@@ -4,6 +4,8 @@
     <title>Water Delivery Service</title>
 </head>
 <body>
-<jsp:forward page="WEB-INF/main.jsp"/>
+<%
+    response.sendRedirect(request.getContextPath()+"/main");
+%>
 </body>
 </html>

@@ -6,6 +6,10 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<fmt:setLocale value="en_EN"/>
+<fmt:bundle basename="i18n.message">
 <html>
 <head>
     <title>mountainspring.com</title>
@@ -17,19 +21,19 @@
 <body>
 
 <div id="header" align="center">
-    <a id="main_logo" title="Заказ воды - mointainspring.com" href="/">
+    <a id="main_logo" title="<fmt:message key="default.logo"/>" href="/">
         <img src="../static/pics/sticker2.jpg">
     </a>
 
     <p id="logo_title" align="center">
-        "Have questions or want to order? Give us a call 7-707-300-2537"
+        <fmt:message key="default.logo_title"/>
     </p>
 
     <a href="#login_form" type="button" class="btn btn-primary" id="btn" data-toggle="button" aria-pressed="false" autocomplete="off">
-        Sign In
+        <fmt:message key="default.signin"/>
     </a>
     <a href="#join_form" type="button" class="btn btn-primary" id="btn1" data-toggle="button" aria-pressed="false" autocomplete="off">
-        Sign Up
+        <fmt:message key="default.signup"/>
     </a>
 </div>
 
@@ -38,7 +42,7 @@
     <h2>Welcome Guest!</h2>
     <p>Please enter your login and password here</p>
     <div>
-        <label for="login">Login</label>
+        <label for="login">Login(Email)</label>
         <input type="text" id="login" value="" />
     </div>
     <div>
@@ -72,8 +76,8 @@
 </div>
 
 <div id="body" class="value_img">
-    <h1 id="main_title">100% NATURAL SPRING WATER.
-    </br>AND PROUD OF IT.</h1>
+    <h1 id="main_title"><fmt:message key="default.main_title1"/>
+    </br><fmt:message key="default.main_title2"/></h1>
     <img alt="" class="body_lines" src="../static/pics/swirl.png">
 </div>
 
@@ -87,11 +91,12 @@
 </div>
 
 <div id="footer" align="center">
-    <p> &copy; 2017 Mountain Spring. All rights reserved.</br>
+    <p><fmt:message key="default.footer_title1"/>.</br>
         EPAM Systems &copy; 2017</br>
-        Tsay V.Y. &copy; 2017
+        <fmt:message key="default.footer_title2"/>
     </p>
 </div>
 
 </body>
 </html>
+</fmt:bundle>

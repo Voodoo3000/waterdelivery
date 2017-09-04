@@ -22,9 +22,9 @@
 #btn {
     position: absolute;
     top: 1%;
-    right: 12%;
+    right: 13%;
     height: 5%;
-    width: 6%;
+    width: 5%;
     font-family: "Century Gothic";
 }
 #btn1 {
@@ -32,7 +32,7 @@
     top: 1%;
     right: 5%;
     height: 5%;
-    width: 6%;
+    width: auto;
     font-family: "Century Gothic";
 }
 .value_img {
