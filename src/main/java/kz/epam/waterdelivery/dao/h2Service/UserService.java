@@ -8,13 +8,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserService extends ConnectionPool implements UserDAO {
+public class UserService implements UserDAO {
 
-    public UserService() {
-        super();
-    }
-
-    Connection connection = getConnection();
+    ConnectionPool pool = ConnectionPool.getInstance();
+    Connection connection = pool.getConnection();
 
     @Override
     public void add(User user) throws SQLException {
@@ -22,29 +19,28 @@ public class UserService extends ConnectionPool implements UserDAO {
 
         String sql = "INSERT INTO USER(ID, FIRSTNAME, LASTNAME, LOGINEMAIL, PASSWORD, ROLE, WALLET) VALUES(?, ?, ?, ?, ?, ?, ?)";
 
-            try {
-                preparedStatement = connection.prepareStatement(sql);
+        try {
+            preparedStatement = connection.prepareStatement(sql);
 
-                preparedStatement.setInt(1, user.getUserId());
-                preparedStatement.setString(2, user.getFirstname());
-                preparedStatement.setString(3, user.getLastName());
-                preparedStatement.setString(4, user.getLoginEmail());
-                preparedStatement.setString(5, user.getPassword());
-                preparedStatement.setString(6, String.valueOf(user.getRole()));
-                preparedStatement.setInt(7, user.getWallet());
+            preparedStatement.setInt(1, user.getUserId());
+            preparedStatement.setString(2, user.getFirstname());
+            preparedStatement.setString(3, user.getLastName());
+            preparedStatement.setString(4, user.getLoginEmail());
+            preparedStatement.setString(5, user.getPassword());
+            preparedStatement.setString(6, String.valueOf(user.getRole()));
+            preparedStatement.setInt(7, user.getWallet());
 
-                preparedStatement.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } finally {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (preparedStatement != null) {
+                preparedStatement.close();
             }
-
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 
     @Override
@@ -84,27 +80,25 @@ public class UserService extends ConnectionPool implements UserDAO {
     }
 
     @Override
-    public User getById(int userId) throws SQLException {
+    public User getByLogin(String loginEmail) throws SQLException {
         PreparedStatement preparedStatement = null;
-
-        String sql = "SELECT ID, FIRSTNAME, LASTNAME, LOGINEMAIL, PASSWORD, ROLE, WALLET FROM USER WHERE ID=?";
-
         User user = new User();
+        String sql = "SELECT ID, FIRSTNAME, LASTNAME, LOGINEMAIL, PASSWORD, ROLE, WALLET FROM USER WHERE LOGINEMAIL=?";
         try {
             preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, userId);
 
+            preparedStatement.setString(1, loginEmail);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            user.setUserId(resultSet.getInt("ID"));
-            user.setFirstname(resultSet.getString("FIRSTNAME"));
-            user.setLastName(resultSet.getString("LASTNAME"));
-            user.setLoginEmail(resultSet.getString("LOGINEMAIL"));
-            user.setPassword(resultSet.getString("PASSWORD"));
-            user.setRole(User.Role.valueOf(resultSet.getString("ROLE")));
-            user.setWallet(resultSet.getInt("WALLET"));
-
-            //preparedStatement.executeUpdate();
+            if (resultSet.next()) {
+                user.setUserId(resultSet.getInt("ID"));
+                user.setFirstname(resultSet.getString("FIRSTNAME"));
+                user.setLastName(resultSet.getString("LASTNAME"));
+                user.setLoginEmail(resultSet.getString("LOGINEMAIL"));
+                user.setPassword(resultSet.getString("PASSWORD"));
+                user.setRole(User.Role.valueOf(resultSet.getString("ROLE")));
+                user.setWallet(resultSet.getInt("WALLET"));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -114,8 +108,8 @@ public class UserService extends ConnectionPool implements UserDAO {
             if (connection != null) {
                 connection.close();
             }
+            return user;
         }
-        return user;
     }
 
     @Override
@@ -146,7 +140,6 @@ public class UserService extends ConnectionPool implements UserDAO {
                 connection.close();
             }
         }
-
     }
 
     @Override
@@ -171,6 +164,5 @@ public class UserService extends ConnectionPool implements UserDAO {
                 connection.close();
             }
         }
-
     }
 }

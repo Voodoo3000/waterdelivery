@@ -16,7 +16,7 @@
 
   <servlet-mapping>
     <servlet-name>Servlet</servlet-name>
-    <url-pattern>/main</url-pattern>
+    <url-pattern>/do/*</url-pattern>
   </servlet-mapping>
 
   <listener>

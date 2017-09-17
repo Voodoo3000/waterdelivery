@@ -5,7 +5,7 @@
 </head>
 <body>
 <%
-    response.sendRedirect(request.getContextPath()+"/main");
+    response.sendRedirect(request.getContextPath()+"do/main");
 %>
 </body>
 </html>
