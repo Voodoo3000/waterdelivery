@@ -3,7 +3,7 @@ package kz.epam.waterdelivery.entity;
 public class User {
     private int userId;
     private int wallet;
-    private String firstname;
+    private String firstName;
     private String lastName;
     private String loginEmail;
     private String password;
@@ -32,12 +32,12 @@ public class User {
         this.wallet = wallet;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
@@ -77,7 +77,7 @@ public class User {
         return "User{" +
                 "userId=" + userId +
                 ", wallet=" + wallet +
-                ", firstname='" + firstname + '\'' +
+                ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", loginEmail='" + loginEmail + '\'' +
                 ", password='" + password + '\'' +

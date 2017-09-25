@@ -4,7 +4,7 @@ import kz.epam.waterdelivery.entity.BottleSize;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface BottleSizeDAO {
+public interface BottleSizeDao {
     //create
     void add(BottleSize bottle) throws SQLException;
 

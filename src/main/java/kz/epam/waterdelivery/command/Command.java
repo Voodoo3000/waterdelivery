@@ -1,4 +1,4 @@
-package kz.epam.waterdelivery.Command;
+package kz.epam.waterdelivery.command;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;

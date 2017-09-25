@@ -1,6 +1,6 @@
-package kz.epam.waterdelivery.dao.h2Service;
+package kz.epam.waterdelivery.dao.sql;
 
-import kz.epam.waterdelivery.dao.WaterDAO;
+import kz.epam.waterdelivery.dao.WaterDao;
 import kz.epam.waterdelivery.entity.Water;
 import kz.epam.waterdelivery.pool.ConnectionPool;
 
@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WaterService implements WaterDAO {
+public class WaterImpl implements WaterDao {
 
     ConnectionPool pool =  ConnectionPool.getInstance();
     Connection connection = pool.getConnection();

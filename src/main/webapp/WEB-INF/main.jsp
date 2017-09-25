@@ -1,14 +1,7 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Voodoo3000
-  Date: 21.08.2017
-  Time: 13:36
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <fmt:setLocale value="${locale}"/>
 <fmt:bundle basename="i18n.message">
@@ -16,9 +9,10 @@
     <head>
         <title>mountainspring.com</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link href="../static/css/mainPageStyle.css" rel="stylesheet" type="text/css"/>
-        <link href="../static/css/bootstrap.css" rel="stylesheet" type="text/css"/>
-        <link href="../static/css/cssmodal.css" rel="stylesheet" type="text/css"/>
+        <link href="../static/css/mainPageStyle.css" rel="stylesheet" type="text/css" media="screen"/>
+        <link href='<c:url value="/webjars/bootstrap/3.2.0/css/bootstrap.css"/>' rel="stylesheet" media="screen">
+        <link href="../static/css/cssmodal.css" rel="stylesheet" type="text/css" media="screen"/>
+        <link href='<c:url value="/static/css/bootstrap-select.css"/>' rel="stylesheet" media="screen">
         <script type='text/javascript' src='<c:url value="/webjars/jquery/1.11.1/jquery.js"/>'></script>
         <script type='text/javascript' src='<c:url value="/webjars/bootstrap/3.2.0/js/bootstrap.js"/>'></script>
         <script type='text/javascript' src='<c:url value="/static/js/bootstrap-select.js"/>'></script>
@@ -49,7 +43,7 @@
             </ul>
         </div>
 
-        <a href="authorized" type="button" class="btn btn-primary" id="btn" aria-pressed="false" autocomplete="off">
+        <a href="#login_form" type="button" class="btn btn-primary" id="btn" aria-pressed="false" autocomplete="off">
             <fmt:message key="default.signin"/>
         </a>
         <a href="#join_form" type="button" class="btn btn-primary" id="btn1" aria-pressed="false" autocomplete="off">
@@ -59,41 +53,46 @@
 
     <a href="#x" class="overlay" id="login_form"></a>
     <div class="popup">
-        <h2>Welcome Guest!</h2>
-        <p>Please enter your login and password here</p>
-        <div>
-            <label for="login">Login(Email)</label>
-            <input type="text" id="login" value=""/>
-        </div>
-        <div>
-            <label for="password">Password</label>
-            <input type="password" id="password" value=""/>
-        </div>
-        <input type="button" value="Log In"/>
+        <form id="login-form" method="post" action="signin">
+            <h2><fmt:message key="default.greetings"/></h2>
+            <p><fmt:message key="default.user_verification"/></p>
+            <div>
+                <label for="login"><fmt:message key="default.user_login"/></label>
+                <input type="text" id="login" name="email"/>
+            </div>
+            <div>
+                <label for="password"><fmt:message key="default.user_pass"/></label>
+                <input type="password" id="password" name="password"/>
+            </div>
+            <input type="submit" value=<fmt:message key="default.signin"/>>
+        </form>
     </div>
 
     <a href="#x" class="overlay" id="join_form"></a>
     <div class="popup">
-        <h2>Sign Up</h2>
-        <p>Please enter your details here</p>
-        <div>
-            <label for="email">Login (Email)</label>
-            <input type="text" id="email" value=""/>
-        </div>
-        <div>
-            <label for="pass">Password</label>
-            <input type="password" id="pass" value=""/>
-        </div>
-        <div>
-            <label for="firstname">First name</label>
-            <input type="text" id="firstname" value=""/>
-        </div>
-        <div>
-            <label for="lastname">Last name</label>
-            <input type="text" id="lastname" value=""/>
-        </div>
-        <input type="button" value="Sign Up"/>&nbsp;&nbsp;&nbsp;or&nbsp;&nbsp;&nbsp;<a href="#login_form"
-                                                                                       id="login_pop">Log In</a>
+        <form id="registration-form" method="post" action="signup">
+            <h2><fmt:message key="default.signup_title"/></h2>
+            <p><fmt:message key="default.user_details"/></p>
+            <div>
+                <label for="email"><fmt:message key="default.user_login"/></label>
+                <input type="text" id="email" name="email" required>
+            </div>
+            <div>
+                <label for="pass"><fmt:message key="default.user_pass"/></label>
+                <input type="password" id="pass" name="password" required>
+            </div>
+            <div>
+                <label for="firstname"><fmt:message key="default.user_firstname"/></label>
+                <input type="text" id="firstname" name="firstname" required>
+            </div>
+            <div>
+                <label for="lastname"><fmt:message key="default.user_lastname"/></label>
+                <input type="text" id="lastname" name="lastname" required>
+            </div>
+            <input type="submit" value="<fmt:message key="default.signup_button"/>"/>&nbsp;&nbsp;&nbsp;
+            <fmt:message key="default.signup_or_title"/>&nbsp;&nbsp;&nbsp;
+            <a href="#login_form" id="login_pop"><fmt:message key="default.signin"/></a>
+        </form>
     </div>
 
     <div id="body" class="value_img">
@@ -102,32 +101,32 @@
         <img alt="" class="body_lines" src="../static/pics/swirl.png">
 
         <div class="panel panel-default">
-            <h3 id="panel-title">Order title</h3>
+            <h3 id="panel-title"><fmt:message key="default.order_panel"/></h3>
             <div class="panel-body">
                 <div class="dropdown">
                     <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        Water types
+                        <fmt:message key="default.water_types"/>
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <li><a href="#">Spring</a></li>
-                        <li><a href="#">Sparkling</a></li>
-                        <li><a href="#">Distilled</a></li>
+                        <li><a href="#"><fmt:message key="default.type_spring"/></a></li>
+                        <li><a href="#"><fmt:message key="default.type_sparkling"/></a></li>
+                        <li><a href="#"><fmt:message key="default.type_distilled"/></a></li>
                     </ul>
                 </div>
                 <div class="dropdown">
                     <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        Bottle value
+                        <fmt:message key="default.bottle_value"/>
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                        <li><a href="#">0.5L</a></li>
-                        <li><a href="#">1L</a></li>
-                        <li><a href="#">1.5L</a></li>
-                        <li><a href="#">5L</a></li>
-                        <li><a href="#">19L</a></li>
+                        <li><a href="#"><fmt:message key="default.half_liter"/></a></li>
+                        <li><a href="#"><fmt:message key="default.one_liter"/></a></li>
+                        <li><a href="#"><fmt:message key="default.one_and_half_liters"/></a></li>
+                        <li><a href="#"><fmt:message key="default.five_liters"/></a></li>
+                        <li><a href="#"><fmt:message key="default.nineteen_liters"/></a></li>
                     </ul>
                 </div>
 
@@ -157,24 +156,23 @@
                         });
                     </script>
 
-                <div class="amount_output">
-                <h5 id="amount-title">Amount</h5>
+                <div class="price_output">
+                <h5 id="amount-title"><fmt:message key="default.output_price"/></h5>
                 <output typeof="number" class="form-control" id="output" readonly="readonly"></output>
 
-                <a href="#" type="button" class="btn btn-default" id="btn2" aria-pressed="false" autocomplete="off">
-                    GET ORDER
+                <a href="#" type="button" class="btn btn-primary" id="btn2" aria-pressed="false" autocomplete="off">
+                    <fmt:message key="default.add_to_cart"/>
+                </a>
+
+                <a href="#" type="button" class="btn btn-default" id="btn3" aria-pressed="false" autocomplete="off">
+                    <fmt:message key="default.get_order"/>
                 </a>
             </div>
             </div>
         </div>
     </div>
 
-    <div id="footer" align="center">
-        <p><fmt:message key="default.footer_title1"/> </br>
-            EPAM Systems &copy; 2017</br>
-            <fmt:message key="default.footer_title2"/>
-        </p>
-    </div>
+    <t:footer/>
 
     </body>
     </html>

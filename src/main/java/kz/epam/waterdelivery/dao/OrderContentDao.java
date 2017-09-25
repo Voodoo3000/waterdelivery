@@ -5,7 +5,7 @@ import kz.epam.waterdelivery.entity.OrderContent;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface OrderContentDAO {
+public interface OrderContentDao {
     //create
     void add(OrderContent content) throws SQLException;
 

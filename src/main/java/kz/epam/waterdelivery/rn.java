@@ -1,18 +1,14 @@
 package kz.epam.waterdelivery;
 
-import kz.epam.waterdelivery.dao.h2Service.*;
-import kz.epam.waterdelivery.entity.*;
-
 import java.sql.SQLException;
-import java.util.List;
 
 public class rn {
-   // public static void main(String[] args) throws SQLException {
+  public static void main(String[] args) throws SQLException {
 
                      //CUSTOMERORDER
 /*
         //create
-        CustomerOrderService orderService = new CustomerOrderService();
+        CustomerOrderImpl orderService = new CustomerOrderImpl();
         CustomerOrder order = new CustomerOrder();
         order.setOrderId(2);
         order.setCustomerId(2);
@@ -22,18 +18,18 @@ public class rn {
         orderService.add(order);
 
         //getAll
-        CustomerOrderService orderService = new CustomerOrderService();
+        CustomerOrderImpl orderService = new CustomerOrderImpl();
         List<CustomerOrder> orderList = orderService.getAll();
         for (CustomerOrder a : orderList) {
             System.out.println(a);
         }
 
          //getById
-        CustomerOrderService orderService = new CustomerOrderService();
+        CustomerOrderImpl orderService = new CustomerOrderImpl();
         System.out.println(orderService.getById(2));
 
         //update
-        CustomerOrderService orderService = new CustomerOrderService();
+        CustomerOrderImpl orderService = new CustomerOrderImpl();
         CustomerOrder order = new CustomerOrder();
         order.setOrderId(2);
         order.setCustomerId(2);
@@ -43,7 +39,7 @@ public class rn {
         orderService.update(order);
 
         //remove
-        CustomerOrderService orderService = new CustomerOrderService();
+        CustomerOrderImpl orderService = new CustomerOrderImpl();
         CustomerOrder order = new CustomerOrder();
         order.setOrderId(3);
         orderService.remove(order);
@@ -54,7 +50,7 @@ public class rn {
                       //ORDERCONTENT
 /*
         //create
-        OrderContentService contentService = new OrderContentService();
+        OrderContentImpl contentService = new OrderContentImpl();
         OrderContent content = new OrderContent();
         content.setOrderContentId(0);
         content.setWaterId(0);
@@ -63,18 +59,18 @@ public class rn {
         contentService.add(content);
 
         //getAll
-        OrderContentService contentService = new OrderContentService();
+        OrderContentImpl contentService = new OrderContentImpl();
         List<OrderContent> contentList = contentService.getAll();
         for (OrderContent a : contentList) {
             System.out.println(a);
         }
 
         //getById
-        OrderContentService contentService = new OrderContentService();
+        OrderContentImpl contentService = new OrderContentImpl();
         System.out.println(contentService.getById(3));
 
         //update
-        OrderContentService contentService = new OrderContentService();
+        OrderContentImpl contentService = new OrderContentImpl();
         OrderContent content = new OrderContent();
         content.setOrderContentId(1);
         content.setWaterId(2);
@@ -83,7 +79,7 @@ public class rn {
         contentService.update(content);
 
         //remove
-        OrderContentService contentService = new OrderContentService();
+        OrderContentImpl contentService = new OrderContentImpl();
         OrderContent content = new OrderContent();
         content.setOrderContentId(1);
         contentService.remove(content);
@@ -93,32 +89,32 @@ public class rn {
                            //BOTLESIZE
 /*
         //create
-        BottleSizeService sizeService = new BottleSizeService();
+        BottleSizeImpl sizeService = new BottleSizeImpl();
         BottleSize bottle = new BottleSize();
         bottle.setBottleId(5);
         bottle.setSize(25);
         sizeService.add(bottle);
 
         //getAll
-        BottleSizeService sizeService = new BottleSizeService();
+        BottleSizeImpl sizeService = new BottleSizeImpl();
         List<BottleSize> bottleSizeList = sizeService.getAll();
         for (BottleSize a : bottleSizeList) {
             System.out.println(a);
         }
 
         //getById
-        BottleSizeService sizeService = new BottleSizeService();
+        BottleSizeImpl sizeService = new BottleSizeImpl();
         System.out.println(sizeService.getById(5));
 
         //update
-        BottleSizeService sizeService = new BottleSizeService();
+        BottleSizeImpl sizeService = new BottleSizeImpl();
         BottleSize bottle = new BottleSize();
         bottle.setBottleId(5);
         bottle.setSize(30);
         sizeService.update(bottle);
 
         //remove
-        BottleSizeService sizeService = new BottleSizeService();
+        BottleSizeImpl sizeService = new BottleSizeImpl();
         BottleSize bottle = new BottleSize();
         bottle.setBottleId(5);
         sizeService.remove(bottle);
@@ -127,7 +123,7 @@ public class rn {
                                      //WATER
 /*
         //create
-        WaterService waterService = new WaterService();
+        WaterImpl waterService = new WaterImpl();
         Water water = new Water();
         water.setWaterId(3);
         water.setWaterTypeId(3);
@@ -135,7 +131,7 @@ public class rn {
         waterService.add(water);
 
         //getAll
-        WaterService waterService = new WaterService();
+        WaterImpl waterService = new WaterImpl();
         try {
             List<Water> waterList = waterService.getAll();
 
@@ -147,11 +143,11 @@ public class rn {
         }
 
         //getById
-        WaterService waterService = new WaterService();
+        WaterImpl waterService = new WaterImpl();
         System.out.println(waterService.getById(0));
 
         //update
-        WaterService waterService = new WaterService();
+        WaterImpl waterService = new WaterImpl();
         Water water = new Water();
         water.setWaterId(3);
         water.setWaterTypeId(3);
@@ -159,7 +155,7 @@ public class rn {
         waterService.update(water);
 
         //remove
-        WaterService waterService = new WaterService();
+        WaterImpl waterService = new WaterImpl();
         Water water = new Water();
         water.setWaterId(3);
         waterService.remove(water);
@@ -169,25 +165,25 @@ public class rn {
                          //WATERTYPE
 /*
         //create
-        WaterTypeService typeService = new WaterTypeService();
+        WaterTypeImpl typeService = new WaterTypeImpl();
         WaterType waterType = new WaterType();
         waterType.setWaterTypeId(3);
         waterType.setType("Dr Pepper");
         typeService.add(waterType);
 
         //getAll
-        WaterTypeService typeService = new WaterTypeService();
+        WaterTypeImpl typeService = new WaterTypeImpl();
         List<WaterType> waterTypeList = typeService.getAll();
         for (WaterType a : waterTypeList){
             System.out.println(a);
         }
 
         //getById
-        WaterTypeService typeService = new WaterTypeService();
+        WaterTypeImpl typeService = new WaterTypeImpl();
         System.out.println(typeService.getById(3));
 
         //update
-        WaterTypeService typeService = new WaterTypeService();
+        WaterTypeImpl typeService = new WaterTypeImpl();
         WaterType waterType = new WaterType();
         waterType.setWaterTypeId(3);
         waterType.setType("Dr Pepper Smooth");
@@ -195,7 +191,7 @@ public class rn {
 
 
         //remove
-        WaterTypeService typeService = new WaterTypeService();
+        WaterTypeImpl typeService = new WaterTypeImpl();
         WaterType waterType = new WaterType();
         waterType.setWaterTypeId(3);
         typeService.remove(waterType);
@@ -205,7 +201,7 @@ public class rn {
 /*
 
         //create
-        UserService userService = new UserService();
+        UserImpl userService = new UserImpl();
         User user = new User();
         user.setUserId(3);
         user.setFirstname("Andrey");
@@ -217,11 +213,11 @@ public class rn {
         userService.add(user);
 
         //getByLogin
-        UserService userService = new UserService();
+        UserImpl userService = new UserImpl();
         System.out.println(userService.getByLogin("logr@mail.ru"));
 
         //getAll
-        UserService userService = new UserService();
+        UserImpl userService = new UserImpl();
         try {
             List<User> userList = userService.getAll();
 
@@ -233,7 +229,7 @@ public class rn {
         }
 
         //update
-        UserService userService = new UserService();
+        UserImpl userService = new UserImpl();
         User user = new User();
         user.setUserId(2);
         user.setFirstname("Pavel");
@@ -245,4 +241,4 @@ public class rn {
         userService.update(user);
 */
     }
-//}
+}

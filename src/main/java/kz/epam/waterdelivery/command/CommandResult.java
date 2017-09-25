@@ -1,4 +1,4 @@
-package kz.epam.waterdelivery.Command;
+package kz.epam.waterdelivery.command;
 
 public class CommandResult {
     private String view;

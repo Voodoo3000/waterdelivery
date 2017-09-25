@@ -6,7 +6,7 @@ import kz.epam.waterdelivery.entity.Water;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface WaterDAO {
+public interface WaterDao {
     //create
     void add(Water water) throws SQLException;
 

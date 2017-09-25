@@ -1,8 +1,8 @@
 package kz.epam.waterdelivery.servlet;
 
-import kz.epam.waterdelivery.Command.Command;
-import kz.epam.waterdelivery.Command.CommandContainer;
-import kz.epam.waterdelivery.Command.CommandResult;
+import kz.epam.waterdelivery.command.Command;
+import kz.epam.waterdelivery.command.CommandContainer;
+import kz.epam.waterdelivery.command.CommandResult;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

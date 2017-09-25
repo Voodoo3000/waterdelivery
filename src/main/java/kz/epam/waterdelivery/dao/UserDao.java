@@ -6,13 +6,14 @@ import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface UserDAO {
+public interface UserDao {
     //create
     void add(User user) throws SQLException;
 
     //read
     List<User> getAll() throws SQLException;
     User getByLogin(String loginEmail) throws SQLException;
+    User getByPass(String password) throws SQLException;
 
     //update
     void update(User user) throws SQLException;
