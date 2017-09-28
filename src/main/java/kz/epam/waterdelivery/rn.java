@@ -1,9 +1,58 @@
 package kz.epam.waterdelivery;
 
+import kz.epam.waterdelivery.dao.sql.UserImpl;
+import kz.epam.waterdelivery.dao.sql.WaterImpl;
+import kz.epam.waterdelivery.dao.sql.WaterTypeImpl;
+import kz.epam.waterdelivery.entity.WaterType;
+
 import java.sql.SQLException;
+import java.util.List;
 
 public class rn {
   public static void main(String[] args) throws SQLException {
+
+                                   //USER
+/*
+        //create
+        UserImpl userService = new UserImpl();
+        User user = new User();
+        user.setUserId(3);
+        user.setFirstname("Andrey");
+        user.setLastName("Vasiliyev");
+        user.setLoginEmail("dink@mail.ru");
+        user.setPassword("zxcv");
+        user.setRole(User.Role.CLIENT);
+        user.setWallet(7000);
+        userService.add(user);
+
+        //getByLogin
+        UserImpl userService = new UserImpl();
+        System.out.println(userService.getByLogin("logr@mail.ru"));
+
+        //getAll
+        UserImpl userService = new UserImpl();
+        try {
+            List<User> userList = userService.getAll();
+
+            for (User a: userList){
+                System.out.println(a);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        //update
+        UserImpl userService = new UserImpl();
+        User user = new User();
+        user.setUserId(2);
+        user.setFirstname("Pavel");
+        user.setLastName("Bobylev");
+        user.setLoginEmail("logr@mail.ru");
+        user.setPassword("qweasdzxc");
+        user.setRole(User.Role.CLIENT);
+        user.setWallet(9000);
+        userService.update(user);
+*/
 
                      //CUSTOMERORDER
 /*
@@ -43,7 +92,6 @@ public class rn {
         CustomerOrder order = new CustomerOrder();
         order.setOrderId(3);
         orderService.remove(order);
-
 
 */
 
@@ -195,50 +243,6 @@ public class rn {
         WaterType waterType = new WaterType();
         waterType.setWaterTypeId(3);
         typeService.remove(waterType);
-*/
-
-                                                 //USER
-/*
-
-        //create
-        UserImpl userService = new UserImpl();
-        User user = new User();
-        user.setUserId(3);
-        user.setFirstname("Andrey");
-        user.setLastName("Vasiliyev");
-        user.setLoginEmail("dink@mail.ru");
-        user.setPassword("zxcv");
-        user.setRole(User.Role.CLIENT);
-        user.setWallet(7000);
-        userService.add(user);
-
-        //getByLogin
-        UserImpl userService = new UserImpl();
-        System.out.println(userService.getByLogin("logr@mail.ru"));
-
-        //getAll
-        UserImpl userService = new UserImpl();
-        try {
-            List<User> userList = userService.getAll();
-
-            for (User a: userList){
-                System.out.println(a);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        //update
-        UserImpl userService = new UserImpl();
-        User user = new User();
-        user.setUserId(2);
-        user.setFirstname("Pavel");
-        user.setLastName("Bobylev");
-        user.setLoginEmail("logr@mail.ru");
-        user.setPassword("qweasdzxc");
-        user.setRole(User.Role.CLIENT);
-        user.setWallet(9000);
-        userService.update(user);
 */
     }
 }

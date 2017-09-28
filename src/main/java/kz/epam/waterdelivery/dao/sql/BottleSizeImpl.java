@@ -1,6 +1,6 @@
 package kz.epam.waterdelivery.dao.sql;
 
-import kz.epam.waterdelivery.dao.BottleSizeDao;
+import kz.epam.waterdelivery.dao.GenericDao;
 import kz.epam.waterdelivery.entity.BottleSize;
 import kz.epam.waterdelivery.pool.ConnectionPool;
 
@@ -8,14 +8,13 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BottleSizeImpl implements BottleSizeDao {
+public class BottleSizeImpl implements GenericDao<BottleSize> {
 
     ConnectionPool pool =  ConnectionPool.getInstance();
-    Connection connection = pool.getConnection();
-
 
     @Override
     public void add(BottleSize bottle) throws SQLException {
+        Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
 
         String sql = "INSERT INTO BOTTLE_SIZE (ID, SIZE) VALUES(?, ?)";
@@ -23,7 +22,7 @@ public class BottleSizeImpl implements BottleSizeDao {
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setInt(1, bottle.getBottleId());
+            preparedStatement.setInt(1, bottle.getId());
             preparedStatement.setDouble(2, bottle.getSize());
 
             preparedStatement.executeUpdate();
@@ -34,15 +33,15 @@ public class BottleSizeImpl implements BottleSizeDao {
                 preparedStatement.close();
             }
             if (connection != null) {
-                connection.close();
+                pool.returnConnection(connection);
             }
         }
     }
 
     @Override
-    public List<BottleSize> getAll() throws SQLException {
+    public List<BottleSize> getAll() {
+        Connection connection = pool.getConnection();
         List<BottleSize> bottleSizeList = new ArrayList<>();
-
         String sql = "SELECT ID, SIZE FROM BOTTLE_SIZE";
 
         Statement statement = null;
@@ -52,7 +51,7 @@ public class BottleSizeImpl implements BottleSizeDao {
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 BottleSize bottle = new BottleSize();
-                bottle.setBottleId(resultSet.getInt("ID"));
+                bottle.setId(resultSet.getInt("ID"));
                 bottle.setSize(resultSet.getDouble("SIZE"));
 
                 bottleSizeList.add(bottle);
@@ -61,28 +60,33 @@ public class BottleSizeImpl implements BottleSizeDao {
             e.printStackTrace();
         } finally {
             if (statement != null) {
-                statement.close();
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             if (connection != null) {
-                connection.close();
+                pool.returnConnection(connection);
             }
         }
         return bottleSizeList;
     }
 
     @Override
-    public BottleSize getById(int bottleId) throws SQLException {
+    public BottleSize getById(int id) throws SQLException {
+        Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
         BottleSize bottle = new BottleSize();
         String sql = "SELECT ID, SIZE FROM BOTTLE_SIZE WHERE ID=?";
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setInt(1, bottleId);
+            preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                bottle.setBottleId(resultSet.getInt("ID"));
+                bottle.setId(resultSet.getInt("ID"));
                 bottle.setSize(resultSet.getDouble("SIZE"));
             }
         } catch (SQLException e) {
@@ -92,7 +96,7 @@ public class BottleSizeImpl implements BottleSizeDao {
                 preparedStatement.close();
             }
             if (connection != null) {
-                connection.close();
+                pool.returnConnection(connection);
             }
             return bottle;
         }
@@ -100,6 +104,7 @@ public class BottleSizeImpl implements BottleSizeDao {
 
     @Override
     public void update(BottleSize bottle) throws SQLException {
+        Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
 
         String sql = "UPDATE BOTTLE_SIZE SET SIZE=? WHERE ID=?";
@@ -108,7 +113,7 @@ public class BottleSizeImpl implements BottleSizeDao {
             preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setDouble(1, bottle.getSize());
-            preparedStatement.setInt(2, bottle.getBottleId());
+            preparedStatement.setInt(2, bottle.getId());
 
 
             preparedStatement.executeUpdate();
@@ -119,13 +124,14 @@ public class BottleSizeImpl implements BottleSizeDao {
                 preparedStatement.close();
             }
             if (connection != null) {
-                connection.close();
+                pool.returnConnection(connection);
             }
         }
     }
 
     @Override
     public void remove(BottleSize bottle) throws SQLException {
+        Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
 
         String sql = "DELETE FROM BOTTLE_SIZE WHERE ID=?";
@@ -133,7 +139,7 @@ public class BottleSizeImpl implements BottleSizeDao {
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setInt(1, bottle.getBottleId());
+            preparedStatement.setInt(1, bottle.getId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -143,7 +149,7 @@ public class BottleSizeImpl implements BottleSizeDao {
                 preparedStatement.close();
             }
             if (connection != null) {
-                connection.close();
+                pool.returnConnection(connection);
             }
         }
     }

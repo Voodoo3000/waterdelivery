@@ -20,15 +20,12 @@
     <body>
 
     <div id="header" align="center">
-
         <a id="main_logo" title="<fmt:message key="default.logo"/>" href="/">
             <img src="../static/pics/sticker2.jpg">
         </a>
-
         <p id="logo_title" align="center">
             <fmt:message key="default.logo_title"/>
         </p>
-
         <div id="locale_changer" class="dropdown">
             <button class="btn btn-default dropdown-toggle" id="dropdownMenu3" data-toggle="dropdown">
                 <c:if test="${locale.language=='ru'}"><img src='<c:url value="/static/pics/RU.png"/>'/></c:if>
@@ -58,11 +55,11 @@
             <p><fmt:message key="default.user_verification"/></p>
             <div>
                 <label for="login"><fmt:message key="default.user_login"/></label>
-                <input type="text" id="login" name="email"/>
+                <input type="text" id="login" name="email" required/>
             </div>
             <div>
                 <label for="password"><fmt:message key="default.user_pass"/></label>
-                <input type="password" id="password" name="password"/>
+                <input type="password" id="password" name="password" required/>
             </div>
             <input type="submit" value=<fmt:message key="default.signin"/>>
         </form>
@@ -110,9 +107,9 @@
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <li><a href="#"><fmt:message key="default.type_spring"/></a></li>
-                        <li><a href="#"><fmt:message key="default.type_sparkling"/></a></li>
-                        <li><a href="#"><fmt:message key="default.type_distilled"/></a></li>
+                        <c:forEach items="${waterTypes}" var="type">
+                            <li><a href="#"><fmt:message key="default.type_${type.type}"/></a></li>
+                        </c:forEach>
                     </ul>
                 </div>
                 <div class="dropdown">
@@ -122,11 +119,9 @@
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                        <li><a href="#"><fmt:message key="default.half_liter"/></a></li>
-                        <li><a href="#"><fmt:message key="default.one_liter"/></a></li>
-                        <li><a href="#"><fmt:message key="default.one_and_half_liters"/></a></li>
-                        <li><a href="#"><fmt:message key="default.five_liters"/></a></li>
-                        <li><a href="#"><fmt:message key="default.nineteen_liters"/></a></li>
+                        <c:forEach items="${bottleSizes}" var="size">
+                            <li><a href="#"><fmt:message key="default.size_${size.size}"/></a></li>
+                        </c:forEach>
                     </ul>
                 </div>
 

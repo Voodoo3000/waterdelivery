@@ -1,19 +1,10 @@
 package kz.epam.waterdelivery.entity;
 
-public class CustomerOrder {
-    private int orderId;
+public class CustomerOrder extends Entity {
     private int customerId;
     private int orderContentId;
     private int amount;
     private String address;
-
-    public int getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
-    }
 
     public int getOrderContentId() {
         return orderContentId;
@@ -50,9 +41,8 @@ public class CustomerOrder {
     @Override
     public String toString() {
         return "CustomerOrder{" +
-                "orderId=" + orderId +
+                "customerId=" + customerId +
                 ", orderContentId=" + orderContentId +
-                ", customerId=" + customerId +
                 ", amount=" + amount +
                 ", address='" + address + '\'' +
                 '}';

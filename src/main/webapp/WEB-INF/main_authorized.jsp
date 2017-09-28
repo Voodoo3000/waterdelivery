@@ -43,7 +43,7 @@
         </div>
 
         <p id="greetings_title" align="center">
-            Добро пожаловать Владислав! На вашем счету: 50000тг.
+            Добро пожаловать ${user.firstName}! На вашем счету: 50000тг.
         </p>
 
         <a href="#join_form" type="button" class="btn btn-primary" id="btn4" aria-pressed="false" autocomplete="off">
@@ -66,9 +66,9 @@
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <li><a href="#"><fmt:message key="default.type_spring"/></a></li>
-                        <li><a href="#"><fmt:message key="default.type_sparkling"/></a></li>
-                        <li><a href="#"><fmt:message key="default.type_distilled"/></a></li>
+                        <c:forEach items="${waterTypes}" var="type">
+                            <li><a href="#"><fmt:message key="default.type_${type.type}"/></a></li>
+                        </c:forEach>
                     </ul>
                 </div>
                 <div class="dropdown">
@@ -78,11 +78,9 @@
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                        <li><a href="#"><fmt:message key="default.half_liter"/></a></li>
-                        <li><a href="#"><fmt:message key="default.one_liter"/></a></li>
-                        <li><a href="#"><fmt:message key="default.one_and_half_liters"/></a></li>
-                        <li><a href="#"><fmt:message key="default.five_liters"/></a></li>
-                        <li><a href="#"><fmt:message key="default.nineteen_liters"/></a></li>
+                        <c:forEach items="${bottleSizes}" var="size">
+                            <li><a href="#"><fmt:message key="default.size_${size.size}"/></a></li>
+                        </c:forEach>
                     </ul>
                 </div>
 

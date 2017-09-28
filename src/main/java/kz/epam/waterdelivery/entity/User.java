@@ -1,7 +1,6 @@
 package kz.epam.waterdelivery.entity;
 
-public class User {
-    private int userId;
+public class User extends Entity {
     private int wallet;
     private String firstName;
     private String lastName;
@@ -14,14 +13,6 @@ public class User {
     }
 
     public User() {
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public int getWallet() {
@@ -75,8 +66,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "userId=" + userId +
-                ", wallet=" + wallet +
+                "wallet=" + wallet +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", loginEmail='" + loginEmail + '\'' +

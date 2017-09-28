@@ -1,6 +1,6 @@
 package kz.epam.waterdelivery.dao.sql;
 
-import kz.epam.waterdelivery.dao.WaterDao;
+import kz.epam.waterdelivery.dao.GenericDao;
 import kz.epam.waterdelivery.entity.Water;
 import kz.epam.waterdelivery.pool.ConnectionPool;
 
@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WaterImpl implements WaterDao {
+public class WaterImpl implements GenericDao<Water> {
 
     ConnectionPool pool =  ConnectionPool.getInstance();
     Connection connection = pool.getConnection();
@@ -23,7 +23,7 @@ public class WaterImpl implements WaterDao {
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setInt(1, water.getWaterId());
+            preparedStatement.setInt(1, water.getId());
             preparedStatement.setInt(2, water.getWaterTypeId());
             preparedStatement.setInt(3, water.getPricePerLiter());
 
@@ -53,7 +53,7 @@ public class WaterImpl implements WaterDao {
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 Water water = new Water();
-                water.setWaterId(resultSet.getInt("ID"));
+                water.setId(resultSet.getInt("ID"));
                 water.setWaterTypeId(resultSet.getInt("WATER_TYPE_ID"));
                 water.setPricePerLiter(resultSet.getInt("PRICE_PER_LITER"));
 
@@ -73,18 +73,18 @@ public class WaterImpl implements WaterDao {
     }
 
     @Override
-    public Water getById(int waterId) throws SQLException {
+    public Water getById(int id) throws SQLException {
         PreparedStatement preparedStatement = null;
         Water water = new Water();
         String sql = "SELECT ID, WATER_TYPE_ID, PRICE_PER_LITER FROM WATER WHERE ID=?";
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setInt(1, waterId);
+            preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                water.setWaterId(resultSet.getInt("ID"));
+                water.setId(resultSet.getInt("ID"));
                 water.setWaterTypeId(resultSet.getInt("WATER_TYPE_ID"));
                 water.setPricePerLiter(resultSet.getInt("PRICE_PER_LITER"));
             }
@@ -112,7 +112,7 @@ public class WaterImpl implements WaterDao {
 
             preparedStatement.setInt(1, water.getWaterTypeId() );
             preparedStatement.setInt(2, water.getPricePerLiter());
-            preparedStatement.setInt(3, water.getWaterId());
+            preparedStatement.setInt(3, water.getId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -136,7 +136,7 @@ public class WaterImpl implements WaterDao {
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setInt(1, water.getWaterId());
+            preparedStatement.setInt(1, water.getId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

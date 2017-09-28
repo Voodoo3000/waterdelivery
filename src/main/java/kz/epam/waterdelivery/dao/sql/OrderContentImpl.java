@@ -1,6 +1,6 @@
 package kz.epam.waterdelivery.dao.sql;
 
-import kz.epam.waterdelivery.dao.OrderContentDao;
+import kz.epam.waterdelivery.dao.GenericDao;
 import kz.epam.waterdelivery.entity.OrderContent;
 import kz.epam.waterdelivery.pool.ConnectionPool;
 
@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderContentImpl implements OrderContentDao {
+public class OrderContentImpl implements GenericDao<OrderContent> {
 
     ConnectionPool pool =  ConnectionPool.getInstance();
     Connection connection = pool.getConnection();
@@ -22,7 +22,7 @@ public class OrderContentImpl implements OrderContentDao {
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setInt(1, content.getOrderContentId());
+            preparedStatement.setInt(1, content.getId());
             preparedStatement.setInt(2, content.getWaterId());
             preparedStatement.setInt(3, content.getBottleSize());
             preparedStatement.setInt(4, content.getQuantity());
@@ -54,7 +54,7 @@ public class OrderContentImpl implements OrderContentDao {
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 OrderContent content = new OrderContent();
-                content.setOrderContentId(resultSet.getInt("ID"));
+                content.setId(resultSet.getInt("ID"));
                 content.setWaterId(resultSet.getInt("WATER_ID"));
                 content.setBottleSize(resultSet.getInt("BOTTLE_SIZE_ID"));
                 content.setQuantity(resultSet.getInt("QUANTITY"));
@@ -75,20 +75,18 @@ public class OrderContentImpl implements OrderContentDao {
     }
 
     @Override
-    public OrderContent getById(int bottleSize) throws SQLException {
+    public OrderContent getById(int id) throws SQLException {
         PreparedStatement preparedStatement = null;
         OrderContent content = new OrderContent();
-        String sql = "SELECT ID, WATER_ID, BOTTLE_SIZE_ID, QUANTITY FROM ORDER_CONTENT WHERE BOTTLE_SIZE_ID=?";
+        String sql = "SELECT ID, WATER_ID, BOTTLE_SIZE_ID, QUANTITY FROM ORDER_CONTENT WHERE ID=?";
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            //preparedStatement.setInt(1, orderContentId);
-            //preparedStatement.setInt(2, waterId);
-            preparedStatement.setInt(1, bottleSize);
+            preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                content.setOrderContentId(resultSet.getInt("ID"));
+                content.setId(resultSet.getInt("ID"));
                 content.setWaterId(resultSet.getInt("WATER_ID"));
                 content.setBottleSize(resultSet.getInt("BOTTLE_SIZE_ID"));
                 content.setQuantity(resultSet.getInt("QUANTITY"));
@@ -118,7 +116,7 @@ public class OrderContentImpl implements OrderContentDao {
             preparedStatement.setInt(1, content.getWaterId());
             preparedStatement.setInt(2, content.getBottleSize());
             preparedStatement.setInt(3, content.getQuantity());
-            preparedStatement.setInt(4, content.getOrderContentId());
+            preparedStatement.setInt(4, content.getId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -142,7 +140,7 @@ public class OrderContentImpl implements OrderContentDao {
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setInt(1, content.getOrderContentId());
+            preparedStatement.setInt(1, content.getId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

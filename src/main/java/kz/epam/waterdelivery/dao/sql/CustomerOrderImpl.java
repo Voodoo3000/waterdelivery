@@ -1,6 +1,6 @@
 package kz.epam.waterdelivery.dao.sql;
 
-import kz.epam.waterdelivery.dao.CustomerOrderDao;
+import kz.epam.waterdelivery.dao.GenericDao;
 import kz.epam.waterdelivery.entity.CustomerOrder;
 import kz.epam.waterdelivery.pool.ConnectionPool;
 
@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerOrderImpl implements CustomerOrderDao {
+public class CustomerOrderImpl implements GenericDao<CustomerOrder> {
 
     ConnectionPool pool = ConnectionPool.getInstance();
     Connection connection = pool.getConnection();
@@ -22,7 +22,7 @@ public class CustomerOrderImpl implements CustomerOrderDao {
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setInt(1, order.getOrderId());
+            preparedStatement.setInt(1, order.getId());
             preparedStatement.setInt(2, order.getCustomerId());
             preparedStatement.setInt(3, order.getOrderContentId());
             preparedStatement.setInt(4, order.getAmount());
@@ -54,7 +54,7 @@ public class CustomerOrderImpl implements CustomerOrderDao {
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 CustomerOrder order = new CustomerOrder();
-                order.setOrderId(resultSet.getInt("ID"));
+                order.setId(resultSet.getInt("ID"));
                 order.setCustomerId(resultSet.getInt("CUSTOMER_ID"));
                 order.setOrderContentId(resultSet.getInt("ORDER_CONTENT_ID"));
                 order.setAmount(resultSet.getInt("AMOUNT"));
@@ -76,18 +76,18 @@ public class CustomerOrderImpl implements CustomerOrderDao {
     }
 
     @Override
-    public CustomerOrder getById(int customerId) throws SQLException {
+    public CustomerOrder getById(int id) throws SQLException {
         PreparedStatement preparedStatement = null;
         CustomerOrder order = new CustomerOrder();
         String sql = "SELECT ID, CUSTOMER_ID, ORDER_CONTENT_ID, AMOUNT, ADDRESS FROM CUSTOMER_ORDER WHERE CUSTOMER_ID=?";
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setInt(1, customerId);
+            preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                order.setOrderId(resultSet.getInt("ID"));
+                order.setId(resultSet.getInt("ID"));
                 order.setCustomerId(resultSet.getInt("CUSTOMER_ID"));
                 order.setOrderContentId(resultSet.getInt("ORDER_CONTENT_ID"));
                 order.setAmount(resultSet.getInt("AMOUNT"));
@@ -119,7 +119,7 @@ public class CustomerOrderImpl implements CustomerOrderDao {
             preparedStatement.setInt(2, order.getOrderContentId());
             preparedStatement.setInt(3, order.getAmount());
             preparedStatement.setString(4, order.getAddress());
-            preparedStatement.setInt(5, order.getOrderId());
+            preparedStatement.setInt(5, order.getId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -143,7 +143,7 @@ public class CustomerOrderImpl implements CustomerOrderDao {
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setInt(1, order.getOrderId());
+            preparedStatement.setInt(1, order.getId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
