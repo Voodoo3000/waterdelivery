@@ -8,44 +8,48 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerOrderImpl implements GenericDao<CustomerOrder> {
+public class CustomerOrderDao implements GenericDao<CustomerOrder> {
 
     ConnectionPool pool = ConnectionPool.getInstance();
-    Connection connection = pool.getConnection();
+
 
     @Override
-    public void add(CustomerOrder order) throws SQLException {
+    public void add(CustomerOrder order) {
+        Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
 
-        String sql = "INSERT INTO CUSTOMER_ORDER (ID, CUSTOMER_ID, ORDER_CONTENT_ID, AMOUNT, ADDRESS) VALUES(?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO CUSTOMER_ORDER (CUSTOMER_ID, ORDER_AMOUNT, ADDRESS) VALUES(?, ?, ?)";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setInt(1, order.getId());
-            preparedStatement.setInt(2, order.getCustomerId());
-            preparedStatement.setInt(3, order.getOrderContentId());
-            preparedStatement.setInt(4, order.getAmount());
-            preparedStatement.setString(5, order.getAddress());
+            preparedStatement.setInt(1, order.getCustomerId());
+            preparedStatement.setDouble(2, order.getAmount());
+            preparedStatement.setString(3, order.getAddress());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             if (preparedStatement != null) {
-                preparedStatement.close();
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             if (connection != null) {
-                connection.close();
+                pool.returnConnection(connection);
             }
         }
     }
 
     @Override
     public List<CustomerOrder> getAll() throws SQLException {
+        Connection connection = pool.getConnection();
         List<CustomerOrder> orderList = new ArrayList<>();
 
-        String sql = "SELECT ID, CUSTOMER_ID, ORDER_CONTENT_ID, AMOUNT, ADDRESS FROM CUSTOMER_ORDER";
+        String sql = "SELECT ID, CUSTOMER_ID, ORDER_AMOUNT, ADDRESS FROM CUSTOMER_ORDER";
 
         Statement statement = null;
 
@@ -56,8 +60,7 @@ public class CustomerOrderImpl implements GenericDao<CustomerOrder> {
                 CustomerOrder order = new CustomerOrder();
                 order.setId(resultSet.getInt("ID"));
                 order.setCustomerId(resultSet.getInt("CUSTOMER_ID"));
-                order.setOrderContentId(resultSet.getInt("ORDER_CONTENT_ID"));
-                order.setAmount(resultSet.getInt("AMOUNT"));
+                order.setAmount(resultSet.getDouble("ORDER_AMOUNT "));
                 order.setAddress(resultSet.getString("ADDRESS"));
 
                 orderList.add(order);
@@ -69,17 +72,18 @@ public class CustomerOrderImpl implements GenericDao<CustomerOrder> {
                 statement.close();
             }
             if (connection != null) {
-                connection.close();
+                pool.returnConnection(connection);
             }
         }
         return orderList;
     }
 
     @Override
-    public CustomerOrder getById(int id) throws SQLException {
+    public CustomerOrder getById(int id) {
+        Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
-        CustomerOrder order = new CustomerOrder();
-        String sql = "SELECT ID, CUSTOMER_ID, ORDER_CONTENT_ID, AMOUNT, ADDRESS FROM CUSTOMER_ORDER WHERE CUSTOMER_ID=?";
+        CustomerOrder order = null;
+        String sql ="SELECT ID, CUSTOMER_ID, ORDER_AMOUNT, ADDRESS FROM CUSTOMER_ORDER WHERE ID=?";;
         try {
             preparedStatement = connection.prepareStatement(sql);
 
@@ -87,55 +91,95 @@ public class CustomerOrderImpl implements GenericDao<CustomerOrder> {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
+                order = new CustomerOrder();
                 order.setId(resultSet.getInt("ID"));
                 order.setCustomerId(resultSet.getInt("CUSTOMER_ID"));
-                order.setOrderContentId(resultSet.getInt("ORDER_CONTENT_ID"));
-                order.setAmount(resultSet.getInt("AMOUNT"));
+                order.setAmount(resultSet.getDouble("ORDER_AMOUNT"));
                 order.setAddress(resultSet.getString("ADDRESS"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             if (preparedStatement != null) {
-                preparedStatement.close();
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             if (connection != null) {
-                connection.close();
+                pool.returnConnection(connection);
+            }
+            return order;
+        }
+    }
+
+    public Integer getByUserId(int userId) {
+        Connection connection = pool.getConnection();
+        PreparedStatement preparedStatement = null;
+        Integer order = null;
+        String sql ="SELECT MAX(ID) FROM CUSTOMER_ORDER WHERE CUSTOMER_ID =?";;
+        try {
+            preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setInt(1, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                order = resultSet.getInt("MAX(ID)");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                pool.returnConnection(connection);
             }
             return order;
         }
     }
 
     @Override
-    public void update(CustomerOrder order) throws SQLException {
+    public void update(CustomerOrder order) {
+        Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
 
-        String sql = "UPDATE CUSTOMER_ORDER SET CUSTOMER_ID=?, ORDER_CONTENT_ID=?, AMOUNT=?, ADDRESS=? WHERE ID=?";
+        String sql = "UPDATE CUSTOMER_ORDER SET CUSTOMER_ID=?, ORDER_AMOUNT=?, ADDRESS=? WHERE ID=?";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setInt(1, order.getCustomerId());
-            preparedStatement.setInt(2, order.getOrderContentId());
-            preparedStatement.setInt(3, order.getAmount());
-            preparedStatement.setString(4, order.getAddress());
-            preparedStatement.setInt(5, order.getId());
+            preparedStatement.setDouble(2, order.getAmount());
+            preparedStatement.setString(3, order.getAddress());
+            preparedStatement.setInt(4, order.getId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             if (preparedStatement != null) {
-                preparedStatement.close();
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             if (connection != null) {
-                connection.close();
+                pool.returnConnection(connection);
             }
         }
     }
 
     @Override
     public void remove(CustomerOrder order) throws SQLException {
+        Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
 
         String sql = "DELETE FROM CUSTOMER_ORDER WHERE ID=?";
@@ -153,7 +197,7 @@ public class CustomerOrderImpl implements GenericDao<CustomerOrder> {
                 preparedStatement.close();
             }
             if (connection != null) {
-                connection.close();
+                pool.returnConnection(connection);
             }
         }
     }

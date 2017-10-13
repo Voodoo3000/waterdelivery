@@ -3,15 +3,17 @@ package kz.epam.waterdelivery.pool;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 public class ConnectionPool {
-    private static final String DRIVER = "org.h2.Driver";
-    private static final String URL = "jdbc:h2:tcp://localhost/~/waterdelivery";
-    private static final String LOGIN = "admin";
-    private static final String PASSWORD = "test";
-    private static final int POOL_SIZE = 7;
+    private static final ResourceBundle RB = ResourceBundle.getBundle("database");
+    private static final String DRIVER = RB.getString("db.driver");
+    private static final String URL = RB.getString("db.url");
+    private static final String LOGIN = RB.getString("db.user");
+    private static final String PASSWORD = RB.getString("db.password");
+    private static final int POOL_SIZE = Integer.parseInt(RB.getString("db.pool_size"));
     private static final ConnectionPool INSTANCE = new ConnectionPool();
     BlockingQueue<Connection> connections = new ArrayBlockingQueue<>(POOL_SIZE);
 

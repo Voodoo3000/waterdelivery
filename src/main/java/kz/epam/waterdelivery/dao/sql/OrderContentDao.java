@@ -1,68 +1,40 @@
 package kz.epam.waterdelivery.dao.sql;
 
 import kz.epam.waterdelivery.dao.GenericDao;
-import kz.epam.waterdelivery.entity.WaterType;
+import kz.epam.waterdelivery.entity.OrderContent;
 import kz.epam.waterdelivery.pool.ConnectionPool;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WaterTypeImpl implements GenericDao<WaterType> {
+public class OrderContentDao implements GenericDao<OrderContent> {
 
     ConnectionPool pool =  ConnectionPool.getInstance();
 
     @Override
-    public void add(WaterType waterType) throws SQLException {
+    public void add(OrderContent content) {
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
 
-        String sql = "INSERT INTO WATER_TYPE (ID, TYPE) VALUES(?, ?)";
+        String sql = "INSERT INTO ORDER_CONTENT (WATER_ID, BOTTLE_SIZE_ID, QUANTITY, PRICE, CUSTOMER_ORDER_ID) VALUES(?, ?, ?, ?, ?)";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setInt(1, waterType.getId());
-            preparedStatement.setString(2, waterType.getType());
+            preparedStatement.setInt(1, content.getWaterId());
+            preparedStatement.setInt(2, content.getBottleSizeId());
+            preparedStatement.setInt(3, content.getQuantity());
+            preparedStatement.setDouble(4, content.getPrice());
+            preparedStatement.setInt(5, content.getCustomerOrderId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             if (preparedStatement != null) {
-                preparedStatement.close();
-            }
-            if (connection != null) {
-                pool.returnConnection(connection);
-            }
-        }
-    }
-
-    @Override
-    public List<WaterType> getAll() {
-        Connection connection = pool.getConnection();
-        List<WaterType> waterTypes = new ArrayList<>();
-
-        String sql = "SELECT ID, TYPE FROM WATER_TYPE";
-
-        Statement statement = null;
-
-        try {
-            statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
-                WaterType waterType = new WaterType();
-                waterType.setId(resultSet.getInt("ID"));
-                waterType.setType(resultSet.getString("TYPE"));
-
-                waterTypes.add(waterType);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (statement != null) {
                 try {
-                    statement.close();
+                    preparedStatement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -71,15 +43,50 @@ public class WaterTypeImpl implements GenericDao<WaterType> {
                 pool.returnConnection(connection);
             }
         }
-        return waterTypes;
     }
 
     @Override
-    public WaterType getById(int id) throws SQLException {
+    public List<OrderContent> getAll() throws SQLException {
+        Connection connection = pool.getConnection();
+        List<OrderContent> contentList = new ArrayList<>();
+
+        String sql = "SELECT ID, WATER_ID, BOTTLE_SIZE_ID, QUANTITY, PRICE, CUSTOMER_ORDER_ID FROM ORDER_CONTENT";
+
+        Statement statement = null;
+
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+                OrderContent content = new OrderContent();
+                content.setId(resultSet.getInt("ID"));
+                content.setWaterId(resultSet.getInt("WATER_ID"));
+                content.setBottleSizeId(resultSet.getInt("BOTTLE_SIZE_ID"));
+                content.setQuantity(resultSet.getInt("QUANTITY"));
+                content.setPrice(resultSet.getDouble("PRICE"));
+                content.setCustomerOrderId(resultSet.getInt("CUSTOMER_ORDER_ID"));
+
+                contentList.add(content);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+            if (connection != null) {
+                pool.returnConnection(connection);
+            }
+        }
+        return contentList;
+    }
+
+    @Override
+    public OrderContent getById(int id) throws SQLException {
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
-        WaterType waterType = new WaterType();
-        String sql = "SELECT ID, TYPE FROM WATER_TYPE WHERE ID=?";
+        OrderContent content = new OrderContent();
+        String sql = "SELECT ID, WATER_ID, BOTTLE_SIZE_ID, QUANTITY, PRICE, CUSTOMER_ORDER_ID FROM ORDER_CONTENT WHERE ID=?";
         try {
             preparedStatement = connection.prepareStatement(sql);
 
@@ -87,8 +94,12 @@ public class WaterTypeImpl implements GenericDao<WaterType> {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                waterType.setId(resultSet.getInt("ID"));
-                waterType.setType(resultSet.getString("TYPE"));
+                content.setId(resultSet.getInt("ID"));
+                content.setWaterId(resultSet.getInt("WATER_ID"));
+                content.setBottleSizeId(resultSet.getInt("BOTTLE_SIZE_ID"));
+                content.setQuantity(resultSet.getInt("QUANTITY"));
+                content.setPrice(resultSet.getDouble("PRICE"));
+                content.setCustomerOrderId(resultSet.getInt("CUSTOMER_ORDER_ID"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -99,23 +110,26 @@ public class WaterTypeImpl implements GenericDao<WaterType> {
             if (connection != null) {
                 pool.returnConnection(connection);
             }
-            return waterType;
+            return content;
         }
     }
 
     @Override
-    public void update(WaterType waterType) throws SQLException {
+    public void update(OrderContent content) throws SQLException {
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
 
-        String sql = "UPDATE WATER_TYPE SET TYPE=? WHERE ID=?";
+        String sql = "UPDATE ORDER_CONTENT SET WATER_ID=?, BOTTLE_SIZE_ID=?, QUANTITY=?, PRICE=?, CUSTOMER_ORDER_ID=? WHERE ID=?";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setString(1, waterType.getType());
-            preparedStatement.setInt(2, waterType.getId());
-
+            preparedStatement.setInt(1, content.getWaterId());
+            preparedStatement.setInt(2, content.getBottleSizeId());
+            preparedStatement.setInt(3, content.getQuantity());
+            preparedStatement.setDouble(4, content.getPrice());
+            preparedStatement.setInt(5, content.getCustomerOrderId());
+            preparedStatement.setInt(6, content.getId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -131,16 +145,16 @@ public class WaterTypeImpl implements GenericDao<WaterType> {
     }
 
     @Override
-    public void remove(WaterType waterType) throws SQLException {
+    public void remove(OrderContent content) throws SQLException {
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
 
-        String sql = "DELETE FROM WATER_TYPE WHERE ID=?";
+        String sql = "DELETE FROM ORDER_CONTENT WHERE ID=?";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setInt(1, waterType.getId());
+            preparedStatement.setInt(1, content.getId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

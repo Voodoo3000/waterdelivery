@@ -95,9 +95,13 @@
 .panel{
     position: absolute;
     right: 10%;
-    width: 15%;
-    height: 55%;
+    width: 19%;
+    height: 50%;
     top: 20%;
+}
+
+#panel-cabinet {
+    width: 25%;
 }
 
 #panel-title {
@@ -106,76 +110,83 @@
     font-family: "Verdana";
 }
 
-#dropdownMenu1{
+#waterType {
     position: relative;
-    margin-left: 20%;
-    width: 60%;
+    background-color: #428BCA;
+    color: #fff;
+    border-radius: 2px;
 }
 
-#dropdownMenu2{
+#bottleSize {
     position: relative;
-    margin-top: 5%;
-    margin-left: 20%;
-    width: 60%;
+    margin-top: 2%;
+    background-color: #428BCA;
+    color: #fff;
+    border-radius: 2px;
+}
+
+#bs {
+    position: relative;
+    margin-top: 7%;
+    margin-bottom: 7%;
 }
 
 .form-inline {
     position: relative;
-    margin-top: 7%;
-    margin-left: 20%;
 }
 
 #input {
-    width: 33%;
+    width: 39%;
     float: left;
     text-align: center;
-    border-radius: 1px;
+    border-radius: 2px;
 }
 
 #minus {
-    background-color: #337ab7;
+    background-color: #428BCA;
+    width: 30%;
     float: left;
-    border-radius: 1px;
+    border-radius: 2px;
     margin-left: auto;
     margin-right: auto;
 }
 
 #plus {
-    background-color: #337ab7;
+    background-color: #428BCA;
+    width: 30%;
     float: left;
-    border-radius: 1px;
+    border-radius: 2px;
     margin-left: auto;
     margin-right: auto;
-}
-
-.price_output {
-    position: relative;
-    width: 60%;
-    margin-left: 20%;
-    margin-top: 27%;
-}
-
-#amount-title {
-    margin-bottom: auto;
-}
-
-#output{
-    margin-top: auto;
 }
 
 #btn2 {
     position: relative;
     width: 100%;
-    margin-top: 12%;
+    font-family: "Verdana";
+    font-size: medium;
+    color: #fff;
+    margin-top: 9%;
+    background-color: #71D677;
+    border-radius: 2px;
 }
 
 #btn3 {
     position: relative;
     width: 100%;
-    height: 13%;
     font-family: "Verdana";
-    margin-top: 12%;
-    background-color: #71D677;
+    font-size: medium;
+    color: #fff;
+    margin-top: 9%;
+    background-color: #428BCA;
+    border-radius: 2px;
+}
+
+#order_content {
+    position: relative;
+    top: 40%;
+    width: 50%;
+    left: 20%;
 }
 
 #footer {

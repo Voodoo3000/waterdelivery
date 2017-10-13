@@ -18,7 +18,7 @@ public class Servlet extends HttpServlet {
         Command command = CommandContainer.get(commandName);
         if (command == null) {
             try {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "url.not.found");
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "url.not.found!!!");
             } catch (IOException e) {
 
                 throw new ServletException(e);

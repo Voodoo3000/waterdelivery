@@ -1,10 +1,6 @@
-INSERT INTO WATER_TYPE VALUES (0, 'type_spring');
-INSERT INTO WATER_TYPE VALUES (1, 'type_sparkling');
-INSERT INTO WATER_TYPE VALUES (2, 'type_distilled');
-
-INSERT INTO WATER VALUES (0, 0, 200);
-INSERT INTO WATER VALUES (1, 1, 300);
-INSERT INTO WATER VALUES (2, 2, 400);
+INSERT INTO WATER VALUES (0, 'Spring', 200);
+INSERT INTO WATER VALUES (1, 'Sparkling', 300);
+INSERT INTO WATER VALUES (2, 'Distilled', 400);
 
 INSERT INTO USER VALUES (0, 'Владислав', 'Цай', 'admin', 'admin', 'ADMIN', '0');
 INSERT INTO USER VALUES (1, 'Даня', 'Шеповалов', 'user', 'qwerty', 'CLIENT', '10000');

@@ -1,15 +1,15 @@
 package kz.epam.waterdelivery.entity;
 
 public class Water extends Entity {
-    private int waterTypeId;
+    private String type;
     private int pricePerLiter;
 
-    public int getWaterTypeId() {
-        return waterTypeId;
+    public String getType() {
+        return type;
     }
 
-    public void setWaterTypeId(int waterTypeId) {
-        this.waterTypeId = waterTypeId;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public int getPricePerLiter() {
@@ -20,11 +20,5 @@ public class Water extends Entity {
         this.pricePerLiter = pricePerLiter;
     }
 
-    @Override
-    public String toString() {
-        return "Water{" +
-                "waterTypeId=" + waterTypeId +
-                ", pricePerLiter=" + pricePerLiter +
-                '}';
-    }
+
 }

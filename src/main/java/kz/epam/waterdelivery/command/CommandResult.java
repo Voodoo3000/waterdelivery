@@ -14,6 +14,10 @@ public class CommandResult {
         this.view = view;
         this.redirection = redirection;
     }
+
+    public CommandResult(Command authorized, boolean redirection) {
+    }
+
     public String getView() {
         return view;
     }

@@ -2,8 +2,10 @@ package kz.epam.waterdelivery.entity;
 
 public class OrderContent extends Entity {
     private int waterId;
-    private int bottleSize;
+    private int bottleSizeId;
     private int quantity;
+    private double price;
+    private int customerOrderId;
 
     public int getWaterId() {
         return waterId;
@@ -13,12 +15,12 @@ public class OrderContent extends Entity {
         this.waterId = waterId;
     }
 
-    public int getBottleSize() {
-        return bottleSize;
+    public int getBottleSizeId() {
+        return bottleSizeId;
     }
 
-    public void setBottleSize(int bottleSize) {
-        this.bottleSize = bottleSize;
+    public void setBottleSizeId(int bottleSizeId) {
+        this.bottleSizeId = bottleSizeId;
     }
 
     public int getQuantity() {
@@ -29,12 +31,30 @@ public class OrderContent extends Entity {
         this.quantity = quantity;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public int getCustomerOrderId() {
+        return customerOrderId;
+    }
+
+    public void setCustomerOrderId(int customerOrderId) {
+        this.customerOrderId = customerOrderId;
+    }
+
     @Override
     public String toString() {
         return "OrderContent{" +
                 "waterId=" + waterId +
-                ", bottleSize=" + bottleSize +
+                ", bottleSizeId=" + bottleSizeId +
                 ", quantity=" + quantity +
+                ", price=" + price +
+                ", customerOrderId=" + customerOrderId +
                 '}';
     }
 }

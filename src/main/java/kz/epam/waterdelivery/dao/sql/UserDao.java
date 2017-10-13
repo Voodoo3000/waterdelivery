@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserImpl implements GenericDao<User> {
+public class UserDao implements GenericDao<User> {
 
     ConnectionPool pool = ConnectionPool.getInstance();
 
@@ -87,7 +87,7 @@ public class UserImpl implements GenericDao<User> {
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
 
-        User user = new User();
+        User user = null;
         String sql = "SELECT ID, FIRSTNAME, LASTNAME, LOGINEMAIL, PASSWORD, ROLE, WALLET FROM USER WHERE ID=?";
         try {
             preparedStatement = connection.prepareStatement(sql);
@@ -96,6 +96,7 @@ public class UserImpl implements GenericDao<User> {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
+                user = new User();
                 user.setId(resultSet.getInt("ID"));
                 user.setFirstName(resultSet.getString("FIRSTNAME"));
                 user.setLastName(resultSet.getString("LASTNAME"));
@@ -122,7 +123,7 @@ public class UserImpl implements GenericDao<User> {
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
 
-        User user = new User();
+        User user = null;
         String sql = "SELECT ID, FIRSTNAME, LASTNAME, LOGINEMAIL, PASSWORD, ROLE, WALLET FROM USER WHERE LOGINEMAIL=?";
         try {
             preparedStatement = connection.prepareStatement(sql);
@@ -131,6 +132,7 @@ public class UserImpl implements GenericDao<User> {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
+                user = new User();
                 user.setId(resultSet.getInt("ID"));
                 user.setFirstName(resultSet.getString("FIRSTNAME"));
                 user.setLastName(resultSet.getString("LASTNAME"));

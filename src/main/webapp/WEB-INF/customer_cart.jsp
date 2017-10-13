@@ -41,9 +41,7 @@
         </div>
 
         <p id="greetings_title" align="center">
-            <fmt:message key="default.greetings_title"/>
-            <a title="<fmt:message key="default.to_cabinet"/>"
-               href='<c:url value="/do/cabinet"/>'>${user.firstName}</a>! <fmt:message
+            <fmt:message key="default.greetings_title"/> ${user.firstName}! <fmt:message
                 key="default.user_balance"/> ${user.wallet}<fmt:message key="default.currency"/>.
         </p>
 
@@ -53,14 +51,22 @@
     </div>
 
     <div id="body" class="value_img">
-        <h1 id="main_title"><fmt:message key="default.main_title1"/>
-            </br><fmt:message key="default.main_title2"/></h1>
-        <img alt="" class="body_lines" src="../static/pics/swirl.png">
+        <table class="table table-striped" id="order_content">
+            <thead>
+            <tr class="info">
+                <th>${content.id}</th>
+                <th>${water.type}</th>
+                <th>${bottle.size}</th>
+                <th>${content.quantity}</th>
+                <th>${content.price}</th>
+            </tr>
+            </thead>
+            <tbody>
 
-        <t:order_panel/>
+            </tbody>
+        </table>
 
     </div>
-
     <t:footer/>
 
     </body>

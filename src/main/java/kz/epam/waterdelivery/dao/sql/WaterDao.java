@@ -1,29 +1,32 @@
 package kz.epam.waterdelivery.dao.sql;
 
 import kz.epam.waterdelivery.dao.GenericDao;
-import kz.epam.waterdelivery.entity.BottleSize;
+import kz.epam.waterdelivery.entity.Water;
 import kz.epam.waterdelivery.pool.ConnectionPool;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BottleSizeImpl implements GenericDao<BottleSize> {
+public class WaterDao implements GenericDao<Water> {
 
     ConnectionPool pool =  ConnectionPool.getInstance();
 
     @Override
-    public void add(BottleSize bottle) throws SQLException {
+    public void add(Water water) throws SQLException {
+
         Connection connection = pool.getConnection();
+
         PreparedStatement preparedStatement = null;
 
-        String sql = "INSERT INTO BOTTLE_SIZE (ID, SIZE) VALUES(?, ?)";
+        String sql = "INSERT INTO WATER(ID, TYPE, PRICE_PER_LITER) VALUES(?, ?, ?)";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setInt(1, bottle.getId());
-            preparedStatement.setDouble(2, bottle.getSize());
+            preparedStatement.setInt(1, water.getId());
+            preparedStatement.setString(2, water.getType());
+            preparedStatement.setInt(3, water.getPricePerLiter());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -39,10 +42,11 @@ public class BottleSizeImpl implements GenericDao<BottleSize> {
     }
 
     @Override
-    public List<BottleSize> getAll() {
+    public List<Water> getAll() {
         Connection connection = pool.getConnection();
-        List<BottleSize> bottleSizeList = new ArrayList<>();
-        String sql = "SELECT ID, SIZE FROM BOTTLE_SIZE";
+        List<Water> waterList = new ArrayList<>();
+
+        String sql = "SELECT ID, TYPE, PRICE_PER_LITER FROM WATER";
 
         Statement statement = null;
 
@@ -50,11 +54,12 @@ public class BottleSizeImpl implements GenericDao<BottleSize> {
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                BottleSize bottle = new BottleSize();
-                bottle.setId(resultSet.getInt("ID"));
-                bottle.setSize(resultSet.getDouble("SIZE"));
+                Water water = new Water();
+                water.setId(resultSet.getInt("ID"));
+                water.setType(resultSet.getString("TYPE"));
+                water.setPricePerLiter(resultSet.getInt("PRICE_PER_LITER"));
 
-                bottleSizeList.add(bottle);
+                waterList.add(water);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -70,15 +75,15 @@ public class BottleSizeImpl implements GenericDao<BottleSize> {
                 pool.returnConnection(connection);
             }
         }
-        return bottleSizeList;
+        return waterList;
     }
 
     @Override
-    public BottleSize getById(int id) throws SQLException {
+    public Water getById(int id) {
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
-        BottleSize bottle = new BottleSize();
-        String sql = "SELECT ID, SIZE FROM BOTTLE_SIZE WHERE ID=?";
+        Water water = null;
+        String sql = "SELECT ID, TYPE, PRICE_PER_LITER FROM WATER WHERE ID=?";
         try {
             preparedStatement = connection.prepareStatement(sql);
 
@@ -86,35 +91,75 @@ public class BottleSizeImpl implements GenericDao<BottleSize> {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                bottle.setId(resultSet.getInt("ID"));
-                bottle.setSize(resultSet.getDouble("SIZE"));
+                water = new Water();
+                water.setId(resultSet.getInt("ID"));
+                water.setType(resultSet.getString("TYPE"));
+                water.setPricePerLiter(resultSet.getInt("PRICE_PER_LITER"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             if (preparedStatement != null) {
-                preparedStatement.close();
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             if (connection != null) {
                 pool.returnConnection(connection);
             }
-            return bottle;
+            return water;
+        }
+    }
+
+    public Water getByType(String type){
+        Connection connection = pool.getConnection();
+        PreparedStatement preparedStatement = null;
+        Water water = null;
+        String sql = "SELECT ID, TYPE, PRICE_PER_LITER FROM WATER WHERE TYPE=?";
+        try {
+            preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, type);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                water = new Water();
+                water.setId(resultSet.getInt("ID"));
+                water.setType(resultSet.getString("TYPE"));
+                water.setPricePerLiter(resultSet.getInt("PRICE_PER_LITER"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                pool.returnConnection(connection);
+            }
+            return water;
         }
     }
 
     @Override
-    public void update(BottleSize bottle) throws SQLException {
+    public void update(Water water) throws SQLException {
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
 
-        String sql = "UPDATE BOTTLE_SIZE SET SIZE=? WHERE ID=?";
+        String sql = "UPDATE WATER SET TYPE=?, PRICE_PER_LITER=? WHERE ID=?";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setDouble(1, bottle.getSize());
-            preparedStatement.setInt(2, bottle.getId());
-
+            preparedStatement.setString(1, water.getType());
+            preparedStatement.setInt(2, water.getPricePerLiter());
+            preparedStatement.setInt(3, water.getId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -130,16 +175,16 @@ public class BottleSizeImpl implements GenericDao<BottleSize> {
     }
 
     @Override
-    public void remove(BottleSize bottle) throws SQLException {
+    public void remove(Water water) throws SQLException {
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
 
-        String sql = "DELETE FROM BOTTLE_SIZE WHERE ID=?";
+        String sql = "DELETE FROM WATER WHERE ID=?";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setInt(1, bottle.getId());
+            preparedStatement.setInt(1, water.getId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

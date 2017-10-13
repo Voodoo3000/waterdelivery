@@ -41,9 +41,7 @@
         </div>
 
         <p id="greetings_title" align="center">
-            <fmt:message key="default.greetings_title"/>
-            <a title="<fmt:message key="default.to_cabinet"/>"
-               href='<c:url value="/do/cabinet"/>'>${user.firstName}</a>! <fmt:message
+            <fmt:message key="default.greetings_title"/> ${user.firstName}! <fmt:message
                 key="default.user_balance"/> ${user.wallet}<fmt:message key="default.currency"/>.
         </p>
 
@@ -57,10 +55,9 @@
             </br><fmt:message key="default.main_title2"/></h1>
         <img alt="" class="body_lines" src="../static/pics/swirl.png">
 
-        <t:order_panel/>
+        <t:user_cabinet_panel/>
 
     </div>
-
     <t:footer/>
 
     </body>

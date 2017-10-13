@@ -20,7 +20,7 @@
     <body>
 
     <div id="header" align="center">
-        <a id="main_logo" title="<fmt:message key="default.logo"/>" href="/">
+        <a id="main_logo" title="<fmt:message key="default.logo"/>" href='<c:url value="${refresh}"/>'>
             <img src="../static/pics/sticker2.jpg">
         </a>
         <p id="logo_title" align="center">
@@ -87,7 +87,7 @@
                 <input type="text" id="lastname" name="lastname" required>
             </div>
             <input type="submit" value="<fmt:message key="default.signup_button"/>"/>&nbsp;&nbsp;&nbsp;
-            <fmt:message key="default.signup_or_title"/>&nbsp;&nbsp;&nbsp;
+            <fmt:message key="default.signup_or"/>&nbsp;&nbsp;&nbsp;
             <a href="#login_form" id="login_pop"><fmt:message key="default.signin"/></a>
         </form>
     </div>
@@ -97,74 +97,8 @@
             </br><fmt:message key="default.main_title2"/></h1>
         <img alt="" class="body_lines" src="../static/pics/swirl.png">
 
-        <div class="panel panel-default">
-            <h3 id="panel-title"><fmt:message key="default.order_panel"/></h3>
-            <div class="panel-body">
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <fmt:message key="default.water_types"/>
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <c:forEach items="${waterTypes}" var="type">
-                            <li><a href="#"><fmt:message key="default.type_${type.type}"/></a></li>
-                        </c:forEach>
-                    </ul>
-                </div>
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <fmt:message key="default.bottle_value"/>
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                        <c:forEach items="${bottleSizes}" var="size">
-                            <li><a href="#"><fmt:message key="default.size_${size.size}"/></a></li>
-                        </c:forEach>
-                    </ul>
-                </div>
+        <t:order_panel/>
 
-                </p>
-                <form class="form-inline">
-                    <span class="btn btn-primary" id="minus">-</span>
-                    <input type="number1" class="form-control" id="input" value="0" readonly="readonly">
-                    <span class="btn btn-primary" id="plus">+</span>
-                </form>
-                <p>
-                    <script>
-                        $(document).ready(function () {
-                            $('#minus').click(function () {
-                                var $input = $(this).parent().find('input');
-                                var count = parseInt($input.val()) - 1;
-                                count = count < 1 ? 0 : count;
-                                $input.val(count);
-                                $input.change();
-                                return false;
-                            });
-                            $('#plus').click(function () {
-                                var $input = $(this).parent().find('input');
-                                $input.val(parseInt($input.val()) + 1);
-                                $input.change();
-                                return false;
-                            });
-                        });
-                    </script>
-
-                <div class="price_output">
-                <h5 id="amount-title"><fmt:message key="default.output_price"/></h5>
-                <output typeof="number" class="form-control" id="output" readonly="readonly"></output>
-
-                <a href="#" type="button" class="btn btn-primary" id="btn2" aria-pressed="false" autocomplete="off">
-                    <fmt:message key="default.add_to_cart"/>
-                </a>
-
-                <a href="#" type="button" class="btn btn-default" id="btn3" aria-pressed="false" autocomplete="off">
-                    <fmt:message key="default.get_order"/>
-                </a>
-            </div>
-            </div>
-        </div>
     </div>
 
     <t:footer/>
