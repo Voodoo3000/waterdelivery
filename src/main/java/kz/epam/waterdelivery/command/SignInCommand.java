@@ -1,6 +1,8 @@
 package kz.epam.waterdelivery.command;
 
+import kz.epam.waterdelivery.dao.sql.CustomerOrderDao;
 import kz.epam.waterdelivery.dao.sql.UserDao;
+import kz.epam.waterdelivery.entity.CustomerOrder;
 import kz.epam.waterdelivery.entity.User;
 
 import javax.servlet.ServletContext;
@@ -41,8 +43,11 @@ public class SignInCommand implements Command {
                 result = LOGIN_FAILED;
                 session.setAttribute(ERROR, login_pass_err_msg);
             } else {
-                result = AUTHORIZED;
                 request.getSession().setAttribute("user", user);
+                CustomerOrderDao orderDao = new CustomerOrderDao();
+                CustomerOrder order = orderDao.getUnpaidOrderByUserId(user.getId());
+                request.getSession().setAttribute("order", order);
+                result = AUTHORIZED;
             }
         } catch (SQLException e) {
             e.printStackTrace();

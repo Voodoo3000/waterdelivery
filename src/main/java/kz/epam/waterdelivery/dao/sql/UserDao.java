@@ -27,7 +27,7 @@ public class UserDao implements GenericDao<User> {
             preparedStatement.setString(3, user.getLoginEmail());
             preparedStatement.setString(4, user.getPassword());
             preparedStatement.setString(5, String.valueOf(user.getRole()));
-            preparedStatement.setInt(6, user.getWallet());
+            preparedStatement.setDouble(6, user.getWallet());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -65,7 +65,7 @@ public class UserDao implements GenericDao<User> {
                 user.setLoginEmail(resultSet.getString("LOGINEMAIL"));
                 user.setPassword(resultSet.getString("PASSWORD"));
                 user.setRole(User.Role.valueOf(resultSet.getString("ROLE")));
-                user.setWallet(resultSet.getInt("WALLET"));
+                user.setWallet(resultSet.getDouble("WALLET"));
 
                 userList.add(user);
             }
@@ -103,7 +103,7 @@ public class UserDao implements GenericDao<User> {
                 user.setLoginEmail(resultSet.getString("LOGINEMAIL"));
                 user.setPassword(resultSet.getString("PASSWORD"));
                 user.setRole(User.Role.valueOf(resultSet.getString("ROLE")));
-                user.setWallet(resultSet.getInt("WALLET"));
+                user.setWallet(resultSet.getDouble("WALLET"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -139,7 +139,7 @@ public class UserDao implements GenericDao<User> {
                 user.setLoginEmail(resultSet.getString("LOGINEMAIL"));
                 user.setPassword(resultSet.getString("PASSWORD"));
                 user.setRole(User.Role.valueOf(resultSet.getString("ROLE")));
-                user.setWallet(resultSet.getInt("WALLET"));
+                user.setWallet(resultSet.getDouble("WALLET"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -175,7 +175,7 @@ public class UserDao implements GenericDao<User> {
                 user.setLoginEmail(resultSet.getString("LOGINEMAIL"));
                 user.setPassword(resultSet.getString("PASSWORD"));
                 user.setRole(User.Role.valueOf(resultSet.getString("ROLE")));
-                user.setWallet(resultSet.getInt("WALLET"));
+                user.setWallet(resultSet.getDouble("WALLET"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -191,7 +191,7 @@ public class UserDao implements GenericDao<User> {
     }
 
     @Override
-    public void update(User user) throws SQLException {
+    public void update(User user) {
 
         Connection connection = pool.getConnection();
 
@@ -207,7 +207,7 @@ public class UserDao implements GenericDao<User> {
             preparedStatement.setString(3, user.getLoginEmail());
             preparedStatement.setString(4, user.getPassword());
             preparedStatement.setString(5, String.valueOf(user.getRole()));
-            preparedStatement.setInt(6, user.getWallet());
+            preparedStatement.setDouble(6, user.getWallet());
             preparedStatement.setInt(7, user.getId());
 
             preparedStatement.executeUpdate();
@@ -215,7 +215,11 @@ public class UserDao implements GenericDao<User> {
             e.printStackTrace();
         } finally {
             if (preparedStatement != null) {
-                preparedStatement.close();
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             if (connection != null) {
                 pool.returnConnection(connection);

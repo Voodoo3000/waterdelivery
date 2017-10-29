@@ -7,7 +7,6 @@ public class CommandContainer {
     private static final String MAIN_PAGE = "main";
     private static final String MAIN_PAGE_AUTHORIZED = "main_authorized";
     private static final String CABINET = "cabinet";
-    private static final String CUSTOMER_CART = "customer_cart";
     private final static Map<String, Command> COMMANDS = new HashMap<>();
 
     static {
@@ -21,7 +20,8 @@ public class CommandContainer {
         COMMANDS.put("GET/locale", new ChangeLocaleCommand());
         COMMANDS.put("GET/refresh", new RefreshPageCommand());
         COMMANDS.put("GET/add_to_cart", new AddToCartCommand());
-        COMMANDS.put("GET/open_customer_cart", new OpenPageCommand(CUSTOMER_CART));
+        COMMANDS.put("GET/open_customer_cart", new OpenCartCommand());
+        COMMANDS.put("GET/order", new GetOrderCommand());
     }
 
     public static Command get(String commandName) {

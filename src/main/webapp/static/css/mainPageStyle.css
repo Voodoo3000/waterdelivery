@@ -80,11 +80,13 @@
     height: 95%;
     margin-top: 0.5%;
 }
+
 .body_lines {
     position: absolute;
     top: 60%;
     width: 95%;
 }
+
 #main_title{
     position: absolute;
     left: 20%;
@@ -93,11 +95,11 @@
     font-family: Impact;
 }
 .panel{
-    position: absolute;
-    right: 10%;
-    width: 19%;
-    height: 50%;
-    top: 20%;
+    position: relative;
+    left: 70%;
+    width: 21%;
+    height: 53%;
+    top: 13%;
 }
 
 #panel-cabinet {
@@ -184,8 +186,8 @@
 
 #order_content {
     position: relative;
-    top: 40%;
-    width: 50%;
+    top: 17%;
+    width: 60%;
     left: 20%;
 }
 

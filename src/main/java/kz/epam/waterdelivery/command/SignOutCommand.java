@@ -8,7 +8,6 @@ import java.io.IOException;
 
 public class SignOutCommand implements Command {
 
-
     private static final CommandResult RESULT = new CommandResult("do/main", true);
 
     @Override
@@ -16,8 +15,11 @@ public class SignOutCommand implements Command {
         HttpSession session = request.getSession();
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) return RESULT;
-        //request.getSession().removeAttribute("user");
+
+        session.removeAttribute("contentList");
         session.removeAttribute("user");
+        session.removeAttribute("order");
+
         return RESULT;
     }
 }

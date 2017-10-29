@@ -27,12 +27,8 @@ public class EditUserCommand implements Command {
         user.setFirstName(firstname);
         user.setLastName(lastname);
         user.setPassword(password);
+        userDao.update(user);
 
-        try {
-            userDao.update(user);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         result = new CommandResult("cabinet");
         request.getSession().setAttribute("user", user);
         return result;

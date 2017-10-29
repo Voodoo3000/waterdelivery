@@ -1,7 +1,7 @@
 package kz.epam.waterdelivery.entity;
 
 public class User extends Entity {
-    private int wallet;
+    private double wallet;
     private String firstName;
     private String lastName;
     private String loginEmail;
@@ -15,11 +15,11 @@ public class User extends Entity {
     public User() {
     }
 
-    public int getWallet() {
+    public double getWallet() {
         return wallet;
     }
 
-    public void setWallet(int wallet) {
+    public void setWallet(double wallet) {
         this.wallet = wallet;
     }
 

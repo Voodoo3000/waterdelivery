@@ -9,11 +9,11 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="input-group">
-                        <span class="input-group-addon" id="waterType"><fmt:message key="default.water_types"/></span>
+                        <span class="input-group-addon" id="waterType"><fmt:message key="default.water"/></span>
                         <select class="selectpicker show-menu-arrow" data-width="auto" name="type" id="type">
-                            <c:forEach items="${waterList}" var="type">
-                                <option value="${type.type}">
-                                    <fmt:message key="default.type_${type.type}"/>
+                            <c:forEach items="${waterList}" var="water">
+                                <option value="${water.type}">
+                                    <fmt:message key="default.type_${water.type}"/>
                                 </option>
                             </c:forEach>
                         </select>
@@ -25,9 +25,9 @@
                     <div class="input-group" id="bs">
                         <span class="input-group-addon" id="bottleSize"><fmt:message key="default.bottle_value"/></span>
                         <select class="selectpicker show-menu-arrow" data-width="auto" name="size" id="size">
-                            <c:forEach items="${bottleSizes}" var="size">
-                                <option value="${size.size}">
-                                    <fmt:message key="default.size_${size.size}"/>
+                            <c:forEach items="${bottleSizes}" var="bottle">
+                                <option value="${bottle.size}">
+                                    <fmt:message key="default.size_${bottle.size}"/>
                                 </option>
                             </c:forEach>
                         </select>
@@ -92,13 +92,11 @@
             </div>
 
             <c:if test="${order != null}">
-                <a type="button" class="btn btn-default" id="btn3" href="<c:url value="/do/open_customer_cart"/>">
+                <a type="button" class="btn btn-default" id="btn3" href='<c:url value="/do/open_customer_cart"/>'>
                     <fmt:message key="default.cart"/>
                 </a>
             </c:if>
 
-
         </div>
     </div>
-
 </form>

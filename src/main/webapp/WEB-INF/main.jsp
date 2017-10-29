@@ -54,8 +54,8 @@
             <h2><fmt:message key="default.greetings"/></h2>
             <p><fmt:message key="default.user_verification"/></p>
             <div>
-                <label for="login"><fmt:message key="default.user_login"/></label>
-                <input type="text" id="login" name="email" required/>
+                <label for="email"><fmt:message key="default.user_login"/></label>
+                <input type="email" id="login" name="email" required/>
             </div>
             <div>
                 <label for="password"><fmt:message key="default.user_pass"/></label>
@@ -72,11 +72,15 @@
             <p><fmt:message key="default.user_details"/></p>
             <div>
                 <label for="email"><fmt:message key="default.user_login"/></label>
-                <input type="text" id="email" name="email" required>
+                <input type="email" id="email" name="email" required>
             </div>
             <div>
                 <label for="pass"><fmt:message key="default.user_pass"/></label>
                 <input type="password" id="pass" name="password" required>
+            </div>
+            <div>
+                <label for="pass"><fmt:message key="default.user_repeat_pass"/></label>
+                <input type="password" id="pass1" name="password" required>
             </div>
             <div>
                 <label for="firstname"><fmt:message key="default.user_firstname"/></label>
