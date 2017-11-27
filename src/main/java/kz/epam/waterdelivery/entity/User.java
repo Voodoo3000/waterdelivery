@@ -7,9 +7,14 @@ public class User extends Entity {
     private String loginEmail;
     private String password;
     private Role role;
+    private State state;
 
     public enum Role {
         ADMIN, CLIENT
+    }
+
+    public enum State {
+        ENABLED, DISABLED
     }
 
     public User() {
@@ -63,15 +68,12 @@ public class User extends Entity {
         this.role = role;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "wallet=" + wallet +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", loginEmail='" + loginEmail + '\'' +
-                ", password='" + password + '\'' +
-                ", role=" + role +
-                '}';
+    public State getState() {
+        return state;
     }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
 }

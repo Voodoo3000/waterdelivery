@@ -1,7 +1,9 @@
 package kz.epam.waterdelivery.command;
 
+import kz.epam.waterdelivery.dao.sql.CustomerAddressDao;
 import kz.epam.waterdelivery.dao.sql.CustomerOrderDao;
 import kz.epam.waterdelivery.dao.sql.OrderContentDao;
+import kz.epam.waterdelivery.entity.CustomerAddress;
 import kz.epam.waterdelivery.entity.CustomerOrder;
 import kz.epam.waterdelivery.entity.OrderContent;
 import kz.epam.waterdelivery.entity.User;
@@ -11,29 +13,45 @@ import java.util.List;
 
 public class OpenCartCommand implements Command {
 
-    private CommandResult result;
+    private static final CommandResult RESULT = new CommandResult("customer_cart");
+    private static final String ATTR_USER = "user";
+    private static final String ATTR_CONTENT_LIST = "contentList";
+    private static final String ATTR_TOTAL_AMOUNT = "totalAmount";
+    private static final String ATTR_ADDRESS = "address";
 
     @Override
     public CommandResult execute(HttpServletRequest request) throws IOException {
 
         double totalAmount = 0;
+        CustomerOrder order;
+        CustomerAddress address;
         CustomerOrderDao orderDao = new CustomerOrderDao();
         OrderContentDao contentDao = new OrderContentDao();
-        CustomerOrder order;
+        CustomerAddressDao addressDao = new CustomerAddressDao();
 
-        User user = (User) request.getSession().getAttribute("user");
-        order = orderDao.getUnpaidOrderByUserId(user.getId());
-        List<OrderContent> contentReal = contentDao.getByCustomerOrderId(order.getId());
-        for (OrderContent content : contentReal) {
-            totalAmount = totalAmount + (content.getWater().getPricePerLiter() * content.getBottleSize().getSize() * content.getQuantity());
+        User user = (User) request.getSession().getAttribute(ATTR_USER);
+        order = orderDao.getCreatingOrderByUserId(user.getId());
+        if (order != null) {
+            List<OrderContent> contentReal = contentDao.getAllByCustomerOrderId(order.getId());
+            request.getSession().setAttribute(ATTR_CONTENT_LIST, contentReal);
+            for (OrderContent content : contentReal) {
+                totalAmount = totalAmount + (content.getWater().getPricePerLiter() * content.getBottleSize().getSize() * content.getQuantity());
+            }
+            order.setAmount(totalAmount);
+            orderDao.update(order);
         }
-        order.setAmount(totalAmount);
-        orderDao.update(order);
+        address = addressDao.getByCustomerId(user.getId());
 
-        request.getSession().setAttribute("totalAmount", totalAmount);
-        request.getSession().setAttribute("contentList", contentReal);
+        if (address != null) {
+            request.getSession().setAttribute(ATTR_ADDRESS, address);
+        }
+        else {
+            address = new CustomerAddress();
+            address.setCustomerId(user.getId());
+            addressDao.add(address);
+        }
+        request.getSession().setAttribute(ATTR_TOTAL_AMOUNT, totalAmount);
 
-        result = new CommandResult("customer_cart");
-        return result;
+        return RESULT;
     }
 }

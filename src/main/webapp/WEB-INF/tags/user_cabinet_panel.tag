@@ -1,9 +1,9 @@
-<%@tag description="user edit form" pageEncoding="UTF-8" %>
+<%@tag description="user_cabinet_panel" pageEncoding="UTF-8" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <form id="user-form1" method="post" action="edit_user">
-<div class="panel panel-primary" id="panel-cabinet">
+<div class="panel panel-primary" id="cabinet-panel">
     <h3 id="panel-title"><fmt:message key="default.cabinet_panel"/></h3>
         <div class="msg-error">${user_change_error}</div>
         <div class="panel-body">
@@ -35,8 +35,16 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="input-group">
-                            <span class="input-group-addon"><fmt:message key="default.user_pass"/></span>
+                            <span class="input-group-addon"><fmt:message key="default.enter_pass"/></span>
                             <input type="password" class="form-control" name="password" value="${user.password}" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="input-group">
+                            <span class="input-group-addon"><fmt:message key="default.repeat_pass"/></span>
+                            <input type="password" class="form-control" name="password1" value="${user.password}" required>
                         </div>
                     </div>
                 </div>

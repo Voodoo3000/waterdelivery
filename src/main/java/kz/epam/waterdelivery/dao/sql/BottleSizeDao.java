@@ -13,24 +13,27 @@ public class BottleSizeDao implements GenericDao<BottleSize> {
     ConnectionPool pool = ConnectionPool.getInstance();
 
     @Override
-    public void add(BottleSize bottle) throws SQLException {
+    public void add(BottleSize bottle) {
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
 
-        String sql = "INSERT INTO BOTTLE_SIZE (ID, SIZE) VALUES(?, ?)";
+        String sql = "INSERT INTO BOTTLE_SIZE (SIZE) VALUES(?)";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setInt(1, bottle.getId());
-            preparedStatement.setDouble(2, bottle.getSize());
+            preparedStatement.setDouble(1, bottle.getSize());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             if (preparedStatement != null) {
-                preparedStatement.close();
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             if (connection != null) {
                 pool.returnConnection(connection);
@@ -142,7 +145,7 @@ public class BottleSizeDao implements GenericDao<BottleSize> {
     }
 
     @Override
-    public void update(BottleSize bottle) throws SQLException {
+    public void update(BottleSize bottle) {
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
 
@@ -160,7 +163,11 @@ public class BottleSizeDao implements GenericDao<BottleSize> {
             e.printStackTrace();
         } finally {
             if (preparedStatement != null) {
-                preparedStatement.close();
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             if (connection != null) {
                 pool.returnConnection(connection);

@@ -9,9 +9,9 @@
     <head>
         <title>mountainspring.com</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link href="../static/css/mainPageStyle.css" rel="stylesheet" type="text/css" media="screen"/>
+        <link href="../static/css/mainPageStyle.css" rel="stylesheet" type="text/css"/>
         <link href='<c:url value="/webjars/bootstrap/3.2.0/css/bootstrap.css"/>' rel="stylesheet" media="screen">
-        <link href="../static/css/cssmodal.css" rel="stylesheet" type="text/css" media="screen"/>
+        <link href="../static/css/cssmodal.css" rel="stylesheet" type="text/css"/>
         <link href='<c:url value="/static/css/bootstrap-select.css"/>' rel="stylesheet" media="screen">
         <script type='text/javascript' src='<c:url value="/webjars/jquery/1.11.1/jquery.js"/>'></script>
         <script type='text/javascript' src='<c:url value="/webjars/bootstrap/3.2.0/js/bootstrap.js"/>'></script>
@@ -23,40 +23,21 @@
 
         <t:main_logo/>
 
-        <c:if test="${user.role == 'CLIENT'}">
-            <t:logo_title/>
-        </c:if>
+        <t:logo_title/>
 
         <t:locale_changer/>
 
-        <c:if test="${user != null}">
-            <t:greetings_title/>
-            <t:signout_btn/>
-        </c:if>
-
-        <c:if test="${user == null}">
-            <t:reg_login_btn_form/>
-        </c:if>
+        <t:signout_btn/>
 
     </div>
 
     <div id="body" class="value_img">
 
-        <c:if test="${user == null || user.role == 'CLIENT'}">
-            <t:title_bodylines/>
-            <t:order_panel/>
-        </c:if>
+        <t:user_cabinet_panel/>
 
-        <c:if test="${user.role == 'ADMIN'}">
-            <t:admin_buttons/>
-            <t:admin_edit_users/>
-        </c:if>
+        <t:user_cabinet_table/>
 
     </div>
-
-    <c:if test="${user == null || user.role == 'CLIENT'}">
-        <t:footer/>
-    </c:if>
 
     </body>
     </html>

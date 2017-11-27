@@ -20,36 +20,17 @@
     <body>
 
     <div id="header" align="center">
-        <a id="main_logo" title="<fmt:message key="default.logo"/>" href='<c:url value="${refresh}"/>'>
-            <img src="../static/pics/sticker2.jpg">
-        </a>
-        <p id="logo_title" align="center">
-            <fmt:message key="default.logo_title"/>
-        </p>
-        <div id="locale_changer" class="dropdown">
-            <button class="btn btn-default dropdown-toggle" id="dropdownMenu3" data-toggle="dropdown">
-                <c:if test="${locale.language=='ru'}"><img src='<c:url value="/static/pics/RU.png"/>'/></c:if>
-                <c:if test="${locale.language=='en'}"><img src='<c:url value="/static/pics/EN.png"/>'/></c:if>
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu3">
-                <li role="option"><a role="menuitem" tabindex="-1" href="locale?locale=ru"><img
-                        src='<c:url value="/static/pics/RU.png"/>'/>Русский</a></li>
-                <li role="option"><a role="menuitem" tabindex="-1" href="locale?locale=en"><img
-                        src='<c:url value="/static/pics/EN.png"/>'/>English</a></li>
-            </ul>
-        </div>
 
-        <p id="greetings_title" align="center">
-            <fmt:message key="default.greetings_title"/>
-            <a title="<fmt:message key="default.to_cabinet"/>"
-               href='<c:url value="/do/cabinet"/>'>${user.firstName}</a>! <fmt:message
-                key="default.user_balance"/> ${user.wallet}<fmt:message key="default.currency"/>.
-        </p>
+        <t:main_logo/>
 
-        <a type="button" class="btn btn-primary" id="btn4" onclick='location.href="/do/signout"'>
-            <fmt:message key="default.signout"/>
-        </a>
+        <t:logo_title/>
+
+        <t:locale_changer/>
+
+        <t:greetings_title/>
+
+        <t:signout_btn/>
+
     </div>
 
     <div id="body" class="value_img">
@@ -59,8 +40,6 @@
         <t:checkout_form/>
 
     </div>
-
-    <t:footer/>
 
     </body>
     </html>

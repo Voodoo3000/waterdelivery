@@ -23,40 +23,21 @@
 
         <t:main_logo/>
 
-        <c:if test="${user.role == 'CLIENT'}">
-            <t:logo_title/>
-        </c:if>
-
         <t:locale_changer/>
 
-        <c:if test="${user != null}">
-            <t:greetings_title/>
-            <t:signout_btn/>
-        </c:if>
+        <t:greetings_title/>
 
-        <c:if test="${user == null}">
-            <t:reg_login_btn_form/>
-        </c:if>
+        <t:signout_btn/>
 
     </div>
 
     <div id="body" class="value_img">
 
-        <c:if test="${user == null || user.role == 'CLIENT'}">
-            <t:title_bodylines/>
-            <t:order_panel/>
-        </c:if>
+        <t:admin_buttons/>
 
-        <c:if test="${user.role == 'ADMIN'}">
-            <t:admin_buttons/>
-            <t:admin_edit_users/>
-        </c:if>
+        <t:admin_edit_water/>
 
     </div>
-
-    <c:if test="${user == null || user.role == 'CLIENT'}">
-        <t:footer/>
-    </c:if>
 
     </body>
     </html>

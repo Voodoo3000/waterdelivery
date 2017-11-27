@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <form id="add_to_cart-form" method="get" action="add_to_cart">
-    <div class="panel panel-default">
+    <div class="panel panel-default" id="order_panel">
         <h3 id="panel-title"><fmt:message key="default.order_panel"/></h3>
         <div class="panel-body">
             <div class="row">
@@ -34,8 +34,8 @@
                     </div>
                 </div>
             </div>
-            <c:set var="count" value="0" scope="request"/>
 
+            <c:set var="count" value="1" scope="request"/>
             <div>
                 <form class="form-inline">
                     <span class="btn btn-primary" id="minus">-</span>
@@ -91,7 +91,7 @@
                 </form>
             </div>
 
-            <c:if test="${order != null}">
+            <c:if test="${user != null}">
                 <a type="button" class="btn btn-default" id="btn3" href='<c:url value="/do/open_customer_cart"/>'>
                     <fmt:message key="default.cart"/>
                 </a>

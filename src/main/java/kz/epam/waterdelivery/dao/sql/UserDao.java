@@ -17,18 +17,17 @@ public class UserDao implements GenericDao<User> {
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
 
-        String sql = "INSERT INTO USER(FIRSTNAME, LASTNAME, LOGINEMAIL, PASSWORD, ROLE, WALLET) VALUES( ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO USER(FIRSTNAME, LASTNAME, LOGINEMAIL, PASSWORD, ROLE, WALLET, STATE) VALUES( ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
-
             preparedStatement.setString(1, user.getFirstName());
             preparedStatement.setString(2, user.getLastName());
             preparedStatement.setString(3, user.getLoginEmail());
             preparedStatement.setString(4, user.getPassword());
             preparedStatement.setString(5, String.valueOf(user.getRole()));
             preparedStatement.setDouble(6, user.getWallet());
-
+            preparedStatement.setString(7, String.valueOf(user.getState()));
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -43,15 +42,12 @@ public class UserDao implements GenericDao<User> {
     }
 
     @Override
-    public List<User> getAll() throws SQLException {
-
-        ConnectionPool pool = ConnectionPool.getInstance();
+    public List<User> getAll() {
         Connection connection = pool.getConnection();
 
         List<User> userList = new ArrayList<>();
 
-        String sql = "SELECT ID, FIRSTNAME, LASTNAME, LOGINEMAIL, PASSWORD, ROLE, WALLET FROM USER";
-
+        String sql = "SELECT ID, FIRSTNAME, LASTNAME, LOGINEMAIL, PASSWORD, ROLE, WALLET, STATE FROM USER";
         Statement statement = null;
 
         try {
@@ -66,14 +62,61 @@ public class UserDao implements GenericDao<User> {
                 user.setPassword(resultSet.getString("PASSWORD"));
                 user.setRole(User.Role.valueOf(resultSet.getString("ROLE")));
                 user.setWallet(resultSet.getDouble("WALLET"));
-
+                user.setState(User.State.valueOf(resultSet.getString("STATE")));
                 userList.add(user);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             if (statement != null) {
-                statement.close();
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                pool.returnConnection(connection);
+            }
+        }
+        return userList;
+    }
+
+    public List<User> getAllUsersByLogin(String loginEmail) {
+
+        Connection connection = pool.getConnection();
+
+        User user;
+        List<User> userList = new ArrayList<>();
+
+        String sql = "SELECT ID, FIRSTNAME, LASTNAME, LOGINEMAIL, PASSWORD, ROLE, WALLET, STATE FROM USER WHERE LOGINEMAIL=?";
+        PreparedStatement preparedStatement = null;
+
+        try {
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, loginEmail);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                user = new User();
+                user.setId(resultSet.getInt("ID"));
+                user.setFirstName(resultSet.getString("FIRSTNAME"));
+                user.setLastName(resultSet.getString("LASTNAME"));
+                user.setLoginEmail(resultSet.getString("LOGINEMAIL"));
+                user.setPassword(resultSet.getString("PASSWORD"));
+                user.setRole(User.Role.valueOf(resultSet.getString("ROLE")));
+                user.setWallet(resultSet.getDouble("WALLET"));
+                user.setState(User.State.valueOf(resultSet.getString("STATE")));
+                userList.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             if (connection != null) {
                 pool.returnConnection(connection);
@@ -83,12 +126,12 @@ public class UserDao implements GenericDao<User> {
     }
 
     @Override
-    public User getById(int id) throws SQLException {
+    public User getById(int id) {
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
 
         User user = null;
-        String sql = "SELECT ID, FIRSTNAME, LASTNAME, LOGINEMAIL, PASSWORD, ROLE, WALLET FROM USER WHERE ID=?";
+        String sql = "SELECT ID, FIRSTNAME, LASTNAME, LOGINEMAIL, PASSWORD, ROLE, WALLET, STATE FROM USER WHERE ID=?";
         try {
             preparedStatement = connection.prepareStatement(sql);
 
@@ -104,12 +147,17 @@ public class UserDao implements GenericDao<User> {
                 user.setPassword(resultSet.getString("PASSWORD"));
                 user.setRole(User.Role.valueOf(resultSet.getString("ROLE")));
                 user.setWallet(resultSet.getDouble("WALLET"));
+                user.setState(User.State.valueOf(resultSet.getString("STATE")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             if (preparedStatement != null) {
-                preparedStatement.close();
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             if (connection != null) {
                 pool.returnConnection(connection);
@@ -118,13 +166,13 @@ public class UserDao implements GenericDao<User> {
         }
     }
 
-    public User getByLogin(String loginEmail) throws SQLException {
+    public User getByLogin(String loginEmail) {
 
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
 
         User user = null;
-        String sql = "SELECT ID, FIRSTNAME, LASTNAME, LOGINEMAIL, PASSWORD, ROLE, WALLET FROM USER WHERE LOGINEMAIL=?";
+        String sql = "SELECT ID, FIRSTNAME, LASTNAME, LOGINEMAIL, PASSWORD, ROLE, WALLET, STATE FROM USER WHERE LOGINEMAIL=?";
         try {
             preparedStatement = connection.prepareStatement(sql);
 
@@ -140,12 +188,17 @@ public class UserDao implements GenericDao<User> {
                 user.setPassword(resultSet.getString("PASSWORD"));
                 user.setRole(User.Role.valueOf(resultSet.getString("ROLE")));
                 user.setWallet(resultSet.getDouble("WALLET"));
+                user.setState(User.State.valueOf(resultSet.getString("STATE")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             if (preparedStatement != null) {
-                preparedStatement.close();
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             if (connection != null) {
                 pool.returnConnection(connection);
@@ -161,7 +214,7 @@ public class UserDao implements GenericDao<User> {
 
         PreparedStatement preparedStatement = null;
         User user = new User();
-        String sql = "SELECT ID, FIRSTNAME, LASTNAME, LOGINEMAIL, PASSWORD, ROLE, WALLET FROM USER WHERE PASSWORD=?";
+        String sql = "SELECT ID, FIRSTNAME, LASTNAME, LOGINEMAIL, PASSWORD, ROLE, WALLET, STATE FROM USER WHERE PASSWORD=?";
         try {
             preparedStatement = connection.prepareStatement(sql);
 
@@ -176,6 +229,7 @@ public class UserDao implements GenericDao<User> {
                 user.setPassword(resultSet.getString("PASSWORD"));
                 user.setRole(User.Role.valueOf(resultSet.getString("ROLE")));
                 user.setWallet(resultSet.getDouble("WALLET"));
+                user.setState(User.State.valueOf(resultSet.getString("STATE")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -192,24 +246,21 @@ public class UserDao implements GenericDao<User> {
 
     @Override
     public void update(User user) {
-
         Connection connection = pool.getConnection();
-
         PreparedStatement preparedStatement = null;
 
-        String sql = "UPDATE USER SET FIRSTNAME=?, LASTNAME=?, LOGINEMAIL=?, PASSWORD=?, ROLE=?, WALLET=? WHERE ID=?";
+        String sql = "UPDATE USER SET FIRSTNAME=?, LASTNAME=?, LOGINEMAIL=?, PASSWORD=?, ROLE=?, WALLET=?, STATE=? WHERE ID=?";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
-
             preparedStatement.setString(1, user.getFirstName());
             preparedStatement.setString(2, user.getLastName());
             preparedStatement.setString(3, user.getLoginEmail());
             preparedStatement.setString(4, user.getPassword());
             preparedStatement.setString(5, String.valueOf(user.getRole()));
             preparedStatement.setDouble(6, user.getWallet());
-            preparedStatement.setInt(7, user.getId());
-
+            preparedStatement.setString(7, String.valueOf(user.getState()));
+            preparedStatement.setInt(8, user.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

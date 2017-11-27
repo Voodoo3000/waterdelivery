@@ -13,27 +13,28 @@ public class WaterDao implements GenericDao<Water> {
     ConnectionPool pool =  ConnectionPool.getInstance();
 
     @Override
-    public void add(Water water) throws SQLException {
+    public void add(Water water) {
 
         Connection connection = pool.getConnection();
-
         PreparedStatement preparedStatement = null;
 
-        String sql = "INSERT INTO WATER(ID, TYPE, PRICE_PER_LITER) VALUES(?, ?, ?)";
+        String sql = "INSERT INTO WATER(TYPE, PRICE_PER_LITER) VALUES(?, ?)";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
-
-            preparedStatement.setInt(1, water.getId());
-            preparedStatement.setString(2, water.getType());
-            preparedStatement.setInt(3, water.getPricePerLiter());
+            preparedStatement.setString(1, water.getType());
+            preparedStatement.setInt(2, water.getPricePerLiter());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             if (preparedStatement != null) {
-                preparedStatement.close();
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             if (connection != null) {
                 pool.returnConnection(connection);
@@ -148,7 +149,7 @@ public class WaterDao implements GenericDao<Water> {
     }
 
     @Override
-    public void update(Water water) throws SQLException {
+    public void update(Water water) {
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
 
@@ -166,7 +167,11 @@ public class WaterDao implements GenericDao<Water> {
             e.printStackTrace();
         } finally {
             if (preparedStatement != null) {
-                preparedStatement.close();
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             if (connection != null) {
                 pool.returnConnection(connection);

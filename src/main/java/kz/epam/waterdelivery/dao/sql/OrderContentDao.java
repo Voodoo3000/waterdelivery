@@ -46,24 +46,33 @@ public class OrderContentDao implements GenericDao<OrderContent> {
     }
 
     @Override
-    public List<OrderContent> getAll() throws SQLException {
+    public List<OrderContent> getAll() {
+
         Connection connection = pool.getConnection();
+
         List<OrderContent> contentList = new ArrayList<>();
+
         String sql = "SELECT ID, WATER_ID, BOTTLE_SIZE_ID, QUANTITY, CUSTOMER_ORDER_ID FROM ORDER_CONTENT";
         Statement statement = null;
+
         try {
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
+
             WaterDao waterDao = new WaterDao();
             BottleSizeDao bottleSizeDao = new BottleSizeDao();
+
             while (resultSet.next()) {
                 OrderContent content = new OrderContent();
+
                 content.setId(resultSet.getInt("ID"));
                 int water_id = resultSet.getInt("WATER_ID");
                 Water water = waterDao.getById(water_id);
                 content.setWater(water);
+
                 int bottle_size_id = resultSet.getInt("BOTTLE_SIZE_ID");
                 BottleSize bottleSize = bottleSizeDao.getById(bottle_size_id);
+
                 content.setBottleSize(bottleSize);
                 content.setQuantity(resultSet.getInt("QUANTITY"));
                 content.setCustomerOrderId(resultSet.getInt("CUSTOMER_ORDER_ID"));
@@ -73,7 +82,11 @@ public class OrderContentDao implements GenericDao<OrderContent> {
             e.printStackTrace();
         } finally {
             if (statement != null) {
-                statement.close();
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             if (connection != null) {
                 pool.returnConnection(connection);
@@ -82,11 +95,15 @@ public class OrderContentDao implements GenericDao<OrderContent> {
         return contentList;
     }
 
-    public List<OrderContent> getByCustomerOrderId(int orderId) {
+    public List<OrderContent> getAllByCustomerOrderId(int orderId) {
+
         Connection connection = pool.getConnection();
+
         List<OrderContent> contentList = new ArrayList<>();
+
         String sql = "SELECT ID, WATER_ID, BOTTLE_SIZE_ID, QUANTITY, CUSTOMER_ORDER_ID FROM ORDER_CONTENT WHERE CUSTOMER_ORDER_ID=?";
         PreparedStatement preparedStatement = null;
+
         try {
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, orderId);
@@ -196,7 +213,7 @@ public class OrderContentDao implements GenericDao<OrderContent> {
     }
 
     @Override
-    public void remove(OrderContent content) throws SQLException {
+    public void remove(OrderContent content) {
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
 
@@ -212,7 +229,11 @@ public class OrderContentDao implements GenericDao<OrderContent> {
             e.printStackTrace();
         } finally {
             if (preparedStatement != null) {
-                preparedStatement.close();
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             if (connection != null) {
                 pool.returnConnection(connection);

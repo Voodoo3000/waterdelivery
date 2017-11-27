@@ -3,7 +3,6 @@ package kz.epam.waterdelivery.dao.sql;
 import kz.epam.waterdelivery.dao.GenericDao;
 import kz.epam.waterdelivery.entity.CustomerOrder;
 import kz.epam.waterdelivery.pool.ConnectionPool;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,16 +17,15 @@ public class CustomerOrderDao implements GenericDao<CustomerOrder> {
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
 
-        String sql = "INSERT INTO CUSTOMER_ORDER (CUSTOMER_ID, AMOUNT, PAYMENT, ORDER_DATE, ADDRESS) VALUES(?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO CUSTOMER_ORDER (CUSTOMER_ID, AMOUNT, ORDER_DATE, STATUS) VALUES(?, ?, ?, ?)";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setInt(1, order.getCustomerId());
             preparedStatement.setDouble(2, order.getAmount());
-            preparedStatement.setBoolean(3, order.isPayment());
-            preparedStatement.setDate(4,  order.getCurrentDate());
-            preparedStatement.setString(5, order.getAddress());
+            preparedStatement.setDate(3,  order.getCurrentDate());
+            preparedStatement.setString(4, String.valueOf(order.getStatus()));
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -47,11 +45,11 @@ public class CustomerOrderDao implements GenericDao<CustomerOrder> {
     }
 
     @Override
-    public List<CustomerOrder> getAll() throws SQLException {
+    public List<CustomerOrder> getAll() {
         Connection connection = pool.getConnection();
         List<CustomerOrder> orderList = new ArrayList<>();
 
-        String sql = "SELECT ID, CUSTOMER_ID, AMOUNT, PAYMENT, ORDER_DATE, ADDRESS FROM CUSTOMER_ORDER";
+        String sql = "SELECT ID, CUSTOMER_ID, AMOUNT, ORDER_DATE, STATUS FROM CUSTOMER_ORDER";
 
         Statement statement = null;
 
@@ -62,18 +60,60 @@ public class CustomerOrderDao implements GenericDao<CustomerOrder> {
                 CustomerOrder order = new CustomerOrder();
                 order.setId(resultSet.getInt("ID"));
                 order.setCustomerId(resultSet.getInt("CUSTOMER_ID"));
-                order.setAmount(resultSet.getDouble("AMOUNT "));
-                order.setPayment(resultSet.getBoolean("PAYMENT"));
+                order.setAmount(resultSet.getDouble("AMOUNT"));
                 order.setOrderDate(resultSet.getDate("ORDER_DATE"));
-                order.setAddress(resultSet.getString("ADDRESS"));
-
+                order.setStatus(CustomerOrder.Status.valueOf(resultSet.getString("STATUS")));
                 orderList.add(order);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             if (statement != null) {
-                statement.close();
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                pool.returnConnection(connection);
+            }
+        }
+        return orderList;
+    }
+
+    public List<CustomerOrder> getAllByClientId(int id) {
+        Connection connection = pool.getConnection();
+
+        List<CustomerOrder> orderList = new ArrayList<>();
+
+        String sql = "SELECT ID, CUSTOMER_ID, AMOUNT, ORDER_DATE, STATUS FROM CUSTOMER_ORDER WHERE CUSTOMER_ID=?";
+
+        PreparedStatement preparedStatement = null;
+
+        try {
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                CustomerOrder order = new CustomerOrder();
+                order.setId(resultSet.getInt("ID"));
+                order.setCustomerId(resultSet.getInt("CUSTOMER_ID"));
+                order.setAmount(resultSet.getDouble("AMOUNT"));
+                order.setOrderDate(resultSet.getDate("ORDER_DATE"));
+                order.setStatus(CustomerOrder.Status.valueOf(resultSet.getString("STATUS")));
+
+                orderList.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             if (connection != null) {
                 pool.returnConnection(connection);
@@ -87,7 +127,7 @@ public class CustomerOrderDao implements GenericDao<CustomerOrder> {
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
         CustomerOrder order = null;
-        String sql ="SELECT ID, CUSTOMER_ID, AMOUNT, PAYMENT, ORDER_DATE, ADDRESS FROM CUSTOMER_ORDER WHERE ID=?";;
+        String sql ="SELECT ID, CUSTOMER_ID, AMOUNT, ORDER_DATE, STATUS FROM CUSTOMER_ORDER WHERE ID=?";;
         try {
             preparedStatement = connection.prepareStatement(sql);
 
@@ -99,9 +139,8 @@ public class CustomerOrderDao implements GenericDao<CustomerOrder> {
                 order.setId(resultSet.getInt("ID"));
                 order.setCustomerId(resultSet.getInt("CUSTOMER_ID"));
                 order.setAmount(resultSet.getDouble("AMOUNT"));
-                order.setPayment(resultSet.getBoolean("PAYMENT"));
                 order.setOrderDate(resultSet.getDate("ORDER_DATE"));
-                order.setAddress(resultSet.getString("ADDRESS"));
+                order.setStatus(CustomerOrder.Status.valueOf(resultSet.getString("STATUS")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -151,11 +190,11 @@ public class CustomerOrderDao implements GenericDao<CustomerOrder> {
         }
     }
 
-    public CustomerOrder getUnpaidOrderByUserId(int userId) {
+    public CustomerOrder getCreatingOrderByUserId(int userId) {
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
         CustomerOrder order = null;
-        String sql ="SELECT ID, CUSTOMER_ID, AMOUNT, PAYMENT, ORDER_DATE, ADDRESS FROM CUSTOMER_ORDER WHERE CUSTOMER_ID=? AND PAYMENT=0";;
+        String sql ="SELECT ID, CUSTOMER_ID, AMOUNT, ORDER_DATE, STATUS FROM CUSTOMER_ORDER WHERE CUSTOMER_ID=? AND STATUS='CREATING'";;
         try {
             preparedStatement = connection.prepareStatement(sql);
 
@@ -167,9 +206,8 @@ public class CustomerOrderDao implements GenericDao<CustomerOrder> {
                 order.setId(resultSet.getInt("ID"));
                 order.setCustomerId(resultSet.getInt("CUSTOMER_ID"));
                 order.setAmount(resultSet.getDouble("AMOUNT"));
-                order.setPayment(resultSet.getBoolean("PAYMENT"));
                 order.setOrderDate(resultSet.getDate("ORDER_DATE"));
-                order.setAddress(resultSet.getString("ADDRESS"));
+                order.setStatus(CustomerOrder.Status.valueOf(resultSet.getString("STATUS")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -193,18 +231,15 @@ public class CustomerOrderDao implements GenericDao<CustomerOrder> {
         Connection connection = pool.getConnection();
         PreparedStatement preparedStatement = null;
 
-        String sql = "UPDATE CUSTOMER_ORDER SET CUSTOMER_ID=?, AMOUNT=?, PAYMENT=?, ORDER_DATE=?, ADDRESS=? WHERE ID=?";
+        String sql = "UPDATE CUSTOMER_ORDER SET CUSTOMER_ID=?, AMOUNT=?, ORDER_DATE=?, STATUS=? WHERE ID=?";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
-
             preparedStatement.setInt(1, order.getCustomerId());
             preparedStatement.setDouble(2, order.getAmount());
-            preparedStatement.setBoolean(3, order.isPayment());
-            preparedStatement.setDate(4, order.getCurrentDate());
-            preparedStatement.setString(5, order.getAddress());
-            preparedStatement.setInt(6, order.getId());
-
+            preparedStatement.setDate(3, order.getCurrentDate());
+            preparedStatement.setString(4, String.valueOf(order.getStatus()));
+            preparedStatement.setInt(5, order.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
