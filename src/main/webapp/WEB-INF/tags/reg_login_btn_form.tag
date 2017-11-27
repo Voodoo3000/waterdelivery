@@ -33,7 +33,7 @@
         <p><fmt:message key="default.user_details"/></p>
         <div>
             <label for="email"><fmt:message key="default.user_login"/></label>
-            <input type="email" id="email" name="email" required>
+            <input type="email" id="email" name="loginEmail" required>
         </div>
         <div>
             <label for="pass"><fmt:message key="default.enter_pass"/></label>
@@ -41,7 +41,7 @@
         </div>
         <div>
             <label for="pass"><fmt:message key="default.repeat_pass"/></label>
-            <input type="password" id="pass1" name="password1" required>
+            <input type="password" id="rePass" name="rePassword" required>
         </div>
         <div>
             <label for="firstname"><fmt:message key="default.user_firstname"/></label>

@@ -2,7 +2,6 @@ package kz.epam.waterdelivery.command;
 
 import kz.epam.waterdelivery.dao.sql.UserDao;
 import kz.epam.waterdelivery.entity.User;
-
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -13,7 +12,7 @@ public class SignUpCommand implements Command {
     private static final CommandResult MAIN_REG_FAILED = new CommandResult("main");
     private static final String PARAM_LOGIN_EMAIL = "loginEmail";
     private static final String PARAM_PASSWORD = "password";
-    private static final String PARAM_RE_PASSWORD = "password1";
+    private static final String PARAM_RE_PASSWORD = "rePassword";
     private static final String PARAM_FIRSTNAME = "firstname";
     private static final String PARAM_LASTNAME = "lastname";
     private static final String ATTR_USER = "user";
@@ -25,7 +24,7 @@ public class SignUpCommand implements Command {
 
         String loginEmail = request.getParameter(PARAM_LOGIN_EMAIL);
         String password = request.getParameter(PARAM_PASSWORD);
-        String password1 = request.getParameter(PARAM_RE_PASSWORD);
+        String rePassword = request.getParameter(PARAM_RE_PASSWORD);
         String firstname = request.getParameter(PARAM_FIRSTNAME);
         String lastname = request.getParameter(PARAM_LASTNAME);
         UserDao userDao = new UserDao();
@@ -36,7 +35,7 @@ public class SignUpCommand implements Command {
             result = MAIN_REG_FAILED;
         }
 
-        else if(!password.equals(password1)) {
+        else if(!password.equals(rePassword)) {
             System.out.println("MISMATCH ENTERED PASSWORDS");
             result = MAIN_REG_FAILED;
         }

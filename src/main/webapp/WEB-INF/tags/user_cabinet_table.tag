@@ -52,5 +52,18 @@
                 </tr>
             </form>
         </c:forEach>
+        <tr class="info">
+            <td></td>
+            <td>
+                <c:if test="${orderList.isEmpty()}">
+                    <h4><fmt:message key="default.empty_order"/></h4>
+                </c:if>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
     </table>
 </div>
