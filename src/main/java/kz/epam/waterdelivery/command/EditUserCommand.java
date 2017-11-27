@@ -39,9 +39,6 @@ public class EditUserCommand implements Command {
             user.setLastName(lastname);
             user.setLoginEmail(loginEmail);
             user.setPassword(password);
-            user.setRole(User.Role.CLIENT);
-            user.setWallet(0);
-            user.setState(User.State.ENABLED);
             userDao.update(user);
 
             request.getSession().setAttribute(ATTR_USER, user);
