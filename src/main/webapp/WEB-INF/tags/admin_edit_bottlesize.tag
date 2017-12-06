@@ -13,7 +13,7 @@
             <th></th>
         </tr>
         </thead>
-        <c:forEach items="${bottleSizeList}" var="bottle" varStatus="i">
+        <c:forEach items="${bottleSizes}" var="bottle" varStatus="i">
             <form method="post" action="change_bottle_size">
                 <tr>
                     <td>${i.count}</td>

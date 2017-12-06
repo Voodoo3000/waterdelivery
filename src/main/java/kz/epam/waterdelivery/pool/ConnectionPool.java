@@ -21,25 +21,28 @@ public class ConnectionPool {
         initializeConnectionPool();
     }
 
-    public void initializeConnectionPool() {
+    public void initializeConnectionPool() throws ConnectionPoolException {
         while ((connections.size() < POOL_SIZE)) {
             try {
                 Class.forName(DRIVER);
-                Connection connection = DriverManager.getConnection(URL, LOGIN, PASSWORD);
-                connections.add(connection);
-            } catch (SQLException e) {
-                e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
+            Connection connection = null;
+            try {
+                connection = DriverManager.getConnection(URL, LOGIN, PASSWORD);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            connections.add(connection);
         }
     }
 
-    public static ConnectionPool getInstance() {
+    public static ConnectionPool getInstance() throws ConnectionPoolException {
         return INSTANCE;
     }
 
-    public Connection getConnection() {
+    public Connection getConnection() throws ConnectionPoolException {
         Connection connection = null;
         try {
             connection = connections.take();

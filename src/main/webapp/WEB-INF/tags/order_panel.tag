@@ -13,7 +13,7 @@
                         <select class="selectpicker show-menu-arrow" data-width="auto" name="type" id="type">
                             <c:forEach items="${waterList}" var="water">
                                 <option value="${water.type}">
-                                    <fmt:message key="default.type_${water.type}"/>
+                                    <fmt:message key="default.type_${water.type}"/> - ${water.pricePerLiter}<fmt:message key="default.currency"/> <fmt:message key="default.per_liter"/>
                                 </option>
                             </c:forEach>
                         </select>

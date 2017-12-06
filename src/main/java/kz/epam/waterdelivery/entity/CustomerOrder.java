@@ -1,7 +1,10 @@
 package kz.epam.waterdelivery.entity;
 
+import kz.epam.waterdelivery.command.CommandException;
+import kz.epam.waterdelivery.dao.DaoException;
 import kz.epam.waterdelivery.dao.sql.OrderContentDao;
 import kz.epam.waterdelivery.dao.sql.UserDao;
+import org.apache.log4j.Logger;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +16,7 @@ public class CustomerOrder extends Entity {
     private Status status;
     private User customer;
     private List<OrderContent> contentList;
+    private static final Logger LOGGER = Logger.getLogger(CustomerOrder.class);
 
     public enum Status {
         CREATING, PREPARATION, DELIVERED, CANCELLED
@@ -63,10 +67,14 @@ public class CustomerOrder extends Entity {
         this.status = status;
     }
 
-    public User getCustomer() {
+    public User getCustomer() throws CommandException {
         UserDao userDao = new UserDao();
-        customer = userDao.getById(customerId);
-
+        try {
+            customer = userDao.getById(customerId);
+        } catch (DaoException e) {
+            LOGGER.error("DaoException in CustomerOrder", e);
+            throw new CommandException(e);
+        }
         return customer;
     }
 
@@ -74,11 +82,14 @@ public class CustomerOrder extends Entity {
         this.customer = customer;
     }
 
-    public List<OrderContent> getContentList() {
-
+    public List<OrderContent> getContentList() throws CommandException {
         OrderContentDao contentDao = new OrderContentDao();
-        contentList = contentDao.getAllByCustomerOrderId(getId());
-
+        try {
+            contentList = contentDao.getAllByCustomerOrderId(getId());
+        } catch (DaoException e) {
+            LOGGER.error("DaoException in CustomerOrder", e);
+            throw new CommandException(e);
+        }
         return contentList;
     }
 

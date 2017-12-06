@@ -1,21 +1,21 @@
 package kz.epam.waterdelivery.command;
 
-import kz.epam.waterdelivery.dao.sql.CustomerOrderDao;
+import kz.epam.waterdelivery.dao.DaoException;
 import kz.epam.waterdelivery.dao.sql.UserDao;
-import kz.epam.waterdelivery.entity.CustomerOrder;
 import kz.epam.waterdelivery.entity.User;
+import kz.epam.waterdelivery.pool.ConnectionPoolException;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 
 public class SignInCommand implements Command {
+    private static final Logger LOGGER = Logger.getLogger(SignInCommand.class);
     private static final String RB_NAME = "i18n.message";
     private static final String ATTR_LOCALE = "locale";
     private static final String ERROR = "errormsg";
@@ -28,7 +28,7 @@ public class SignInCommand implements Command {
     private static final String ATTR_USER = "user";
 
     @Override
-    public CommandResult execute(HttpServletRequest request) throws IOException {
+    public CommandResult execute(HttpServletRequest request) throws CommandException {
         HttpSession session = request.getSession();
         ServletContext context = session.getServletContext();
         Locale locale = (Locale) context.getAttribute(ATTR_LOCALE);
@@ -39,22 +39,32 @@ public class SignInCommand implements Command {
         String email = request.getParameter(PARAM_EMAIL);
         String password = request.getParameter(PARAM_PASSWORD);
 
-        UserDao userDao = new UserDao();
+        UserDao userDao;
         User user;
+        try {
+            userDao = new UserDao();
+            user = userDao.getByLogin(email);
+        } catch (DaoException e) {
+            LOGGER.error("DaoException in SignInCommand", e);
+            throw new CommandException(e);
+        }
 
-        user = userDao.getByLogin(email);
         if (user == null || !user.getLoginEmail().equals(email)
-                || !user.getPassword().equals(password) || user.getState() == User.State.DISABLED) {
+                || !user.getPassword().equals(password)) {
+            LOGGER.info("Wrong login or password");
             result = MAIN;
-            session.setAttribute(ERROR, login_pass_err_msg);
+        } else if (user.getState() == User.State.DISABLED) {
+            LOGGER.info("Requested user was banned");
+            result = MAIN;
         } else if (user.getRole() == User.Role.ADMIN) {
             request.getSession().setAttribute(ATTR_USER, user);
+            LOGGER.info("Administrator has logged in");
             result = ADMIN_PAGE;
         } else {
             request.getSession().setAttribute(ATTR_USER, user);
+            LOGGER.info("User " + user.getLoginEmail() + " has logged in");
             result = MAIN;
         }
-
         return result;
     }
 }

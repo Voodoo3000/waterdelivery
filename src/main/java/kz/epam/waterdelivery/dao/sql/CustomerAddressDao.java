@@ -1,26 +1,26 @@
 package kz.epam.waterdelivery.dao.sql;
 
+import kz.epam.waterdelivery.dao.DaoException;
 import kz.epam.waterdelivery.dao.GenericDao;
 import kz.epam.waterdelivery.entity.CustomerAddress;
 import kz.epam.waterdelivery.pool.ConnectionPool;
+import org.apache.log4j.Logger;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerAddressDao implements GenericDao<CustomerAddress> {
 
-    ConnectionPool pool = ConnectionPool.getInstance();
+    private static final Logger LOGGER = Logger.getLogger(CustomerAddressDao.class);
+    private ConnectionPool pool = ConnectionPool.getInstance();
 
     @Override
-    public void add(CustomerAddress address) {
-
+    public void add(CustomerAddress address) throws DaoException {
         Connection connection = pool.getConnection();
-        PreparedStatement preparedStatement = null;
-
         String sql = "INSERT INTO CUSTOMER_ADDRESS(CITY, STREET, HOUSE_NUMBER, APARTMENT_NUMBER, PHONE_NUMBER, CUSTOMER_ID) VALUES( ?, ?, ?, ?, ?, ?)";
-
         try {
-            preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, address.getCity());
             preparedStatement.setString(2, address.getStreet());
             preparedStatement.setString(3, address.getHouseNumber());
@@ -28,16 +28,11 @@ public class CustomerAddressDao implements GenericDao<CustomerAddress> {
             preparedStatement.setString(5, address.getPhoneNumber());
             preparedStatement.setInt(6, address.getCustomerId());
             preparedStatement.executeUpdate();
+            preparedStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("Address creating SQLException", e);
+            throw new DaoException();
         } finally {
-            if (preparedStatement != null) {
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
             if (connection != null) {
                 pool.returnConnection(connection);
             }
@@ -45,18 +40,12 @@ public class CustomerAddressDao implements GenericDao<CustomerAddress> {
     }
 
     @Override
-    public List<CustomerAddress> getAll() throws SQLException {
-        ConnectionPool pool = ConnectionPool.getInstance();
+    public List<CustomerAddress> getAll() throws DaoException {
         Connection connection = pool.getConnection();
-
         List<CustomerAddress> addressList = new ArrayList<>();
-
         String sql = "SELECT ID, CITY, STREET, HOUSE_NUMBER, APARTMENT_NUMBER, PHONE_NUMBER, CUSTOMER_ID FROM CUSTOMER_ADDRESS";
-
-        Statement statement = null;
-
         try {
-            statement = connection.createStatement();
+            Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 CustomerAddress address = new CustomerAddress();
@@ -69,16 +58,12 @@ public class CustomerAddressDao implements GenericDao<CustomerAddress> {
                 address.setCustomerId(resultSet.getInt("CUSTOMER_ID"));
                 addressList.add(address);
             }
+            resultSet.close();
+            statement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("Get all addresses SQLException", e);
+            throw new DaoException();
         } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
             if (connection != null) {
                 pool.returnConnection(connection);
             }
@@ -87,19 +72,14 @@ public class CustomerAddressDao implements GenericDao<CustomerAddress> {
     }
 
     @Override
-    public CustomerAddress getById(int id) {
-
+    public CustomerAddress getById(int id) throws DaoException {
         Connection connection = pool.getConnection();
-        PreparedStatement preparedStatement = null;
-
         CustomerAddress address = null;
         String sql = "SELECT ID, CITY, STREET, HOUSE_NUMBER, APARTMENT_NUMBER, PHONE_NUMBER, CUSTOMER_ID FROM CUSTOMER_ADDRESS WHERE ID=?";
         try {
-            preparedStatement = connection.prepareStatement(sql);
-
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-
             if (resultSet.next()) {
                 address = new CustomerAddress();
                 address.setId(resultSet.getInt("ID"));
@@ -110,36 +90,27 @@ public class CustomerAddressDao implements GenericDao<CustomerAddress> {
                 address.setPhoneNumber(resultSet.getString("PHONE_NUMBER"));
                 address.setCustomerId(resultSet.getInt("CUSTOMER_ID"));
             }
+            resultSet.close();
+            preparedStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("Get address by id SQLException", e);
+            throw new DaoException();
         } finally {
-            if (preparedStatement != null) {
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
             if (connection != null) {
                 pool.returnConnection(connection);
             }
-            return address;
         }
+        return address;
     }
 
-    public CustomerAddress getByCustomerId(int id) {
-
+    public CustomerAddress getByCustomerId(int id) throws DaoException {
         Connection connection = pool.getConnection();
-        PreparedStatement preparedStatement = null;
-
         CustomerAddress address = null;
         String sql = "SELECT ID, CITY, STREET, HOUSE_NUMBER, APARTMENT_NUMBER, PHONE_NUMBER, CUSTOMER_ID FROM CUSTOMER_ADDRESS WHERE CUSTOMER_ID=?";
         try {
-            preparedStatement = connection.prepareStatement(sql);
-
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-
             if (resultSet.next()) {
                 address = new CustomerAddress();
                 address.setId(resultSet.getInt("ID"));
@@ -150,32 +121,26 @@ public class CustomerAddressDao implements GenericDao<CustomerAddress> {
                 address.setPhoneNumber(resultSet.getString("PHONE_NUMBER"));
                 address.setCustomerId(resultSet.getInt("CUSTOMER_ID"));
             }
+            resultSet.close();
+            preparedStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("Get address by customer id SQLException", e);
+            throw new DaoException();
         } finally {
-            if (preparedStatement != null) {
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
             if (connection != null) {
                 pool.returnConnection(connection);
             }
-            return address;
         }
+        return address;
     }
 
 
     @Override
-    public void update(CustomerAddress address) {
+    public void update(CustomerAddress address) throws DaoException {
         Connection connection = pool.getConnection();
-        PreparedStatement preparedStatement = null;
         String sql = "UPDATE CUSTOMER_ADDRESS SET CITY=?, STREET=?, HOUSE_NUMBER=?, APARTMENT_NUMBER=?, PHONE_NUMBER=?, CUSTOMER_ID=? WHERE ID=?";
-
         try {
-            preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, address.getCity());
             preparedStatement.setString(2, address.getStreet());
             preparedStatement.setString(3, address.getHouseNumber());
@@ -184,16 +149,11 @@ public class CustomerAddressDao implements GenericDao<CustomerAddress> {
             preparedStatement.setInt(6, address.getCustomerId());
             preparedStatement.setInt(7, address.getId());
             preparedStatement.executeUpdate();
+            preparedStatement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("Address updating SQLException", e);
+            throw new DaoException();
         } finally {
-            if (preparedStatement != null) {
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
             if (connection != null) {
                 pool.returnConnection(connection);
             }
@@ -201,7 +161,7 @@ public class CustomerAddressDao implements GenericDao<CustomerAddress> {
     }
 
     @Override
-    public void remove(CustomerAddress entity) throws SQLException {
-
+    public void remove(CustomerAddress entity) throws DaoException {
+        throw new DaoException("It's not allowed to delete address!");
     }
 }

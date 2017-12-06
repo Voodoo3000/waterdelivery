@@ -37,7 +37,7 @@
                         </select>
                     </td>
                     <td>
-                        <select class="selectpicker show-menu-arrow" data-width="auto" name="stat">
+                        <select class="selectpicker show-menu-arrow" data-width="auto" name="state">
                             <c:forEach items="${states}" var="state">
                                 <option value="${state}"
                                         <c:if test="${user.state==state}">selected</c:if>>${state}</option>

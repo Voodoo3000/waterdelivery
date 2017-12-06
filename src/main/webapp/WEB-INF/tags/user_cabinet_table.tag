@@ -21,11 +21,12 @@
                     <td>${i.count}</td>
                     <td>${order.orderDate}</td>
                     <td>${order.address}</td>
-                    <td><c:forEach items="${order.contentList}" var="content" varStatus="i">
-                        <fmt:message key="default.type_${content.water.type}"/>, <fmt:message
-                            key="default.size_${content.bottleSize.size}"/>, <fmt:message
-                            key="default.quantity'"/>: ${content.quantity}</br>
-                    </c:forEach>
+                    <td>
+                        <c:forEach items="${order.contentList}" var="content" varStatus="i">
+                            <fmt:message key="default.type_${content.water.type}"/>, <fmt:message
+                                key="default.size_${content.bottleSize.size}"/>, <fmt:message
+                                key="default.quantity'"/>: ${content.quantity}</br>
+                        </c:forEach>
                     </td>
                     <td>${order.amount}<fmt:message key="default.currency"/></td>
                     <td>

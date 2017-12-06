@@ -1,5 +1,6 @@
 package kz.epam.waterdelivery.listener;
 
+import kz.epam.waterdelivery.dao.DaoException;
 import kz.epam.waterdelivery.dao.sql.BottleSizeDao;
 import kz.epam.waterdelivery.dao.sql.WaterDao;
 import kz.epam.waterdelivery.entity.BottleSize;
@@ -26,15 +27,20 @@ public class ContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
         context.setAttribute(ATTR_LOCALE, DEFAULT_LOCALE);
-        List<Water> waterList = new WaterDao().getAll();
+        List<Water> waterList = null;
+        List<BottleSize> bottleSizes = null;
+        try {
+            waterList = new WaterDao().getAll();
+            bottleSizes = new BottleSizeDao().getAll();
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
         context.setAttribute(ATTR_WATER_LIST, waterList);
-        List<BottleSize> bottleSizes = new BottleSizeDao().getAll();
         context.setAttribute(ATTR_BOTTLE_SIZES, bottleSizes);
         context.setAttribute(ATTR_ROLES, User.Role.values());
         context.setAttribute(ATTR_STATES, User.State.values());
         context.setAttribute(ATTR_STATUSES, CustomerOrder.Status.values());
     }
-
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
     }

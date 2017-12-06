@@ -114,7 +114,7 @@
 
 #main_title {
     position: absolute;
-    left: 20%;
+    left: 13%;
     bottom: 45%;
     color: #EEEEEE;
     font-family: Impact;
@@ -122,10 +122,10 @@
 
 #order_panel {
     position: relative;
-    left: 70%;
-    width: 21%;
-    height: 55%;
-    top: 13%;
+    left: 69%;
+    width: 28%;
+    height: 59%;
+    top: 10%;
 }
 
 #admin_panel {
