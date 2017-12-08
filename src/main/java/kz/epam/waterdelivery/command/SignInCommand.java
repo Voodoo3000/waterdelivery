@@ -48,7 +48,6 @@ public class SignInCommand implements Command {
             LOGGER.error("DaoException in SignInCommand", e);
             throw new CommandException(e);
         }
-
         if (user == null || !user.getLoginEmail().equals(email)
                 || !user.getPassword().equals(password)) {
             LOGGER.info("Wrong login or password");

@@ -34,6 +34,7 @@ public class OpenCartCommand implements Command {
         User user = (User) request.getSession().getAttribute(ATTR_USER);
         try {
             order = orderDao.getCreatingOrderByUserId(user.getId());
+            LOGGER.info("Getting current order");
             if (order != null) {
                 List<OrderContent> contentReal;
                 contentReal = contentDao.getAllByCustomerOrderId(order.getId());
@@ -43,6 +44,7 @@ public class OpenCartCommand implements Command {
                 }
                 order.setAmount(totalAmount);
                 orderDao.update(order);
+                LOGGER.info("Order price was calculated");
             }
             address = addressDao.getByCustomerId(user.getId());
             if (address != null) {
@@ -51,6 +53,7 @@ public class OpenCartCommand implements Command {
                 address = new CustomerAddress();
                 address.setCustomerId(user.getId());
                 addressDao.add(address);
+                LOGGER.info("Address was created");
             }
         } catch (DaoException e) {
             LOGGER.error("DaoException in OpenCartCommand", e);

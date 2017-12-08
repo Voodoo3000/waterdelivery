@@ -24,9 +24,8 @@ public class Servlet extends HttpServlet {
         Command command = CommandContainer.get(commandName);
         if (command == null) {
             try {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "url.not.found!!!");
+                response.sendRedirect("error404");
             } catch (IOException e) {
-
                 throw new ServletException(e);
             }
             return;
@@ -35,8 +34,8 @@ public class Servlet extends HttpServlet {
         try {
             result = command.execute(request);
         } catch (CommandException e) {
-            LOGGER.error("blabla", e);
-            //todo send 500 error
+            LOGGER.error("Execute command error", e);
+            response.sendRedirect("error500");
         }
         if (result != null) {
             if (result.isRedirection()) {
@@ -46,8 +45,8 @@ public class Servlet extends HttpServlet {
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/" + result.getView() + ".jsp");
             requestDispatcher.forward(request, response);
         } else {
-            //todo log result is null
-            //todo send 500 error
+            LOGGER.error("Result is null");
+            response.sendRedirect("error500");
         }
     }
 }

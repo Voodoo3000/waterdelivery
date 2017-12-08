@@ -45,16 +45,14 @@ public class UserDao implements GenericDao<User> {
     @Override
     public List<User> getAll() throws DaoException {
         Connection connection = pool.getConnection();
-
+        User user;
         List<User> userList = new ArrayList<>();
-
         String sql = "SELECT ID, FIRSTNAME, LASTNAME, LOGINEMAIL, PASSWORD, ROLE, WALLET, STATE FROM USER";
-
         try {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                User user = new User();
+                user = new User();
                 user.setId(resultSet.getInt("ID"));
                 user.setFirstName(resultSet.getString("FIRSTNAME"));
                 user.setLastName(resultSet.getString("LASTNAME"));
@@ -69,44 +67,6 @@ public class UserDao implements GenericDao<User> {
             statement.close();
         } catch (SQLException e) {
             LOGGER.error("Get all users SQLException", e);
-            throw new DaoException();
-        } finally {
-            if (connection != null) {
-                pool.returnConnection(connection);
-            }
-        }
-        return userList;
-    }
-
-    public List<User> getAllUsersByLogin(String loginEmail) throws DaoException {
-
-        Connection connection = pool.getConnection();
-
-        User user;
-        List<User> userList = new ArrayList<>();
-
-        String sql = "SELECT ID, FIRSTNAME, LASTNAME, LOGINEMAIL, PASSWORD, ROLE, WALLET, STATE FROM USER WHERE LOGINEMAIL=?";
-
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, loginEmail);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                user = new User();
-                user.setId(resultSet.getInt("ID"));
-                user.setFirstName(resultSet.getString("FIRSTNAME"));
-                user.setLastName(resultSet.getString("LASTNAME"));
-                user.setLoginEmail(resultSet.getString("LOGINEMAIL"));
-                user.setPassword(resultSet.getString("PASSWORD"));
-                user.setRole(User.Role.valueOf(resultSet.getString("ROLE")));
-                user.setWallet(resultSet.getDouble("WALLET"));
-                user.setState(User.State.valueOf(resultSet.getString("STATE")));
-                userList.add(user);
-            }
-            resultSet.close();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            LOGGER.error("Get all users by login SQLException", e);
             throw new DaoException();
         } finally {
             if (connection != null) {
@@ -220,3 +180,5 @@ public class UserDao implements GenericDao<User> {
         throw new DaoException("It's not allowed to delete user!");
     }
 }
+
+

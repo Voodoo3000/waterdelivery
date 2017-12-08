@@ -27,8 +27,8 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="input-group">
-                            <span class="input-group-addon"><fmt:message key="default.old_pass"/></span>
-                            <input type="password" class="form-control" name="oldPassword" value=""
+                            <span class="input-group-addon"><fmt:message key="default.current_pass"/></span>
+                            <input type="password" class="form-control" name="currentPassword" value=""
                                    required>
                         </div>
                     </div>
@@ -37,8 +37,7 @@
                     <div class="col-lg-12">
                         <div class="input-group">
                             <span class="input-group-addon"><fmt:message key="default.new_pass"/></span>
-                            <input type="password" class="form-control" name="newPassword" value=""
-                                   required>
+                            <input type="password" class="form-control" name="newPassword" value="">
                         </div>
                     </div>
                 </div>
@@ -46,8 +45,7 @@
                     <div class="col-lg-12">
                         <div class="input-group">
                             <span class="input-group-addon"><fmt:message key="default.repeat_pass"/></span>
-                            <input type="password" class="form-control" name="newRePassword" value=""
-                                   required>
+                            <input type="password" class="form-control" name="newRePassword" value="">
                         </div>
                     </div>
                 </div>

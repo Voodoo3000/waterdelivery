@@ -16,9 +16,7 @@ public class RemoveContentCommand implements Command {
 
     @Override
     public CommandResult execute(HttpServletRequest request) throws CommandException {
-
         contentPositionId = Integer.parseInt(request.getParameter("id"));
-
         OrderContentDao contentDao = new OrderContentDao();
         OrderContent content = new OrderContent();
         content.setId(contentPositionId);

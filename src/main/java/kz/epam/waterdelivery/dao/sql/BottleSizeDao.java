@@ -79,7 +79,7 @@ public class BottleSizeDao implements GenericDao<BottleSize> {
             resultSet.close();
             preparedStatement.close();
         } catch (SQLException e) {
-            LOGGER.error("Get water by id SQLException", e);
+            LOGGER.error("Get bottle by id SQLException", e);
             throw new DaoException();
         } finally {
             if (connection != null) {

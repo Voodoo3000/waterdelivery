@@ -48,7 +48,6 @@ public class SignUpCommand implements Command {
                 user.setState(User.State.ENABLED);
                 userDao.add(user);
                 LOGGER.info("Newly registered user is: " + user.toString());
-
                 request.getSession().setAttribute(ATTR_USER, user);
                 result = MAIN_REG;
             }
