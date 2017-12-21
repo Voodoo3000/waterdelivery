@@ -33,6 +33,10 @@
 
     <div id="body" class="value_img">
 
+        <c:if test="${errormsg != null}">
+            <h5 id="errormsg" align="center">${errormsg}</h5>
+        </c:if>
+
         <t:user_cabinet_panel/>
 
         <t:user_cabinet_table/>

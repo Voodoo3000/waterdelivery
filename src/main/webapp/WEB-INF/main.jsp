@@ -42,6 +42,10 @@
 
     <div id="body" class="value_img">
 
+        <c:if test="${errormsg != null}">
+            <h5 id="errormsg" align="center">${errormsg}</h5>
+        </c:if>
+
         <c:if test="${user == null || user.role == 'CLIENT'}">
             <t:title_bodylines/>
             <t:order_panel/>

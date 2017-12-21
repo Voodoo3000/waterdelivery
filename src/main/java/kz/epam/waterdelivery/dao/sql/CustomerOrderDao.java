@@ -18,51 +18,30 @@ public class CustomerOrderDao implements GenericDao<CustomerOrder> {
 
     @Override
     public void add(CustomerOrder order) throws DaoException {
-        Connection connection = pool.getConnection();
-        PreparedStatement preparedStatement = null;
-
         String sql = "INSERT INTO CUSTOMER_ORDER (CUSTOMER_ID, AMOUNT, ORDER_DATE, STATUS) VALUES(?, ?, ?, ?)";
+        addUpdateOrder(order, sql);
+    }
 
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-
-            preparedStatement.setInt(1, order.getCustomerId());
-            preparedStatement.setDouble(2, order.getAmount());
-            preparedStatement.setDate(3,  order.getCurrentDate());
-            preparedStatement.setString(4, String.valueOf(order.getStatus()));
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            LOGGER.error("Order creating SQLException", e);
-            throw new DaoException();
-        } finally {
-            if (connection != null) {
-                pool.returnConnection(connection);
-            }
-        }
+    @Override
+    public void update(CustomerOrder order) throws DaoException {
+        String sql = "UPDATE CUSTOMER_ORDER SET CUSTOMER_ID=?, AMOUNT=?, ORDER_DATE=?, STATUS=? WHERE ID=?";
+        addUpdateOrder(order, sql);
     }
 
     @Override
     public List<CustomerOrder> getAll() throws DaoException {
         Connection connection = pool.getConnection();
-        CustomerOrder order;
         List<CustomerOrder> orderList = new ArrayList<>();
         String sql = "SELECT ID, CUSTOMER_ID, AMOUNT, ORDER_DATE, STATUS FROM CUSTOMER_ORDER";
-        Statement statement = null;
         try {
-            statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                order = new CustomerOrder();
-                order.setId(resultSet.getInt("ID"));
-                order.setCustomerId(resultSet.getInt("CUSTOMER_ID"));
-                order.setAmount(resultSet.getDouble("AMOUNT"));
-                order.setOrderDate(resultSet.getDate("ORDER_DATE"));
-                order.setStatus(CustomerOrder.Status.valueOf(resultSet.getString("STATUS")));
+                CustomerOrder order = getCustomerOrderFieldsFromDB(resultSet);
                 orderList.add(order);
             }
             resultSet.close();
-            statement.close();
+            preparedStatement.close();
         } catch (SQLException e) {
             LOGGER.error("Get all orders SQLException", e);
             throw new DaoException();
@@ -107,38 +86,20 @@ public class CustomerOrderDao implements GenericDao<CustomerOrder> {
 
     @Override
     public CustomerOrder getById(int id) throws DaoException {
-        Connection connection = pool.getConnection();
-        CustomerOrder order = null;
         String sql ="SELECT ID, CUSTOMER_ID, AMOUNT, ORDER_DATE, STATUS FROM CUSTOMER_ORDER WHERE ID=?";;
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                order = new CustomerOrder();
-                order.setId(resultSet.getInt("ID"));
-                order.setCustomerId(resultSet.getInt("CUSTOMER_ID"));
-                order.setAmount(resultSet.getDouble("AMOUNT"));
-                order.setOrderDate(resultSet.getDate("ORDER_DATE"));
-                order.setStatus(CustomerOrder.Status.valueOf(resultSet.getString("STATUS")));
-            }
-            resultSet.close();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            LOGGER.error("Get order by id SQLException", e);
-            throw new DaoException();
-        } finally {
-            if (connection != null) {
-                pool.returnConnection(connection);
-            }
-        }
-        return order;
+        return getByParameter(id, sql);
+    }
+
+    public CustomerOrder getCreatingOrderByUserId(int userId) throws DaoException {
+        String sql = "SELECT ID, CUSTOMER_ID, AMOUNT, ORDER_DATE, STATUS FROM CUSTOMER_ORDER WHERE CUSTOMER_ID=? AND STATUS='CREATING'";
+        return getByParameter(userId, sql);
     }
 
     public Integer getByUserId(int userId) throws DaoException {
         Connection connection = pool.getConnection();
         Integer order = null;
-        String sql ="SELECT MAX(ID) FROM CUSTOMER_ORDER WHERE CUSTOMER_ID =?";;
+        String sql = "SELECT MAX(ID) FROM CUSTOMER_ORDER WHERE CUSTOMER_ID =?";
+        ;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, userId);
@@ -159,26 +120,47 @@ public class CustomerOrderDao implements GenericDao<CustomerOrder> {
         return order;
     }
 
-    public CustomerOrder getCreatingOrderByUserId(int userId) throws DaoException {
+    @Override
+    public void remove(CustomerOrder order) throws DaoException {
+        throw new DaoException("It's not allowed to delete order!");
+    }
+
+    private void addUpdateOrder(CustomerOrder order, String sqlParameter) throws DaoException {
+        Connection connection = pool.getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlParameter);
+            preparedStatement.setInt(1, order.getCustomerId());
+            preparedStatement.setDouble(2, order.getAmount());
+            preparedStatement.setDate(3, order.getCurrentDate());
+            preparedStatement.setString(4, String.valueOf(order.getStatus()));
+            System.out.println(order.getId());
+            if (order.getId() != null)  preparedStatement.setInt(5, order.getId());
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            LOGGER.error("Order creating and updating SQLException", e);
+            throw new DaoException();
+        } finally {
+            if (connection != null) {
+                pool.returnConnection(connection);
+            }
+        }
+    }
+
+    private CustomerOrder getByParameter(Object parameter, String sqlParameter) throws DaoException {
         Connection connection = pool.getConnection();
         CustomerOrder order = null;
-        String sql ="SELECT ID, CUSTOMER_ID, AMOUNT, ORDER_DATE, STATUS FROM CUSTOMER_ORDER WHERE CUSTOMER_ID=? AND STATUS='CREATING'";;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, userId);
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlParameter);
+            preparedStatement.setObject(1, parameter);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                order = new CustomerOrder();
-                order.setId(resultSet.getInt("ID"));
-                order.setCustomerId(resultSet.getInt("CUSTOMER_ID"));
-                order.setAmount(resultSet.getDouble("AMOUNT"));
-                order.setOrderDate(resultSet.getDate("ORDER_DATE"));
-                order.setStatus(CustomerOrder.Status.valueOf(resultSet.getString("STATUS")));
+                order = getCustomerOrderFieldsFromDB(resultSet);
             }
             resultSet.close();
             preparedStatement.close();
         } catch (SQLException e) {
-            LOGGER.error("Get creating order by user id SQLException", e);
+            LOGGER.error("Get order by " + parameter + " id SQLException", e);
             throw new DaoException();
         } finally {
             if (connection != null) {
@@ -188,31 +170,14 @@ public class CustomerOrderDao implements GenericDao<CustomerOrder> {
         return order;
     }
 
-    @Override
-    public void update(CustomerOrder order) throws DaoException {
-        Connection connection = pool.getConnection();
-        String sql = "UPDATE CUSTOMER_ORDER SET CUSTOMER_ID=?, AMOUNT=?, ORDER_DATE=?, STATUS=? WHERE ID=?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, order.getCustomerId());
-            preparedStatement.setDouble(2, order.getAmount());
-            preparedStatement.setDate(3, order.getCurrentDate());
-            preparedStatement.setString(4, String.valueOf(order.getStatus()));
-            preparedStatement.setInt(5, order.getId());
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            LOGGER.error("Order updating SQLException", e);
-            throw new DaoException();
-        } finally {
-            if (connection != null) {
-                pool.returnConnection(connection);
-            }
-        }
-    }
-
-    @Override
-    public void remove(CustomerOrder order) throws DaoException {
-        throw new DaoException("It's not allowed to delete order!");
+    private CustomerOrder getCustomerOrderFieldsFromDB(ResultSet resultSet) throws SQLException {
+        CustomerOrder order;
+        order = new CustomerOrder();
+        order.setId(resultSet.getInt("ID"));
+        order.setCustomerId(resultSet.getInt("CUSTOMER_ID"));
+        order.setAmount(resultSet.getDouble("AMOUNT"));
+        order.setOrderDate(resultSet.getDate("ORDER_DATE"));
+        order.setStatus(CustomerOrder.Status.valueOf(resultSet.getString("STATUS")));
+        return order;
     }
 }

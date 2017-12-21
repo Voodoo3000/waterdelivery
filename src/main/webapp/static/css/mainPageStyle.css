@@ -41,6 +41,18 @@
     font-family: Helvetica;
 }
 
+#errormsg {
+    color: white;
+    background-color: #b94a48;
+}
+
+#error_page_msg {
+    color: white;
+    position: absolute;
+    left: 23%;
+    top: 5%;
+}
+
 #success_order {
     position: relative;
     text-align: center;
@@ -61,7 +73,7 @@
 }
 
 #error404_logo {
-    position: relative;
+    position: absolute;
     left: 20%;
 }
 

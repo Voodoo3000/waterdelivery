@@ -13,25 +13,18 @@ import java.util.List;
 public class BottleSizeDao implements GenericDao<BottleSize> {
 
     private static final Logger LOGGER = Logger.getLogger(BottleSizeDao.class);
-    ConnectionPool pool = ConnectionPool.getInstance();
+    private ConnectionPool pool = ConnectionPool.getInstance();
 
     @Override
     public void add(BottleSize bottle) throws DaoException {
-        Connection connection = pool.getConnection();
         String sql = "INSERT INTO BOTTLE_SIZE (SIZE) VALUES(?)";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setDouble(1, bottle.getSize());
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            LOGGER.error("Bottle creating SQLException", e);
-            throw new DaoException();
-        } finally {
-            if (connection != null) {
-                pool.returnConnection(connection);
-            }
-        }
+        addUpdateSize(bottle, sql);
+    }
+
+    @Override
+    public void update(BottleSize bottle) throws DaoException {
+        String sql = "UPDATE BOTTLE_SIZE SET SIZE=? WHERE ID=?";
+        addUpdateSize(bottle, sql);
     }
 
     @Override
@@ -40,16 +33,14 @@ public class BottleSizeDao implements GenericDao<BottleSize> {
         List<BottleSize> bottleSizeList = new ArrayList<>();
         String sql = "SELECT ID, SIZE FROM BOTTLE_SIZE";
         try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                BottleSize bottle = new BottleSize();
-                bottle.setId(resultSet.getInt("ID"));
-                bottle.setSize(resultSet.getDouble("SIZE"));
+                BottleSize bottle = getBottleSizeFieldsFromDB(resultSet);
                 bottleSizeList.add(bottle);
             }
             resultSet.close();
-            statement.close();
+            preparedStatement.close();
         } catch (SQLException e) {
             LOGGER.error("Get all bottle SQLException", e);
             throw new DaoException();
@@ -63,81 +54,66 @@ public class BottleSizeDao implements GenericDao<BottleSize> {
 
     @Override
     public BottleSize getById(int id) throws DaoException {
-        Connection connection = pool.getConnection();
-        PreparedStatement preparedStatement = null;
-        BottleSize bottle = null;
         String sql = "SELECT ID, SIZE FROM BOTTLE_SIZE WHERE ID=?";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                bottle = new BottleSize();
-                bottle.setId(resultSet.getInt("ID"));
-                bottle.setSize(resultSet.getDouble("SIZE"));
-            }
-            resultSet.close();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            LOGGER.error("Get bottle by id SQLException", e);
-            throw new DaoException();
-        } finally {
-            if (connection != null) {
-                pool.returnConnection(connection);
-            }
-        }
-        return bottle;
+        return getByParameter(id, sql);
     }
 
     public BottleSize getBySize(double size) throws DaoException {
-        Connection connection = pool.getConnection();
-        BottleSize bottle = null;
         String sql = "SELECT ID, SIZE FROM BOTTLE_SIZE WHERE SIZE=?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setDouble(1, size);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                bottle = new BottleSize();
-                bottle.setId(resultSet.getInt("ID"));
-                bottle.setSize(resultSet.getDouble("SIZE"));
-            }
-            resultSet.close();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            LOGGER.error("Get bottle by size SQLException", e);
-            throw new DaoException();
-        } finally {
-            if (connection != null) {
-                pool.returnConnection(connection);
-            }
-        }
-        return bottle;
-    }
-
-    @Override
-    public void update(BottleSize bottle) throws DaoException {
-        Connection connection = pool.getConnection();
-        String sql = "UPDATE BOTTLE_SIZE SET SIZE=? WHERE ID=?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setDouble(1, bottle.getSize());
-            preparedStatement.setInt(2, bottle.getId());
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            LOGGER.error("Bottle updating SQLException", e);
-            throw new DaoException();
-        } finally {
-            if (connection != null) {
-                pool.returnConnection(connection);
-            }
-        }
+        return getByParameter(size, sql);
     }
 
     @Override
     public void remove(BottleSize bottle) throws DaoException {
         throw new DaoException("It's not allowed to delete bottle!");
+    }
+
+    private void addUpdateSize(BottleSize bottle, String sqlParameter) throws DaoException {
+        Connection connection = pool.getConnection();
+        String sql = "UPDATE BOTTLE_SIZE SET SIZE=? WHERE ID=?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlParameter);
+            preparedStatement.setDouble(1, bottle.getSize());
+            if (bottle.getId() != null) preparedStatement.setInt(2, bottle.getId());
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            LOGGER.error("Bottle creating and updating SQLException", e);
+            throw new DaoException();
+        } finally {
+            if (connection != null) {
+                pool.returnConnection(connection);
+            }
+        }
+    }
+
+    private BottleSize getByParameter(Object parameter, String sqlParameter) throws DaoException {
+        Connection connection = pool.getConnection();
+        BottleSize bottle = null;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlParameter);
+            preparedStatement.setObject(1, parameter);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                bottle = getBottleSizeFieldsFromDB(resultSet);
+            }
+            resultSet.close();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            LOGGER.error("Get bottle by " + parameter + " SQLException", e);
+            throw new DaoException();
+        } finally {
+            if (connection != null) {
+                pool.returnConnection(connection);
+            }
+        }
+        return bottle;
+    }
+
+    private BottleSize getBottleSizeFieldsFromDB(ResultSet resultSet) throws SQLException {
+        BottleSize bottle = new BottleSize();
+        bottle.setId(resultSet.getInt("ID"));
+        bottle.setSize(resultSet.getDouble("SIZE"));
+        return bottle;
     }
 }

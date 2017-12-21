@@ -17,27 +17,16 @@ public class CustomerAddressDao implements GenericDao<CustomerAddress> {
 
     @Override
     public void add(CustomerAddress address) throws DaoException {
-        Connection connection = pool.getConnection();
         String sql = "INSERT INTO CUSTOMER_ADDRESS(CITY, STREET, HOUSE_NUMBER, APARTMENT_NUMBER, PHONE_NUMBER, CUSTOMER_ID) VALUES( ?, ?, ?, ?, ?, ?)";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, address.getCity());
-            preparedStatement.setString(2, address.getStreet());
-            preparedStatement.setString(3, address.getHouseNumber());
-            preparedStatement.setString(4, address.getApartmentNumber());
-            preparedStatement.setString(5, address.getPhoneNumber());
-            preparedStatement.setInt(6, address.getCustomerId());
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            LOGGER.error("Address creating SQLException", e);
-            throw new DaoException();
-        } finally {
-            if (connection != null) {
-                pool.returnConnection(connection);
-            }
-        }
+        addUpdateAddress(address, sql);
     }
+
+    @Override
+    public void update(CustomerAddress address) throws DaoException {
+        String sql = "UPDATE CUSTOMER_ADDRESS SET CITY=?, STREET=?, HOUSE_NUMBER=?, APARTMENT_NUMBER=?, PHONE_NUMBER=?, CUSTOMER_ID=? WHERE ID=?";
+        addUpdateAddress(address, sql);
+    }
+
 
     @Override
     public List<CustomerAddress> getAll() throws DaoException {
@@ -45,21 +34,14 @@ public class CustomerAddressDao implements GenericDao<CustomerAddress> {
         List<CustomerAddress> addressList = new ArrayList<>();
         String sql = "SELECT ID, CITY, STREET, HOUSE_NUMBER, APARTMENT_NUMBER, PHONE_NUMBER, CUSTOMER_ID FROM CUSTOMER_ADDRESS";
         try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                CustomerAddress address = new CustomerAddress();
-                address.setId(resultSet.getInt("ID"));
-                address.setCity(resultSet.getString("CITY"));
-                address.setStreet(resultSet.getString("STREET"));
-                address.setHouseNumber(resultSet.getString("HOUSE_NUMBER"));
-                address.setApartmentNumber(resultSet.getString("APARTMENT_NUMBER"));
-                address.setPhoneNumber(resultSet.getString("PHONE_NUMBER"));
-                address.setCustomerId(resultSet.getInt("CUSTOMER_ID"));
+                CustomerAddress address = getCustomerAddressFieldsFromDB(resultSet);
                 addressList.add(address);
             }
             resultSet.close();
-            statement.close();
+            preparedStatement.close();
         } catch (SQLException e) {
             LOGGER.error("Get all addresses SQLException", e);
             throw new DaoException();
@@ -73,95 +55,76 @@ public class CustomerAddressDao implements GenericDao<CustomerAddress> {
 
     @Override
     public CustomerAddress getById(int id) throws DaoException {
-        Connection connection = pool.getConnection();
-        CustomerAddress address = null;
         String sql = "SELECT ID, CITY, STREET, HOUSE_NUMBER, APARTMENT_NUMBER, PHONE_NUMBER, CUSTOMER_ID FROM CUSTOMER_ADDRESS WHERE ID=?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                address = new CustomerAddress();
-                address.setId(resultSet.getInt("ID"));
-                address.setCity(resultSet.getString("CITY"));
-                address.setStreet(resultSet.getString("STREET"));
-                address.setHouseNumber(resultSet.getString("HOUSE_NUMBER"));
-                address.setApartmentNumber(resultSet.getString("APARTMENT_NUMBER"));
-                address.setPhoneNumber(resultSet.getString("PHONE_NUMBER"));
-                address.setCustomerId(resultSet.getInt("CUSTOMER_ID"));
-            }
-            resultSet.close();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            LOGGER.error("Get address by id SQLException", e);
-            throw new DaoException();
-        } finally {
-            if (connection != null) {
-                pool.returnConnection(connection);
-            }
-        }
-        return address;
+        return getByParameter(id, sql);
     }
 
     public CustomerAddress getByCustomerId(int id) throws DaoException {
-        Connection connection = pool.getConnection();
-        CustomerAddress address = null;
         String sql = "SELECT ID, CITY, STREET, HOUSE_NUMBER, APARTMENT_NUMBER, PHONE_NUMBER, CUSTOMER_ID FROM CUSTOMER_ADDRESS WHERE CUSTOMER_ID=?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                address = new CustomerAddress();
-                address.setId(resultSet.getInt("ID"));
-                address.setCity(resultSet.getString("CITY"));
-                address.setStreet(resultSet.getString("STREET"));
-                address.setHouseNumber(resultSet.getString("HOUSE_NUMBER"));
-                address.setApartmentNumber(resultSet.getString("APARTMENT_NUMBER"));
-                address.setPhoneNumber(resultSet.getString("PHONE_NUMBER"));
-                address.setCustomerId(resultSet.getInt("CUSTOMER_ID"));
-            }
-            resultSet.close();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            LOGGER.error("Get address by customer id SQLException", e);
-            throw new DaoException();
-        } finally {
-            if (connection != null) {
-                pool.returnConnection(connection);
-            }
-        }
-        return address;
-    }
-
-
-    @Override
-    public void update(CustomerAddress address) throws DaoException {
-        Connection connection = pool.getConnection();
-        String sql = "UPDATE CUSTOMER_ADDRESS SET CITY=?, STREET=?, HOUSE_NUMBER=?, APARTMENT_NUMBER=?, PHONE_NUMBER=?, CUSTOMER_ID=? WHERE ID=?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, address.getCity());
-            preparedStatement.setString(2, address.getStreet());
-            preparedStatement.setString(3, address.getHouseNumber());
-            preparedStatement.setString(4, address.getApartmentNumber());
-            preparedStatement.setString(5, address.getPhoneNumber());
-            preparedStatement.setInt(6, address.getCustomerId());
-            preparedStatement.setInt(7, address.getId());
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            LOGGER.error("Address updating SQLException", e);
-            throw new DaoException();
-        } finally {
-            if (connection != null) {
-                pool.returnConnection(connection);
-            }
-        }
+        return getByParameter(id, sql);
     }
 
     @Override
     public void remove(CustomerAddress entity) throws DaoException {
         throw new DaoException("It's not allowed to delete address!");
     }
+
+    private void addUpdateAddress(CustomerAddress address, String sqlParameter) throws DaoException {
+        Connection connection = pool.getConnection();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlParameter);
+            preparedStatement.setString(1, address.getCity());
+            preparedStatement.setString(2, address.getStreet());
+            preparedStatement.setString(3, address.getHouseNumber());
+            preparedStatement.setString(4, address.getApartmentNumber());
+            preparedStatement.setString(5, address.getPhoneNumber());
+            preparedStatement.setInt(6, address.getCustomerId());
+            if (address.getId() != null) preparedStatement.setInt(7, address.getId());
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            LOGGER.error("Address creating and updating SQLException", e);
+            throw new DaoException();
+        } finally {
+            if (connection != null) {
+                pool.returnConnection(connection);
+            }
+        }
+    }
+
+    private CustomerAddress getByParameter(Object parameter, String sqlParameter) throws DaoException {
+        Connection connection = pool.getConnection();
+        CustomerAddress address = null;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlParameter);
+            preparedStatement.setObject(1, parameter);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                address = getCustomerAddressFieldsFromDB(resultSet);
+            }
+            resultSet.close();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            LOGGER.error("Get address by " + parameter + " id SQLException", e);
+            throw new DaoException();
+        } finally {
+            if (connection != null) {
+                pool.returnConnection(connection);
+            }
+        }
+        return address;
+    }
+
+    private CustomerAddress getCustomerAddressFieldsFromDB(ResultSet resultSet) throws SQLException {
+        CustomerAddress address = new CustomerAddress();
+        address.setId(resultSet.getInt("ID"));
+        address.setCity(resultSet.getString("CITY"));
+        address.setStreet(resultSet.getString("STREET"));
+        address.setHouseNumber(resultSet.getString("HOUSE_NUMBER"));
+        address.setApartmentNumber(resultSet.getString("APARTMENT_NUMBER"));
+        address.setPhoneNumber(resultSet.getString("PHONE_NUMBER"));
+        address.setCustomerId(resultSet.getInt("CUSTOMER_ID"));
+        return address;
+    }
+
 }

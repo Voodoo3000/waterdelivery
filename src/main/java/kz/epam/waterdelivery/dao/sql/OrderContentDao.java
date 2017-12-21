@@ -1,6 +1,5 @@
 package kz.epam.waterdelivery.dao.sql;
 
-import kz.epam.waterdelivery.command.SignInCommand;
 import kz.epam.waterdelivery.dao.DaoException;
 import kz.epam.waterdelivery.dao.GenericDao;
 import kz.epam.waterdelivery.entity.BottleSize;
@@ -20,54 +19,31 @@ public class OrderContentDao implements GenericDao<OrderContent> {
 
     @Override
     public void add(OrderContent content) throws DaoException {
-        Connection connection = pool.getConnection();
         String sql = "INSERT INTO ORDER_CONTENT (WATER_ID, BOTTLE_SIZE_ID, QUANTITY, CUSTOMER_ORDER_ID) VALUES(?, ?, ?, ?)";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, content.getWater().getId());
-            preparedStatement.setInt(2, content.getBottleSize().getId());
-            preparedStatement.setInt(3, content.getQuantity());
-            preparedStatement.setInt(4, content.getCustomerOrderId());
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            LOGGER.error("Content creating SQLException", e);
-            throw new DaoException();
-        } finally {
-            if (connection != null) {
-                pool.returnConnection(connection);
-            }
-        }
+        addRemoveContent(content, sql);
+    }
+
+    @Override
+    public void update(OrderContent content) throws DaoException {
+        throw new DaoException("It's not allowed to update content!");
     }
 
     @Override
     public List<OrderContent> getAll() throws DaoException {
         Connection connection = pool.getConnection();
-        OrderContent content;
         List<OrderContent> contentList = new ArrayList<>();
         String sql = "SELECT ID, WATER_ID, BOTTLE_SIZE_ID, QUANTITY, CUSTOMER_ORDER_ID FROM ORDER_CONTENT";
         try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
             WaterDao waterDao = new WaterDao();
             BottleSizeDao bottleSizeDao = new BottleSizeDao();
-
             while (resultSet.next()) {
-                content = new OrderContent();
-                content.setId(resultSet.getInt("ID"));
-                int water_id = resultSet.getInt("WATER_ID");
-                Water water = waterDao.getById(water_id);
-                content.setWater(water);
-                int bottle_size_id = resultSet.getInt("BOTTLE_SIZE_ID");
-                BottleSize bottleSize = bottleSizeDao.getById(bottle_size_id);
-                content.setBottleSize(bottleSize);
-                content.setQuantity(resultSet.getInt("QUANTITY"));
-                content.setCustomerOrderId(resultSet.getInt("CUSTOMER_ORDER_ID"));
+                OrderContent content = getContentFieldsFromDB(resultSet, waterDao, bottleSizeDao);
                 contentList.add(content);
             }
             resultSet.close();
-            statement.close();
+            preparedStatement.close();
         } catch (SQLException e) {
             LOGGER.error("Get all content SQLException", e);
             throw new DaoException();
@@ -91,16 +67,7 @@ public class OrderContentDao implements GenericDao<OrderContent> {
             WaterDao waterDao = new WaterDao();
             BottleSizeDao bottleSizeDao = new BottleSizeDao();
             while (resultSet.next()) {
-                content = new OrderContent();
-                content.setId(resultSet.getInt("ID"));
-                int water_id = resultSet.getInt("WATER_ID");
-                Water water = waterDao.getById(water_id);
-                content.setWater(water);
-                int bottle_size_id = resultSet.getInt("BOTTLE_SIZE_ID");
-                BottleSize bottleSize = bottleSizeDao.getById(bottle_size_id);
-                content.setBottleSize(bottleSize);
-                content.setQuantity(resultSet.getInt("QUANTITY"));
-                content.setCustomerOrderId(resultSet.getInt("CUSTOMER_ORDER_ID"));
+                content = getContentFieldsFromDB(resultSet, waterDao, bottleSizeDao);
                 contentList.add(content);
             }
             resultSet.close();
@@ -123,23 +90,12 @@ public class OrderContentDao implements GenericDao<OrderContent> {
         String sql = "SELECT ID, WATER_ID, BOTTLE_SIZE_ID, QUANTITY, CUSTOMER_ORDER_ID FROM ORDER_CONTENT WHERE ID=?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, id);
+            preparedStatement.setObject(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-
             WaterDao waterDao = new WaterDao();
             BottleSizeDao bottleSizeDao = new BottleSizeDao();
-
             if (resultSet.next()) {
-                content = new OrderContent();
-                content.setId(resultSet.getInt("ID"));
-                int water_id = resultSet.getInt("WATER_ID");
-                Water water = waterDao.getById(water_id);
-                content.setWater(water);
-                int bottle_size_id = resultSet.getInt("BOTTLE_SIZE_ID");
-                BottleSize bottleSize = bottleSizeDao.getById(bottle_size_id);
-                content.setBottleSize(bottleSize);
-                content.setQuantity(resultSet.getInt("QUANTITY"));
-                content.setCustomerOrderId(resultSet.getInt("CUSTOMER_ORDER_ID"));
+                content = getContentFieldsFromDB(resultSet, waterDao, bottleSizeDao);
             }
             resultSet.close();
             preparedStatement.close();
@@ -155,43 +111,26 @@ public class OrderContentDao implements GenericDao<OrderContent> {
     }
 
     @Override
-    public void update(OrderContent content) throws DaoException {
-    /*    Connection connection = pool.getConnection();
-        PreparedStatement preparedStatement = null;
-
-        String sql = "UPDATE ORDER_CONTENT SET WATER_ID=?, BOTTLE_SIZE_ID=?, QUANTITY=?, CUSTOMER_ORDER_ID=? WHERE ID=?";
-
-        try {
-            preparedStatement = connection.prepareStatement(sql);
-
-            preparedStatement.setInt(1, content.getWater().getId());
-            preparedStatement.setInt(2, content.getBottleSize().getId());
-            preparedStatement.setInt(3, content.getQuantity());
-            preparedStatement.setInt(4, content.getCustomerOrderId());
-            preparedStatement.setInt(5, content.getId());
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            LOGGER.error("Content updating SQLException", e);
-            throw new DaoException();
-        } finally {
-            if (connection != null) {
-                pool.returnConnection(connection);
-            }
-        }*/
+    public void remove(OrderContent content) throws DaoException {
+        String sql = "DELETE FROM ORDER_CONTENT WHERE ID=?";
+        addRemoveContent(content, sql);
     }
 
-    @Override
-    public void remove(OrderContent content) throws DaoException {
+    private void addRemoveContent(OrderContent content, String sqlParameter) throws DaoException {
         Connection connection = pool.getConnection();
-        String sql = "DELETE FROM ORDER_CONTENT WHERE ID=?";
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, content.getId());
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlParameter);
+            if (content.getId() == null) {
+                preparedStatement.setInt(1, content.getWater().getId());
+                preparedStatement.setInt(2, content.getBottleSize().getId());
+                preparedStatement.setInt(3, content.getQuantity());
+                preparedStatement.setInt(4, content.getCustomerOrderId());
+            }
+            else preparedStatement.setInt(1, content.getId());
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
-            LOGGER.error("Content removing SQLException", e);
+            LOGGER.error("Content creating SQLException", e);
             throw new DaoException();
         } finally {
             if (connection != null) {
@@ -200,4 +139,18 @@ public class OrderContentDao implements GenericDao<OrderContent> {
         }
     }
 
+    private OrderContent getContentFieldsFromDB(ResultSet resultSet, WaterDao waterDao, BottleSizeDao bottleSizeDao) throws SQLException, DaoException {
+        OrderContent content;
+        content = new OrderContent();
+        content.setId(resultSet.getInt("ID"));
+        int water_id = resultSet.getInt("WATER_ID");
+        Water water = waterDao.getById(water_id);
+        content.setWater(water);
+        int bottle_size_id = resultSet.getInt("BOTTLE_SIZE_ID");
+        BottleSize bottleSize = bottleSizeDao.getById(bottle_size_id);
+        content.setBottleSize(bottleSize);
+        content.setQuantity(resultSet.getInt("QUANTITY"));
+        content.setCustomerOrderId(resultSet.getInt("CUSTOMER_ORDER_ID"));
+        return content;
+    }
 }
