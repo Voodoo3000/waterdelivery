@@ -2,11 +2,11 @@ package kz.epam.waterdelivery.command;
 
 public class CommandException extends Exception {
 
-    public CommandException(){
+    public CommandException() {
 
     }
 
-    public CommandException(String message){
+    public CommandException(String message) {
 
     }
 

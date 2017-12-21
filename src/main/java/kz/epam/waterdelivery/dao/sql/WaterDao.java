@@ -1,10 +1,15 @@
 package kz.epam.waterdelivery.dao.sql;
+
 import kz.epam.waterdelivery.dao.DaoException;
 import kz.epam.waterdelivery.dao.GenericDao;
 import kz.epam.waterdelivery.entity.Water;
 import kz.epam.waterdelivery.pool.ConnectionPool;
 import org.apache.log4j.Logger;
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,7 +91,7 @@ public class WaterDao implements GenericDao<Water> {
     private Water getByParameter(Object parameter, String sqlParameter) throws DaoException {
         Connection connection = pool.getConnection();
         Water water = null;
-        String sql = "SELECT ID, TYPE, PRICE_PER_LITER FROM WATER WHERE "+ sqlParameter +"=?";
+        String sql = "SELECT ID, TYPE, PRICE_PER_LITER FROM WATER WHERE " + sqlParameter + "=?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setObject(1, parameter);

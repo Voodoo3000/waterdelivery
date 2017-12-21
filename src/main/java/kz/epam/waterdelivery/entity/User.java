@@ -9,14 +9,6 @@ public class User extends Entity {
     private Role role;
     private State state;
 
-    public enum Role {
-        ADMIN, CLIENT
-    }
-
-    public enum State {
-        ENABLED, DISABLED
-    }
-
     public User() {
     }
 
@@ -74,6 +66,14 @@ public class User extends Entity {
 
     public void setState(State state) {
         this.state = state;
+    }
+
+    public enum Role {
+        ADMIN, CLIENT
+    }
+
+    public enum State {
+        ENABLED, DISABLED
     }
 
 }

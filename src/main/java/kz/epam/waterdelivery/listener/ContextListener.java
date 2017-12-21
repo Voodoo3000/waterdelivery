@@ -41,6 +41,7 @@ public class ContextListener implements ServletContextListener {
         context.setAttribute(ATTR_STATES, User.State.values());
         context.setAttribute(ATTR_STATUSES, CustomerOrder.Status.values());
     }
+
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
     }

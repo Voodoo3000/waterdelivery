@@ -8,7 +8,10 @@ import kz.epam.waterdelivery.entity.Water;
 import kz.epam.waterdelivery.pool.ConnectionPool;
 import org.apache.log4j.Logger;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,8 +128,7 @@ public class OrderContentDao implements GenericDao<OrderContent> {
                 preparedStatement.setInt(2, content.getBottleSize().getId());
                 preparedStatement.setInt(3, content.getQuantity());
                 preparedStatement.setInt(4, content.getCustomerOrderId());
-            }
-            else preparedStatement.setInt(1, content.getId());
+            } else preparedStatement.setInt(1, content.getId());
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {

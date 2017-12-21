@@ -6,7 +6,6 @@ import kz.epam.waterdelivery.entity.Water;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.List;
 
 public class CreateWaterCommand implements Command {

@@ -34,7 +34,7 @@ public class CommandContainer {
         COMMANDS.put("POST/edit_user", new EditUserCommand());
         COMMANDS.put("POST/remove_content", new RemoveContentCommand());
         COMMANDS.put("POST/cancel_order", new CancelOrderCommand());
-        COMMANDS.put("POST/change_order" , new ChangeOrderCommand());
+        COMMANDS.put("POST/change_order", new ChangeOrderCommand());
         COMMANDS.put("POST/change_user", new ChangeUserCommand());
         COMMANDS.put("POST/change_water", new ChangeWaterCommand());
         COMMANDS.put("POST/create_water", new CreateWaterCommand());

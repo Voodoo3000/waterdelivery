@@ -1,13 +1,15 @@
 package kz.epam.waterdelivery.dao.sql;
 
-import kz.epam.waterdelivery.command.SignInCommand;
 import kz.epam.waterdelivery.dao.DaoException;
 import kz.epam.waterdelivery.dao.GenericDao;
 import kz.epam.waterdelivery.entity.CustomerOrder;
 import kz.epam.waterdelivery.pool.ConnectionPool;
 import org.apache.log4j.Logger;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,7 +88,8 @@ public class CustomerOrderDao implements GenericDao<CustomerOrder> {
 
     @Override
     public CustomerOrder getById(int id) throws DaoException {
-        String sql ="SELECT ID, CUSTOMER_ID, AMOUNT, ORDER_DATE, STATUS FROM CUSTOMER_ORDER WHERE ID=?";;
+        String sql = "SELECT ID, CUSTOMER_ID, AMOUNT, ORDER_DATE, STATUS FROM CUSTOMER_ORDER WHERE ID=?";
+        ;
         return getByParameter(id, sql);
     }
 
@@ -134,7 +137,7 @@ public class CustomerOrderDao implements GenericDao<CustomerOrder> {
             preparedStatement.setDate(3, order.getCurrentDate());
             preparedStatement.setString(4, String.valueOf(order.getStatus()));
             System.out.println(order.getId());
-            if (order.getId() != null)  preparedStatement.setInt(5, order.getId());
+            if (order.getId() != null) preparedStatement.setInt(5, order.getId());
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {

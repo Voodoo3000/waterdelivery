@@ -21,6 +21,10 @@ public class ConnectionPool {
         initializeConnectionPool();
     }
 
+    public static ConnectionPool getInstance() throws ConnectionPoolException {
+        return INSTANCE;
+    }
+
     public void initializeConnectionPool() throws ConnectionPoolException {
         while ((connections.size() < POOL_SIZE)) {
             try {
@@ -38,10 +42,6 @@ public class ConnectionPool {
         }
     }
 
-    public static ConnectionPool getInstance() throws ConnectionPoolException {
-        return INSTANCE;
-    }
-
     public Connection getConnection() throws ConnectionPoolException {
         Connection connection = null;
         try {
@@ -56,8 +56,8 @@ public class ConnectionPool {
         connections.add(connection);
     }
 
-    public synchronized void closeConnections(){
-        for(Connection connection : connections){
+    public synchronized void closeConnections() {
+        for (Connection connection : connections) {
             try {
                 connection.close();
             } catch (SQLException e) {

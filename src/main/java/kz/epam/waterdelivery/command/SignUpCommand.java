@@ -7,10 +7,8 @@ import kz.epam.waterdelivery.util.LocaleUtil;
 import kz.epam.waterdelivery.util.Validator;
 import org.apache.log4j.Logger;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.sql.SQLException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -53,19 +51,18 @@ public class SignUpCommand implements Command {
 
         boolean loginEmailValidResult;
         boolean passwordValidResult;
-        loginEmailValidResult = Validator.loginEmailValidator(loginEmail);
-        passwordValidResult = Validator.passwordValidator(password);
+        loginEmailValidResult = Validator.validateLoginEmail(loginEmail);
+        passwordValidResult = Validator.validatePassword(password);
         try {
             if (!loginEmailValidResult) {
                 LOGGER.info("Invalid login(email address)");
                 session.setAttribute(ERROR, invalid_loginEmail_err_msg);
                 result = MAIN_REG_FAILED;
-            }else if(!passwordValidResult){
+            } else if (!passwordValidResult) {
                 LOGGER.info("Invalid login(email address)");
                 session.setAttribute(ERROR, undesirable_pass_err_msg);
                 result = MAIN_REG_FAILED;
-            }
-            else if (userDao.getByLogin(loginEmail) != null) {
+            } else if (userDao.getByLogin(loginEmail) != null) {
                 LOGGER.info("Entered login is busy");
                 session.setAttribute(ERROR, busy_login_err_msg);
                 result = MAIN_REG_FAILED;
@@ -98,7 +95,7 @@ public class SignUpCommand implements Command {
         user.setWallet(0);
         user.setState(User.State.ENABLED);
         userDao.add(user);
-        return user;
+        return userDao.getByLogin(loginEmail);
     }
 
 }

@@ -6,8 +6,8 @@ import kz.epam.waterdelivery.command.CommandException;
 import kz.epam.waterdelivery.command.CommandResult;
 import kz.epam.waterdelivery.util.LocaleUtil;
 import org.apache.log4j.Logger;
+
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +33,6 @@ public class Servlet extends HttpServlet {
         ResourceBundle RB = ResourceBundle.getBundle(RB_NAME, locale);
         String url_not_found_err_msg = RB.getString(MESSAGE_ERROR404);
         String internal_err_msg = RB.getString(MESSAGE_ERROR500);
-        request.setCharacterEncoding("UTF-8");
         String commandName = request.getMethod() + request.getPathInfo();
         Command command = CommandContainer.get(commandName);
         if (command == null) {

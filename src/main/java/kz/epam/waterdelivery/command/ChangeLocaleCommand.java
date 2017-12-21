@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.Locale;
 
 public class ChangeLocaleCommand implements Command {

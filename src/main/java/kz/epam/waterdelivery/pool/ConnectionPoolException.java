@@ -2,7 +2,8 @@ package kz.epam.waterdelivery.pool;
 
 public class ConnectionPoolException extends RuntimeException {
 
-    public ConnectionPoolException() {}
+    public ConnectionPoolException() {
+    }
 
     public ConnectionPoolException(String message) {
         super(message);

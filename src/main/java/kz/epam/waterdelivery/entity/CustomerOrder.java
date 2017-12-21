@@ -5,10 +5,12 @@ import kz.epam.waterdelivery.dao.DaoException;
 import kz.epam.waterdelivery.dao.sql.OrderContentDao;
 import kz.epam.waterdelivery.dao.sql.UserDao;
 import org.apache.log4j.Logger;
+
 import java.util.Date;
 import java.util.List;
 
 public class CustomerOrder extends Entity {
+    private static final Logger LOGGER = Logger.getLogger(CustomerOrder.class);
     private int customerId;
     private double amount;
     private Date orderDate;
@@ -16,11 +18,6 @@ public class CustomerOrder extends Entity {
     private Status status;
     private User customer;
     private List<OrderContent> contentList;
-    private static final Logger LOGGER = Logger.getLogger(CustomerOrder.class);
-
-    public enum Status {
-        CREATING, PREPARATION, DELIVERED, CANCELLED
-    }
 
     public int getCustomerId() {
         return customerId;
@@ -95,5 +92,9 @@ public class CustomerOrder extends Entity {
 
     public void setContentList(List<OrderContent> contentList) {
         this.contentList = contentList;
+    }
+
+    public enum Status {
+        CREATING, PREPARATION, DELIVERED, CANCELLED
     }
 }

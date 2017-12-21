@@ -10,8 +10,6 @@ import kz.epam.waterdelivery.entity.User;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Date;
 
 public class GetOrderCommand implements Command {

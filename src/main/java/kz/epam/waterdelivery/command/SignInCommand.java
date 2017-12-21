@@ -5,7 +5,7 @@ import kz.epam.waterdelivery.dao.sql.UserDao;
 import kz.epam.waterdelivery.entity.User;
 import kz.epam.waterdelivery.util.LocaleUtil;
 import org.apache.log4j.Logger;
-import javax.servlet.ServletContext;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Locale;

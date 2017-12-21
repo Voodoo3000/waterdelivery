@@ -9,8 +9,9 @@ public class OpenPageCommand implements Command {
     public OpenPageCommand(String page) {
         result = new CommandResult(page);
     }
+
     @Override
     public CommandResult execute(HttpServletRequest req) {
-               return result;
+        return result;
     }
 }

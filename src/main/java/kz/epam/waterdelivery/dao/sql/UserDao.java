@@ -1,12 +1,15 @@
 package kz.epam.waterdelivery.dao.sql;
 
-import kz.epam.waterdelivery.command.SignInCommand;
 import kz.epam.waterdelivery.dao.DaoException;
 import kz.epam.waterdelivery.dao.GenericDao;
 import kz.epam.waterdelivery.entity.User;
 import kz.epam.waterdelivery.pool.ConnectionPool;
 import org.apache.log4j.Logger;
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

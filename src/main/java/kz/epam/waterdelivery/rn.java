@@ -1,16 +1,11 @@
 package kz.epam.waterdelivery;
 
-import kz.epam.waterdelivery.dao.sql.BottleSizeDao;
-import kz.epam.waterdelivery.dao.sql.WaterDao;
-import kz.epam.waterdelivery.entity.BottleSize;
-import kz.epam.waterdelivery.entity.Water;
-
 import java.sql.SQLException;
 
 public class rn {
-  public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException {
 
-                                   //USER
+        //USER
 /*
         //create
         UserDao userService = new UserDao();
@@ -53,7 +48,7 @@ public class rn {
         userService.update(user);
 */
 
-                     //CUSTOMERORDER
+        //CUSTOMERORDER
 /*
         //create
         CustomerOrderDao orderService = new CustomerOrderDao();
@@ -94,7 +89,7 @@ public class rn {
 
 */
 
-                      //ORDERCONTENT
+        //ORDERCONTENT
 /*
         //create
         OrderContentDao contentService = new OrderContentDao();
@@ -133,7 +128,7 @@ public class rn {
 
 */
 
-                           //BOTLESIZE
+        //BOTLESIZE
 /*
         //create
         BottleSizeDao sizeService = new BottleSizeDao();
@@ -167,7 +162,7 @@ public class rn {
         sizeService.remove(bottle);
 
 */
-                                     //WATER
+        //WATER
 /*
         //create
         WaterDao waterService = new WaterDao();
@@ -209,7 +204,7 @@ public class rn {
 
 */
 
-                         //WATERTYPE
+        //WATERTYPE
 /*
         //create
         WaterTypeDao typeService = new WaterTypeDao();

@@ -6,7 +6,6 @@ import kz.epam.waterdelivery.entity.BottleSize;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.List;
 
 public class CreateBottleSizeCommand implements Command {
@@ -29,8 +28,8 @@ public class CreateBottleSizeCommand implements Command {
             bottleSizes = bottleSizeDao.getAll();
             request.getSession().setAttribute(ATTR_BOTTLE_SIZES, bottleSizes);
         } catch (DaoException e) {
-           LOGGER.error("DaoException in CreateBottleSizeCommand", e);
-           throw new CommandException(e);
+            LOGGER.error("DaoException in CreateBottleSizeCommand", e);
+            throw new CommandException(e);
         }
         return RESULT;
     }

@@ -6,12 +6,12 @@ import kz.epam.waterdelivery.entity.OrderContent;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 public class RemoveContentCommand implements Command {
 
     private static final Logger LOGGER = Logger.getLogger(RemoveContentCommand.class);
-    private static final CommandResult RESULT =  new CommandResult("do/open_customer_cart", true);;
+    private static final CommandResult RESULT = new CommandResult("do/open_customer_cart", true);
+    ;
     private int contentPositionId;
 
     @Override

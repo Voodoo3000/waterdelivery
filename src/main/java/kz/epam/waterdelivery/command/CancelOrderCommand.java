@@ -6,6 +6,7 @@ import kz.epam.waterdelivery.dao.sql.UserDao;
 import kz.epam.waterdelivery.entity.CustomerOrder;
 import kz.epam.waterdelivery.entity.User;
 import org.apache.log4j.Logger;
+
 import javax.servlet.http.HttpServletRequest;
 
 public class CancelOrderCommand implements Command {

@@ -1,6 +1,5 @@
 package kz.epam.waterdelivery.filter;
 
-import kz.epam.waterdelivery.command.SignUpCommand;
 import kz.epam.waterdelivery.entity.User;
 import org.apache.log4j.Logger;
 
@@ -11,13 +10,12 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 public class SecurityFilter implements Filter {
     private static final String ATTR_USER = "user";
-    private List<String> adminPages = new ArrayList<>();
     private static final Logger LOGGER = Logger.getLogger(SecurityFilter.class);
+    private List<String> adminPages = new ArrayList<>();
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -40,13 +38,13 @@ public class SecurityFilter implements Filter {
         if ((pathInfo != null) && (currentRole != User.Role.ADMIN)) {
             for (String page : adminPages) {
                 if (pathInfo.contains(page)) {
-                    LOGGER.error("Access denied. Page: "+pathInfo+" required admin privileges");
+                    LOGGER.error("Access denied. Page: " + pathInfo + " required admin privileges");
                     resp.sendError(HttpServletResponse.SC_FORBIDDEN, "Have not required privileges. Access denied.");
                     return;
                 }
             }
         }
-        chain.doFilter(req,resp);
+        chain.doFilter(req, resp);
     }
 
 

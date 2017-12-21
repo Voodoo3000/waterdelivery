@@ -6,6 +6,7 @@ public class CommandResult {
 
     public CommandResult() {
     }
+
     public CommandResult(String view) {
         this.view = view;
     }
@@ -21,6 +22,7 @@ public class CommandResult {
     public String getView() {
         return view;
     }
+
     public void setView(String view) {
         this.view = view;
     }
