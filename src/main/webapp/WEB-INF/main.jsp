@@ -27,8 +27,6 @@
             <t:logo_title/>
         </c:if>
 
-        <t:locale_changer/>
-
         <c:if test="${user != null}">
             <t:greetings_title/>
             <t:signout_btn/>
@@ -37,6 +35,8 @@
         <c:if test="${user == null}">
             <t:reg_login_btn_form/>
         </c:if>
+
+        <t:locale_changer/>
 
     </div>
 

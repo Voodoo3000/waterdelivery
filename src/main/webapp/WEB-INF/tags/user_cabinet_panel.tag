@@ -12,7 +12,7 @@
                     <div class="col-lg-12">
                         <div class="input-group">
                             <span class="input-group-addon"><fmt:message key="default.user_firstname"/></span>
-                            <input type="text" class="form-control" name="firstname" value="${user.firstName}" required>
+                            <input type="text" class="form-control" name="firstName" value="${user.firstName}" required>
                         </div>
                     </div>
                 </div>
@@ -20,7 +20,7 @@
                     <div class="col-lg-12">
                         <div class="input-group">
                             <span class="input-group-addon"><fmt:message key="default.user_lastname"/></span>
-                            <input type="text" class="form-control" name="lastname" value="${user.lastName}" required>
+                            <input type="text" class="form-control" name="lastName" value="${user.lastName}" required>
                         </div>
                     </div>
                 </div>

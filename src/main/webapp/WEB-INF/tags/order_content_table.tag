@@ -44,7 +44,7 @@
             <th></th>
             <th><fmt:message key="default.total_amount"/>${totalAmount}<fmt:message key="default.currency"/></th>
             <th>
-                <c:if test="${totalAmount != 0 && user.wallet > totalAmount}">
+                <c:if test="${totalAmount != 0 && user.wallet >= totalAmount}">
                     <a href="#checkout_form" type="button" class="btn btn-primary" aria-pressed="false">
                         <fmt:message key="default.checkout"/>
                     </a>

@@ -2,6 +2,7 @@ package kz.epam.waterdelivery.command;
 
 import kz.epam.waterdelivery.dao.DaoException;
 import kz.epam.waterdelivery.dao.sql.WaterDao;
+import kz.epam.waterdelivery.entity.Entity;
 import kz.epam.waterdelivery.entity.Water;
 import org.apache.log4j.Logger;
 
@@ -11,18 +12,13 @@ import java.util.List;
 public class ChangeWaterCommand implements Command {
 
     private static final Logger LOGGER = Logger.getLogger(ChangeWaterCommand.class);
-    private static final CommandResult RESULT = new CommandResult("do/admin_water", true);
-    private static final String PARAM_TYPE = "type";
-    private static final String PARAM_PRICEPERLITER = "pricePerLiter";
-    private static final String PARAM_ID = "id";
-    private static final String ATTR_WATER_LIST = "waterList";
 
     @Override
     public CommandResult execute(HttpServletRequest request) throws CommandException {
 
-        String type = request.getParameter(PARAM_TYPE);
-        Integer pricePerLiter = Integer.valueOf(request.getParameter(PARAM_PRICEPERLITER));
-        Integer id = Integer.parseInt(request.getParameter(PARAM_ID));
+        String type = request.getParameter(Entity.PARAM_TYPE);
+        Integer pricePerLiter = Integer.valueOf(request.getParameter(Entity.PARAM_PRICEPERLITER));
+        Integer id = Integer.parseInt(request.getParameter(Entity.PARAM_ID));
         WaterDao waterDao = new WaterDao();
         Water water;
         List<Water> waterList;
@@ -34,11 +30,11 @@ public class ChangeWaterCommand implements Command {
             waterDao.update(water);
             LOGGER.info("Water " + water + " was changed by administrator");
             waterList = waterDao.getAll();
-            request.getSession().setAttribute(ATTR_WATER_LIST, waterList);
+            request.getSession().setAttribute(Entity.ATTR_WATER_LIST, waterList);
         } catch (DaoException e) {
             LOGGER.error("DaoException in ChangeWaterCommand", e);
             throw new CommandException(e);
         }
-        return RESULT;
+        return Entity.ADMIN_WATER;
     }
 }

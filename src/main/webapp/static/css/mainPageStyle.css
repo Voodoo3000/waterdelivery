@@ -24,8 +24,14 @@
 
 #locale_changer {
     position: absolute;
-    right: 16.5%;
-    top: 2%;
+    right: 20%;
+    top: 1%;
+}
+
+#flags_btn {
+    position: absolute;
+    width: 45px;
+    height: 30px;
 }
 
 #dropdownMenu3 {
