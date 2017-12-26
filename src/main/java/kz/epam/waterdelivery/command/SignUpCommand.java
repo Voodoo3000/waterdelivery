@@ -2,6 +2,7 @@ package kz.epam.waterdelivery.command;
 
 import kz.epam.waterdelivery.dao.DaoException;
 import kz.epam.waterdelivery.dao.sql.UserDao;
+import kz.epam.waterdelivery.entity.Entity;
 import kz.epam.waterdelivery.entity.User;
 import kz.epam.waterdelivery.util.LocaleUtil;
 import kz.epam.waterdelivery.util.Validator;
@@ -15,80 +16,72 @@ import java.util.ResourceBundle;
 public class SignUpCommand implements Command {
 
     private static final Logger LOGGER = Logger.getLogger(SignUpCommand.class);
-    private static final String RB_NAME = "i18n.message";
-    private static final String ERROR = "errormsg";
-    private static final String ERROR_BUSY_LOGIN = "error.busy_login";
-    private static final String ERROR_PASS_MISMATCH = "error.password_mismatching";
-    private static final String ERROR_INVALID_LOGINEMAIL = "error.invalid_loginEmail";
-    private static final String ERROR_UNDESIRABLE_PASSWORD = "error.undesirable_password";
-    private static final CommandResult MAIN_REG = new CommandResult("do/main", true);
-    private static final CommandResult MAIN_REG_FAILED = new CommandResult("main");
-    private static final String PARAM_LOGIN_EMAIL = "loginEmail";
-    private static final String PARAM_PASSWORD = "password";
-    private static final String PARAM_RE_PASSWORD = "rePassword";
-    private static final String PARAM_FIRSTNAME = "firstname";
-    private static final String PARAM_LASTNAME = "lastname";
-    private static final String ATTR_USER = "user";
+    private CommandResult result = new CommandResult();
 
     @Override
     public CommandResult execute(HttpServletRequest request) throws CommandException {
         HttpSession session = request.getSession();
         Locale locale = LocaleUtil.getSessionLocale(request);
-        ResourceBundle RB = ResourceBundle.getBundle(RB_NAME, locale);
-        String busy_login_err_msg = RB.getString(ERROR_BUSY_LOGIN);
-        String pass_mis_err_msg = RB.getString(ERROR_PASS_MISMATCH);
-        String invalid_loginEmail_err_msg = RB.getString(ERROR_INVALID_LOGINEMAIL);
-        String undesirable_pass_err_msg = RB.getString(ERROR_UNDESIRABLE_PASSWORD);
+        ResourceBundle RB = ResourceBundle.getBundle(Entity.RB_NAME, locale);
+        String busy_login_err_msg = RB.getString(Entity.ERROR_BUSY_LOGIN);
+        String pass_mis_err_msg = RB.getString(Entity.ERROR_PASS_MISMATCH);
+        String invalid_loginEmail_err_msg = RB.getString(Entity.ERROR_INVALID_LOGINEMAIL);
+        String undesirable_pass_err_msg = RB.getString(Entity.ERROR_UNDESIRABLE_PASSWORD);
+        String invalid_firstname_err_msg = RB.getString(Entity.ERROR_INVALID_FIRSTNAME);
+        String invalid_lastname_err_msg = RB.getString(Entity.ERROR_INVALID_LASTNAME);
 
-        CommandResult result;
-        String loginEmail = request.getParameter(PARAM_LOGIN_EMAIL);
-        String password = request.getParameter(PARAM_PASSWORD);
-        String rePassword = request.getParameter(PARAM_RE_PASSWORD);
-        String firstname = request.getParameter(PARAM_FIRSTNAME);
-        String lastname = request.getParameter(PARAM_LASTNAME);
+        String loginEmail = request.getParameter(Entity.PARAM_LOGIN_EMAIL);
+        String newPassword = request.getParameter(Entity.PARAM_NEW_PASSWORD);
+        String newRePassword = request.getParameter(Entity.PARAM_RE_NEW_PASSWORD);
+        String firstName = request.getParameter(Entity.PARAM_FIRSTNAME);
+        String lastName = request.getParameter(Entity.PARAM_LASTNAME);
         UserDao userDao = new UserDao();
         User user;
 
         boolean loginEmailValidResult;
         boolean passwordValidResult;
+        boolean firstNameValidResult;
+        boolean lastNameValidResult;
         loginEmailValidResult = Validator.validateLoginEmail(loginEmail);
-        passwordValidResult = Validator.validatePassword(password);
+        passwordValidResult = Validator.validatePassword(newPassword);
+        firstNameValidResult = Validator.validateNames(firstName);
+        lastNameValidResult = Validator.validateNames(lastName);
         try {
             if (!loginEmailValidResult) {
                 LOGGER.info("Invalid login(email address)");
-                session.setAttribute(ERROR, invalid_loginEmail_err_msg);
-                result = MAIN_REG_FAILED;
+                session.setAttribute(Entity.ERROR, invalid_loginEmail_err_msg);
             } else if (!passwordValidResult) {
                 LOGGER.info("Invalid login(email address)");
-                session.setAttribute(ERROR, undesirable_pass_err_msg);
-                result = MAIN_REG_FAILED;
+                session.setAttribute(Entity.ERROR, undesirable_pass_err_msg);
+            } else if (!firstNameValidResult) {
+                LOGGER.info("Invalid first name");
+                session.setAttribute(Entity.ERROR, invalid_firstname_err_msg);
+            } else if (!lastNameValidResult) {
+                LOGGER.info("Invalid last name");
+                session.setAttribute(Entity.ERROR, invalid_lastname_err_msg);
             } else if (userDao.getByLogin(loginEmail) != null) {
                 LOGGER.info("Entered login is busy");
-                session.setAttribute(ERROR, busy_login_err_msg);
-                result = MAIN_REG_FAILED;
-            } else if (!password.equals(rePassword)) {
+                session.setAttribute(Entity.ERROR, busy_login_err_msg);
+            } else if (!newPassword.equals(newRePassword)) {
                 LOGGER.info("Password mismatching");
-                session.setAttribute(ERROR, pass_mis_err_msg);
-                result = MAIN_REG_FAILED;
+                session.setAttribute(Entity.ERROR, pass_mis_err_msg);
             } else {
-                user = createUser(loginEmail, password, firstname, lastname, userDao);
+                user = createUser(loginEmail, newPassword, firstName, lastName, userDao);
                 LOGGER.info("Newly registered user is: " + user.toString());
-                session.setAttribute(ATTR_USER, user);
-                result = MAIN_REG;
+                session.setAttribute(Entity.ATTR_USER, user);
             }
         } catch (DaoException e) {
             LOGGER.error("DaoException in SignUpCommand", e);
             throw new CommandException(e);
         }
-
-        return result;
+        return Entity.MAIN;
     }
 
-    private User createUser(String loginEmail, String password, String firstname, String lastname, UserDao userDao) throws DaoException {
+    private User createUser(String loginEmail, String password, String firstName, String lastName, UserDao userDao) throws DaoException {
         User user;
         user = new User();
-        user.setFirstName(firstname);
-        user.setLastName(lastname);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
         user.setLoginEmail(loginEmail);
         user.setPassword(password);
         user.setRole(User.Role.CLIENT);
@@ -98,4 +91,39 @@ public class SignUpCommand implements Command {
         return userDao.getByLogin(loginEmail);
     }
 
+    private CommandResult validUserFields(HttpServletRequest request, String loginEmail, String password, String firstName, String lastName) {
+        HttpSession session = request.getSession();
+        Locale locale = LocaleUtil.getSessionLocale(request);
+        ResourceBundle RB = ResourceBundle.getBundle(Entity.RB_NAME, locale);
+        String invalid_loginEmail_err_msg = RB.getString(Entity.ERROR_INVALID_LOGINEMAIL);
+        String undesirable_pass_err_msg = RB.getString(Entity.ERROR_UNDESIRABLE_PASSWORD);
+        String invalid_firstname_err_msg = RB.getString(Entity.ERROR_INVALID_FIRSTNAME);
+        String invalid_lastname_err_msg = RB.getString(Entity.ERROR_INVALID_LASTNAME);
+        boolean loginEmailValidResult;
+        boolean passwordValidResult;
+        boolean firstNameValidResult;
+        boolean lastNameValidResult;
+        loginEmailValidResult = Validator.validateLoginEmail(loginEmail);
+        passwordValidResult = Validator.validatePassword(password);
+        firstNameValidResult = Validator.validateNames(firstName);
+        lastNameValidResult = Validator.validateNames(lastName);
+        if (!loginEmailValidResult) {
+            LOGGER.info("Invalid login(email address)");
+            session.setAttribute(Entity.ERROR, invalid_loginEmail_err_msg);
+            result = Entity.MAIN;
+        } else if (!passwordValidResult) {
+            LOGGER.info("Invalid login(email address)");
+            session.setAttribute(Entity.ERROR, undesirable_pass_err_msg);
+            result = Entity.MAIN;
+        } else if (!firstNameValidResult) {
+            LOGGER.info("Invalid first name");
+            session.setAttribute(Entity.ERROR, invalid_firstname_err_msg);
+            result = Entity.MAIN;
+        } else if (!lastNameValidResult) {
+            LOGGER.info("Invalid last name");
+            session.setAttribute(Entity.ERROR, invalid_lastname_err_msg);
+            result = Entity.MAIN;
+        }
+        return result;
+    }
 }

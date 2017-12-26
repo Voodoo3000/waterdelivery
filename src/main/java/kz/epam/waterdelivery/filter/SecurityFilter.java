@@ -1,5 +1,6 @@
 package kz.epam.waterdelivery.filter;
 
+import kz.epam.waterdelivery.entity.Entity;
 import kz.epam.waterdelivery.entity.User;
 import org.apache.log4j.Logger;
 
@@ -13,7 +14,6 @@ import java.util.List;
 
 
 public class SecurityFilter implements Filter {
-    private static final String ATTR_USER = "user";
     private static final Logger LOGGER = Logger.getLogger(SecurityFilter.class);
     private List<String> adminPages = new ArrayList<>();
 
@@ -32,7 +32,7 @@ public class SecurityFilter implements Filter {
     private void doFilter0(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws IOException, ServletException {
         HttpSession session = req.getSession();
         String pathInfo = req.getPathInfo();
-        User user = (User) session.getAttribute(ATTR_USER);
+        User user = (User) session.getAttribute(Entity.ATTR_USER);
         User.Role currentRole = null;
         if (user != null) currentRole = user.getRole();
         if ((pathInfo != null) && (currentRole != User.Role.ADMIN)) {

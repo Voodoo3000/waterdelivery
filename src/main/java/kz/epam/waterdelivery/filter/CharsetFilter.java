@@ -1,5 +1,6 @@
 package kz.epam.waterdelivery.filter;
 
+import kz.epam.waterdelivery.entity.Entity;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +17,7 @@ public class CharsetFilter implements Filter {
     }
 
     private void doFilter0(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws IOException, ServletException {
-        req.setCharacterEncoding("UTF-8");
+        req.setCharacterEncoding(Entity.UTF);
         chain.doFilter(req, resp);
     }
 

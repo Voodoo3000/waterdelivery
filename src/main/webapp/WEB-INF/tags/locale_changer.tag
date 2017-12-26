@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <div id="locale_changer" class="dropdown">
-    <button class="btn btn-default dropdown-toggle" id="dropdownMenu3" data-toggle="dropdown">
+    <button class="btn btn-default dropdown-toggle" id="flags_btn" data-toggle="dropdown">
         <c:if test="${locale.language=='ru'}"><img src='<c:url value="/static/pics/RU.png"/>'/></c:if>
         <c:if test="${locale.language=='en'}"><img src='<c:url value="/static/pics/EN.png"/>'/></c:if>
         <span class="caret"></span>

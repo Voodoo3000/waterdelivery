@@ -22,9 +22,9 @@
             <form method="post" action="change_user">
                 <tr>
                     <td><input id="N" class="form-control" value="${i.count}" readonly></td>
-                    <td><input required type="email" class="form-control" name="email" value="${user.loginEmail}">
+                    <td><input required type="email" class="form-control" name="loginEmail" value="${user.loginEmail}">
                     </td>
-                    <td><input required type="password" class="form-control" name="password" value="${user.password}">
+                    <td><input required type="password" class="form-control" name="currentPassword" value="${user.password}">
                     </td>
                     <td><input required type="text" class="form-control" name="firstName" value="${user.firstName}">
                     </td>

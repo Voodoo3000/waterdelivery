@@ -4,6 +4,7 @@ import kz.epam.waterdelivery.dao.DaoException;
 import kz.epam.waterdelivery.dao.sql.CustomerOrderDao;
 import kz.epam.waterdelivery.dao.sql.UserDao;
 import kz.epam.waterdelivery.entity.CustomerOrder;
+import kz.epam.waterdelivery.entity.Entity;
 import kz.epam.waterdelivery.entity.User;
 import org.apache.log4j.Logger;
 
@@ -12,9 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 public class CancelOrderCommand implements Command {
 
     private static final Logger LOGGER = Logger.getLogger(CancelOrderCommand.class);
-    private static final String PARAM_ID = "id";
-    private static final String ATTR_USER = "user";
-    private CommandResult RESULT = new CommandResult("do/open_cabinet", true);
 
     @Override
     public CommandResult execute(HttpServletRequest request) throws CommandException {
@@ -22,7 +20,7 @@ public class CancelOrderCommand implements Command {
         CustomerOrder order;
         UserDao userDao = new UserDao();
         CustomerOrderDao orderDao = new CustomerOrderDao();
-        int contentPositionId = Integer.parseInt(request.getParameter(PARAM_ID));
+        int contentPositionId = Integer.parseInt(request.getParameter(Entity.PARAM_ID));
         try {
             order = orderDao.getById(contentPositionId);
             user = userDao.getById(order.getCustomerId());
@@ -37,7 +35,7 @@ public class CancelOrderCommand implements Command {
             LOGGER.error("DaoException in CancelOrderCommand", e);
             throw new CommandException(e);
         }
-        request.getSession().setAttribute(ATTR_USER, user);
-        return RESULT;
+        request.getSession().setAttribute(Entity.ATTR_USER, user);
+        return Entity.OPEN_CABINET;
     }
 }

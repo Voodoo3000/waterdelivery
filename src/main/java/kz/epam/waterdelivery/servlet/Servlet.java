@@ -21,7 +21,6 @@ public class Servlet extends HttpServlet {
 
     private static final Logger LOGGER = Logger.getLogger(Servlet.class);
     private static final String RB_NAME = "i18n.message";
-    private static final String ATTR_LOCALE = "locale";
     private static final String MESSAGE_ERROR404 = "error.404";
     private static final String MESSAGE_ERROR500 = "error.500";
     private static final String ERROR404 = "error404";

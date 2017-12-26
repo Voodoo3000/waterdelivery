@@ -3,10 +3,7 @@ package kz.epam.waterdelivery.listener;
 import kz.epam.waterdelivery.dao.DaoException;
 import kz.epam.waterdelivery.dao.sql.BottleSizeDao;
 import kz.epam.waterdelivery.dao.sql.WaterDao;
-import kz.epam.waterdelivery.entity.BottleSize;
-import kz.epam.waterdelivery.entity.CustomerOrder;
-import kz.epam.waterdelivery.entity.User;
-import kz.epam.waterdelivery.entity.Water;
+import kz.epam.waterdelivery.entity.*;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -15,18 +12,11 @@ import java.util.List;
 import java.util.Locale;
 
 public class ContextListener implements ServletContextListener {
-    private static final String ATTR_LOCALE = "locale";
-    private static final String ATTR_WATER_LIST = "waterList";
-    private static final String ATTR_BOTTLE_SIZES = "bottleSizes";
-    private static final String ATTR_ROLES = "roles";
-    private static final String ATTR_STATES = "states";
-    private static final String ATTR_STATUSES = "statuses";
-    private static final Locale DEFAULT_LOCALE = Locale.getDefault();
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
-        context.setAttribute(ATTR_LOCALE, DEFAULT_LOCALE);
+        context.setAttribute(Entity.LOCALE, Entity.DEFAULT_LOCALE);
         List<Water> waterList = null;
         List<BottleSize> bottleSizes = null;
         try {
@@ -35,11 +25,11 @@ public class ContextListener implements ServletContextListener {
         } catch (DaoException e) {
             e.printStackTrace();
         }
-        context.setAttribute(ATTR_WATER_LIST, waterList);
-        context.setAttribute(ATTR_BOTTLE_SIZES, bottleSizes);
-        context.setAttribute(ATTR_ROLES, User.Role.values());
-        context.setAttribute(ATTR_STATES, User.State.values());
-        context.setAttribute(ATTR_STATUSES, CustomerOrder.Status.values());
+        context.setAttribute(Entity.ATTR_WATER_LIST, waterList);
+        context.setAttribute(Entity.ATTR_BOTTLE_SIZES, bottleSizes);
+        context.setAttribute(Entity.PARAM_ROLES, User.Role.values());
+        context.setAttribute(Entity.PARAM_STATES, User.State.values());
+        context.setAttribute(Entity.PARAM_STATUSES, CustomerOrder.Status.values());
     }
 
     @Override

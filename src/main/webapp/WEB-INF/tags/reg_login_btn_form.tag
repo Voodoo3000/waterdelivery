@@ -16,11 +16,11 @@
         <p><fmt:message key="default.user_verification"/></p>
         <div>
             <label for="email"><fmt:message key="default.user_login"/></label>
-            <input type="email" id="login" name="email" required/>
+            <input type="email" id="login" name="loginEmail" required/>
         </div>
         <div>
             <label for="password"><fmt:message key="default.enter_pass"/></label>
-            <input type="password" id="password" name="password" required/>
+            <input type="password" id="password" name="currentPassword" required/>
         </div>
         <input type="submit" value=<fmt:message key="default.signin"/>>
     </form>
@@ -37,19 +37,19 @@
         </div>
         <div>
             <label for="pass"><fmt:message key="default.enter_pass"/></label>
-            <input type="password" id="pass" name="password" required>
+            <input type="password" id="pass" name="newPassword" required>
         </div>
         <div>
             <label for="pass"><fmt:message key="default.repeat_pass"/></label>
-            <input type="password" id="rePass" name="rePassword" required>
+            <input type="password" id="rePass" name="newRePassword" required>
         </div>
         <div>
             <label for="firstname"><fmt:message key="default.user_firstname"/></label>
-            <input type="text" id="firstname" name="firstname" required>
+            <input type="text" id="firstname" name="firstName" required>
         </div>
         <div>
             <label for="lastname"><fmt:message key="default.user_lastname"/></label>
-            <input type="text" id="lastname" name="lastname" required>
+            <input type="text" id="lastname" name="lastName" required>
         </div>
         <input type="submit" value="<fmt:message key="default.signup_button"/>"/>&nbsp;&nbsp;&nbsp;
         <fmt:message key="default.signup_or"/>&nbsp;&nbsp;&nbsp;
