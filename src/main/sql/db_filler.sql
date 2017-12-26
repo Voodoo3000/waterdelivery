@@ -2,8 +2,7 @@ INSERT INTO WATER VALUES (0, 'Spring', 200);
 INSERT INTO WATER VALUES (1, 'Sparkling', 300);
 INSERT INTO WATER VALUES (2, 'Distilled', 400);
 
-INSERT INTO USER VALUES (0, 'Владислав', 'Цай', 'admin', 'admin', 'ADMIN', '0');
-INSERT INTO USER VALUES (1, 'Даня', 'Шеповалов', 'user', 'qwerty', 'CLIENT', '10000');
+INSERT INTO USER VALUES (0, 'Владислав', 'Цай', 'm047wbm@mail.ru', '123', 'ADMIN', '0.0', 'ENABLED');
 
 INSERT INTO BOTTLE_SIZE VALUES (0, 0.5);
 INSERT INTO BOTTLE_SIZE VALUES (1, 1);
