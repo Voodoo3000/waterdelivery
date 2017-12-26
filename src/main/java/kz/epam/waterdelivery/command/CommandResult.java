@@ -6,6 +6,7 @@ public class CommandResult {
 
     public CommandResult() {
     }
+
     public CommandResult(String view) {
         this.view = view;
     }
@@ -14,9 +15,14 @@ public class CommandResult {
         this.view = view;
         this.redirection = redirection;
     }
+
+    public CommandResult(Command authorized, boolean redirection) {
+    }
+
     public String getView() {
         return view;
     }
+
     public void setView(String view) {
         this.view = view;
     }

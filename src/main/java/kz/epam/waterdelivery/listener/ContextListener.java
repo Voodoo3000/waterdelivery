@@ -1,9 +1,12 @@
 package kz.epam.waterdelivery.listener;
 
-import kz.epam.waterdelivery.dao.sql.BottleSizeImpl;
-import kz.epam.waterdelivery.dao.sql.WaterTypeImpl;
+import kz.epam.waterdelivery.dao.DaoException;
+import kz.epam.waterdelivery.dao.sql.BottleSizeDao;
+import kz.epam.waterdelivery.dao.sql.WaterDao;
 import kz.epam.waterdelivery.entity.BottleSize;
-import kz.epam.waterdelivery.entity.WaterType;
+import kz.epam.waterdelivery.entity.CustomerOrder;
+import kz.epam.waterdelivery.entity.User;
+import kz.epam.waterdelivery.entity.Water;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -13,16 +16,30 @@ import java.util.Locale;
 
 public class ContextListener implements ServletContextListener {
     private static final String ATTR_LOCALE = "locale";
+    private static final String ATTR_WATER_LIST = "waterList";
+    private static final String ATTR_BOTTLE_SIZES = "bottleSizes";
+    private static final String ATTR_ROLES = "roles";
+    private static final String ATTR_STATES = "states";
+    private static final String ATTR_STATUSES = "statuses";
     private static final Locale DEFAULT_LOCALE = Locale.getDefault();
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
         context.setAttribute(ATTR_LOCALE, DEFAULT_LOCALE);
-        List<WaterType> waterTypes = new WaterTypeImpl().getAll();
-        context.setAttribute("waterTypes", waterTypes);
-        List<BottleSize> bottleSizes = new BottleSizeImpl().getAll();
-        context.setAttribute("bottleSizes", bottleSizes);
+        List<Water> waterList = null;
+        List<BottleSize> bottleSizes = null;
+        try {
+            waterList = new WaterDao().getAll();
+            bottleSizes = new BottleSizeDao().getAll();
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+        context.setAttribute(ATTR_WATER_LIST, waterList);
+        context.setAttribute(ATTR_BOTTLE_SIZES, bottleSizes);
+        context.setAttribute(ATTR_ROLES, User.Role.values());
+        context.setAttribute(ATTR_STATES, User.State.values());
+        context.setAttribute(ATTR_STATUSES, CustomerOrder.Status.values());
     }
 
     @Override

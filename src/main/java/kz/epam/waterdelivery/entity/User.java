@@ -1,25 +1,22 @@
 package kz.epam.waterdelivery.entity;
 
 public class User extends Entity {
-    private int wallet;
+    private double wallet;
     private String firstName;
     private String lastName;
     private String loginEmail;
     private String password;
     private Role role;
-
-    public enum Role {
-        ADMIN, CLIENT
-    }
+    private State state;
 
     public User() {
     }
 
-    public int getWallet() {
+    public double getWallet() {
         return wallet;
     }
 
-    public void setWallet(int wallet) {
+    public void setWallet(double wallet) {
         this.wallet = wallet;
     }
 
@@ -63,15 +60,20 @@ public class User extends Entity {
         this.role = role;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "wallet=" + wallet +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", loginEmail='" + loginEmail + '\'' +
-                ", password='" + password + '\'' +
-                ", role=" + role +
-                '}';
+    public State getState() {
+        return state;
     }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public enum Role {
+        ADMIN, CLIENT
+    }
+
+    public enum State {
+        ENABLED, DISABLED
+    }
+
 }

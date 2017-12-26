@@ -1,20 +1,14 @@
 package kz.epam.waterdelivery;
 
-import kz.epam.waterdelivery.dao.sql.UserImpl;
-import kz.epam.waterdelivery.dao.sql.WaterImpl;
-import kz.epam.waterdelivery.dao.sql.WaterTypeImpl;
-import kz.epam.waterdelivery.entity.WaterType;
-
 import java.sql.SQLException;
-import java.util.List;
 
 public class rn {
-  public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException {
 
-                                   //USER
+        //USER
 /*
         //create
-        UserImpl userService = new UserImpl();
+        UserDao userService = new UserDao();
         User user = new User();
         user.setUserId(3);
         user.setFirstname("Andrey");
@@ -26,11 +20,11 @@ public class rn {
         userService.add(user);
 
         //getByLogin
-        UserImpl userService = new UserImpl();
+        UserDao userService = new UserDao();
         System.out.println(userService.getByLogin("logr@mail.ru"));
 
         //getAll
-        UserImpl userService = new UserImpl();
+        UserDao userService = new UserDao();
         try {
             List<User> userList = userService.getAll();
 
@@ -42,7 +36,7 @@ public class rn {
         }
 
         //update
-        UserImpl userService = new UserImpl();
+        UserDao userService = new UserDao();
         User user = new User();
         user.setUserId(2);
         user.setFirstname("Pavel");
@@ -54,10 +48,10 @@ public class rn {
         userService.update(user);
 */
 
-                     //CUSTOMERORDER
+        //CUSTOMERORDER
 /*
         //create
-        CustomerOrderImpl orderService = new CustomerOrderImpl();
+        CustomerOrderDao orderService = new CustomerOrderDao();
         CustomerOrder order = new CustomerOrder();
         order.setOrderId(2);
         order.setCustomerId(2);
@@ -67,18 +61,18 @@ public class rn {
         orderService.add(order);
 
         //getAll
-        CustomerOrderImpl orderService = new CustomerOrderImpl();
+        CustomerOrderDao orderService = new CustomerOrderDao();
         List<CustomerOrder> orderList = orderService.getAll();
         for (CustomerOrder a : orderList) {
             System.out.println(a);
         }
 
          //getById
-        CustomerOrderImpl orderService = new CustomerOrderImpl();
+        CustomerOrderDao orderService = new CustomerOrderDao();
         System.out.println(orderService.getById(2));
 
         //update
-        CustomerOrderImpl orderService = new CustomerOrderImpl();
+        CustomerOrderDao orderService = new CustomerOrderDao();
         CustomerOrder order = new CustomerOrder();
         order.setOrderId(2);
         order.setCustomerId(2);
@@ -88,17 +82,17 @@ public class rn {
         orderService.update(order);
 
         //remove
-        CustomerOrderImpl orderService = new CustomerOrderImpl();
+        CustomerOrderDao orderService = new CustomerOrderDao();
         CustomerOrder order = new CustomerOrder();
         order.setOrderId(3);
         orderService.remove(order);
 
 */
 
-                      //ORDERCONTENT
+        //ORDERCONTENT
 /*
         //create
-        OrderContentImpl contentService = new OrderContentImpl();
+        OrderContentDao contentService = new OrderContentDao();
         OrderContent content = new OrderContent();
         content.setOrderContentId(0);
         content.setWaterId(0);
@@ -107,18 +101,18 @@ public class rn {
         contentService.add(content);
 
         //getAll
-        OrderContentImpl contentService = new OrderContentImpl();
+        OrderContentDao contentService = new OrderContentDao();
         List<OrderContent> contentList = contentService.getAll();
         for (OrderContent a : contentList) {
             System.out.println(a);
         }
 
         //getById
-        OrderContentImpl contentService = new OrderContentImpl();
+        OrderContentDao contentService = new OrderContentDao();
         System.out.println(contentService.getById(3));
 
         //update
-        OrderContentImpl contentService = new OrderContentImpl();
+        OrderContentDao contentService = new OrderContentDao();
         OrderContent content = new OrderContent();
         content.setOrderContentId(1);
         content.setWaterId(2);
@@ -127,51 +121,51 @@ public class rn {
         contentService.update(content);
 
         //remove
-        OrderContentImpl contentService = new OrderContentImpl();
+        OrderContentDao contentService = new OrderContentDao();
         OrderContent content = new OrderContent();
         content.setOrderContentId(1);
         contentService.remove(content);
 
 */
 
-                           //BOTLESIZE
+        //BOTLESIZE
 /*
         //create
-        BottleSizeImpl sizeService = new BottleSizeImpl();
+        BottleSizeDao sizeService = new BottleSizeDao();
         BottleSize bottle = new BottleSize();
         bottle.setBottleId(5);
         bottle.setSize(25);
         sizeService.add(bottle);
 
         //getAll
-        BottleSizeImpl sizeService = new BottleSizeImpl();
+        BottleSizeDao sizeService = new BottleSizeDao();
         List<BottleSize> bottleSizeList = sizeService.getAll();
         for (BottleSize a : bottleSizeList) {
             System.out.println(a);
         }
 
         //getById
-        BottleSizeImpl sizeService = new BottleSizeImpl();
+        BottleSizeDao sizeService = new BottleSizeDao();
         System.out.println(sizeService.getById(5));
 
         //update
-        BottleSizeImpl sizeService = new BottleSizeImpl();
+        BottleSizeDao sizeService = new BottleSizeDao();
         BottleSize bottle = new BottleSize();
         bottle.setBottleId(5);
         bottle.setSize(30);
         sizeService.update(bottle);
 
         //remove
-        BottleSizeImpl sizeService = new BottleSizeImpl();
+        BottleSizeDao sizeService = new BottleSizeDao();
         BottleSize bottle = new BottleSize();
         bottle.setBottleId(5);
         sizeService.remove(bottle);
 
 */
-                                     //WATER
+        //WATER
 /*
         //create
-        WaterImpl waterService = new WaterImpl();
+        WaterDao waterService = new WaterDao();
         Water water = new Water();
         water.setWaterId(3);
         water.setWaterTypeId(3);
@@ -179,7 +173,7 @@ public class rn {
         waterService.add(water);
 
         //getAll
-        WaterImpl waterService = new WaterImpl();
+        WaterDao waterService = new WaterDao();
         try {
             List<Water> waterList = waterService.getAll();
 
@@ -191,11 +185,11 @@ public class rn {
         }
 
         //getById
-        WaterImpl waterService = new WaterImpl();
+        WaterDao waterService = new WaterDao();
         System.out.println(waterService.getById(0));
 
         //update
-        WaterImpl waterService = new WaterImpl();
+        WaterDao waterService = new WaterDao();
         Water water = new Water();
         water.setWaterId(3);
         water.setWaterTypeId(3);
@@ -203,35 +197,35 @@ public class rn {
         waterService.update(water);
 
         //remove
-        WaterImpl waterService = new WaterImpl();
+        WaterDao waterService = new WaterDao();
         Water water = new Water();
         water.setWaterId(3);
         waterService.remove(water);
 
 */
 
-                         //WATERTYPE
+        //WATERTYPE
 /*
         //create
-        WaterTypeImpl typeService = new WaterTypeImpl();
+        WaterTypeDao typeService = new WaterTypeDao();
         WaterType waterType = new WaterType();
         waterType.setWaterTypeId(3);
         waterType.setType("Dr Pepper");
         typeService.add(waterType);
 
         //getAll
-        WaterTypeImpl typeService = new WaterTypeImpl();
+        WaterTypeDao typeService = new WaterTypeDao();
         List<WaterType> waterTypeList = typeService.getAll();
         for (WaterType a : waterTypeList){
             System.out.println(a);
         }
 
         //getById
-        WaterTypeImpl typeService = new WaterTypeImpl();
+        WaterTypeDao typeService = new WaterTypeDao();
         System.out.println(typeService.getById(3));
 
         //update
-        WaterTypeImpl typeService = new WaterTypeImpl();
+        WaterTypeDao typeService = new WaterTypeDao();
         WaterType waterType = new WaterType();
         waterType.setWaterTypeId(3);
         waterType.setType("Dr Pepper Smooth");
@@ -239,7 +233,7 @@ public class rn {
 
 
         //remove
-        WaterTypeImpl typeService = new WaterTypeImpl();
+        WaterTypeDao typeService = new WaterTypeDao();
         WaterType waterType = new WaterType();
         waterType.setWaterTypeId(3);
         typeService.remove(waterType);

@@ -10,11 +10,4 @@ public class BottleSize extends Entity {
     public void setSize(double size) {
         this.size = size;
     }
-
-    @Override
-    public String toString() {
-        return "BottleSize{" +
-                "size=" + size +
-                '}';
-    }
 }

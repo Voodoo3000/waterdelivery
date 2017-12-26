@@ -20,154 +20,47 @@
     <body>
 
     <div id="header" align="center">
-        <a id="main_logo" title="<fmt:message key="default.logo"/>" href="/">
-            <img src="../static/pics/sticker2.jpg">
-        </a>
-        <p id="logo_title" align="center">
-            <fmt:message key="default.logo_title"/>
-        </p>
-        <div id="locale_changer" class="dropdown">
-            <button class="btn btn-default dropdown-toggle" id="dropdownMenu3" data-toggle="dropdown">
-                <c:if test="${locale.language=='ru'}"><img src='<c:url value="/static/pics/RU.png"/>'/></c:if>
-                <c:if test="${locale.language=='en'}"><img src='<c:url value="/static/pics/EN.png"/>'/></c:if>
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu3">
-                <li role="option"><a role="menuitem" tabindex="-1" href="locale?locale=ru"><img
-                        src='<c:url value="/static/pics/RU.png"/>'/>Русский</a></li>
-                <li role="option"><a role="menuitem" tabindex="-1" href="locale?locale=en"><img
-                        src='<c:url value="/static/pics/EN.png"/>'/>English</a></li>
-            </ul>
-        </div>
 
-        <a href="#login_form" type="button" class="btn btn-primary" id="btn" aria-pressed="false" autocomplete="off">
-            <fmt:message key="default.signin"/>
-        </a>
-        <a href="#join_form" type="button" class="btn btn-primary" id="btn1" aria-pressed="false" autocomplete="off">
-            <fmt:message key="default.signup"/>
-        </a>
-    </div>
+        <t:main_logo/>
 
-    <a href="#x" class="overlay" id="login_form"></a>
-    <div class="popup">
-        <form id="login-form" method="post" action="signin">
-            <h2><fmt:message key="default.greetings"/></h2>
-            <p><fmt:message key="default.user_verification"/></p>
-            <div>
-                <label for="login"><fmt:message key="default.user_login"/></label>
-                <input type="text" id="login" name="email" required/>
-            </div>
-            <div>
-                <label for="password"><fmt:message key="default.user_pass"/></label>
-                <input type="password" id="password" name="password" required/>
-            </div>
-            <input type="submit" value=<fmt:message key="default.signin"/>>
-        </form>
-    </div>
+        <c:if test="${user.role == 'CLIENT'}">
+            <t:logo_title/>
+        </c:if>
 
-    <a href="#x" class="overlay" id="join_form"></a>
-    <div class="popup">
-        <form id="registration-form" method="post" action="signup">
-            <h2><fmt:message key="default.signup_title"/></h2>
-            <p><fmt:message key="default.user_details"/></p>
-            <div>
-                <label for="email"><fmt:message key="default.user_login"/></label>
-                <input type="text" id="email" name="email" required>
-            </div>
-            <div>
-                <label for="pass"><fmt:message key="default.user_pass"/></label>
-                <input type="password" id="pass" name="password" required>
-            </div>
-            <div>
-                <label for="firstname"><fmt:message key="default.user_firstname"/></label>
-                <input type="text" id="firstname" name="firstname" required>
-            </div>
-            <div>
-                <label for="lastname"><fmt:message key="default.user_lastname"/></label>
-                <input type="text" id="lastname" name="lastname" required>
-            </div>
-            <input type="submit" value="<fmt:message key="default.signup_button"/>"/>&nbsp;&nbsp;&nbsp;
-            <fmt:message key="default.signup_or_title"/>&nbsp;&nbsp;&nbsp;
-            <a href="#login_form" id="login_pop"><fmt:message key="default.signin"/></a>
-        </form>
+        <t:locale_changer/>
+
+        <c:if test="${user != null}">
+            <t:greetings_title/>
+            <t:signout_btn/>
+        </c:if>
+
+        <c:if test="${user == null}">
+            <t:reg_login_btn_form/>
+        </c:if>
+
     </div>
 
     <div id="body" class="value_img">
-        <h1 id="main_title"><fmt:message key="default.main_title1"/>
-            </br><fmt:message key="default.main_title2"/></h1>
-        <img alt="" class="body_lines" src="../static/pics/swirl.png">
 
-        <div class="panel panel-default">
-            <h3 id="panel-title"><fmt:message key="default.order_panel"/></h3>
-            <div class="panel-body">
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <fmt:message key="default.water_types"/>
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <c:forEach items="${waterTypes}" var="type">
-                            <li><a href="#"><fmt:message key="default.type_${type.type}"/></a></li>
-                        </c:forEach>
-                    </ul>
-                </div>
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <fmt:message key="default.bottle_value"/>
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                        <c:forEach items="${bottleSizes}" var="size">
-                            <li><a href="#"><fmt:message key="default.size_${size.size}"/></a></li>
-                        </c:forEach>
-                    </ul>
-                </div>
+        <c:if test="${errormsg != null}">
+            <h5 id="errormsg" align="center">${errormsg}</h5>
+        </c:if>
 
-                </p>
-                <form class="form-inline">
-                    <span class="btn btn-primary" id="minus">-</span>
-                    <input type="number1" class="form-control" id="input" value="0" readonly="readonly">
-                    <span class="btn btn-primary" id="plus">+</span>
-                </form>
-                <p>
-                    <script>
-                        $(document).ready(function () {
-                            $('#minus').click(function () {
-                                var $input = $(this).parent().find('input');
-                                var count = parseInt($input.val()) - 1;
-                                count = count < 1 ? 0 : count;
-                                $input.val(count);
-                                $input.change();
-                                return false;
-                            });
-                            $('#plus').click(function () {
-                                var $input = $(this).parent().find('input');
-                                $input.val(parseInt($input.val()) + 1);
-                                $input.change();
-                                return false;
-                            });
-                        });
-                    </script>
+        <c:if test="${user == null || user.role == 'CLIENT'}">
+            <t:title_bodylines/>
+            <t:order_panel/>
+        </c:if>
 
-                <div class="price_output">
-                <h5 id="amount-title"><fmt:message key="default.output_price"/></h5>
-                <output typeof="number" class="form-control" id="output" readonly="readonly"></output>
+        <c:if test="${user.role == 'ADMIN'}">
+            <t:admin_buttons/>
+            <t:admin_edit_users/>
+        </c:if>
 
-                <a href="#" type="button" class="btn btn-primary" id="btn2" aria-pressed="false" autocomplete="off">
-                    <fmt:message key="default.add_to_cart"/>
-                </a>
-
-                <a href="#" type="button" class="btn btn-default" id="btn3" aria-pressed="false" autocomplete="off">
-                    <fmt:message key="default.get_order"/>
-                </a>
-            </div>
-            </div>
-        </div>
     </div>
 
-    <t:footer/>
+    <c:if test="${user == null || user.role == 'CLIENT'}">
+        <t:footer/>
+    </c:if>
 
     </body>
     </html>
