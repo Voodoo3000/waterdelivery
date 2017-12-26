@@ -1,6 +1,10 @@
 package kz.epam.waterdelivery.entity;
 
 import kz.epam.waterdelivery.command.CommandResult;
+import kz.epam.waterdelivery.pool.ConnectionPool;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public abstract class Entity {
 
@@ -10,9 +14,12 @@ public abstract class Entity {
     public static final String PARAM_COUNT = "count";
     public static final String PARAM_PRICEPERLITER = "pricePerLiter";
     public static final String PARAM_STATUS = "status";
+    public static final String PARAM_STATES = "states";
+    public static final String PARAM_STATUSES = "statuses";
     public static final String PARAM_FIRSTNAME = "firstName";
     public static final String PARAM_LASTNAME = "lastName";
     public static final String PARAM_ROLE = "role";
+    public static final String PARAM_ROLES = "roles";
     public static final String PARAM_WALLET = "wallet";
     public static final String PARAM_STATE = "state";
     public static final String PARAM_LOGIN_EMAIL = "loginEmail";
@@ -46,11 +53,6 @@ public abstract class Entity {
     public static final CommandResult CUSTOMER_CABINET = new CommandResult("customer_cabinet");
     public static final CommandResult CUSTOMER_CART = new CommandResult("customer_cart");
 
-    public static final String REFERER = "Referer";
-
-    public static final String LOCALE = "locale";
-    public static final String RB_NAME = "i18n.message";
-
     public static final String ERROR = "errormsg";
     public static final String ERROR_PASS = "error.wrong_pass";
     public static final String ERROR_PASS_MISMATCH = "error.password_mismatching";
@@ -69,6 +71,25 @@ public abstract class Entity {
     public static final String ERROR_PAGE = "error_page";
     public static final String CUSTOMER_CART_PAGE = "customer_cart";
     public static final String COMPLETED_ORDER = "completed_order";
+
+    public static final String EMAIL_REGEX = "[\\w\\u002E\\u005F]{0,20}@([a-zA-Z]+\\u002E){1,2}[a-zA-Z]{2,3}";
+    public static final String PASSWORD_REGEX = "[\\w]{3,20}";
+    public static final String NAMES_REGEX = "([A-Z]{1}[a-z]{0,19})|([\\u0410-\\u042F]{1}[\\u0430-\\u044F]{0,19})";
+
+    public static final String REFERER = "Referer";
+
+    public static final String LOCALE = "locale";
+    public static final Locale DEFAULT_LOCALE = Locale.getDefault();
+    public static final String RB_NAME = "i18n.message";
+    public static final String UTF = "UTF-8";
+
+    private static final ResourceBundle RB = ResourceBundle.getBundle("database");
+    public static final String DRIVER = RB.getString("db.driver");
+    public static final String URL = RB.getString("db.url");
+    public static final String LOGIN = RB.getString("db.user");
+    public static final String PASSWORD = RB.getString("db.password");
+    public static final int POOL_SIZE = Integer.parseInt(RB.getString("db.pool_size"));
+    public static final ConnectionPool INSTANCE = new ConnectionPool();
 
     private Integer id;
     public Integer getId() {

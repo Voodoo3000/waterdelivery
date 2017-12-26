@@ -1,5 +1,7 @@
 package kz.epam.waterdelivery.pool;
 
+import kz.epam.waterdelivery.entity.Entity;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -8,33 +10,26 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 public class ConnectionPool {
-    private static final ResourceBundle RB = ResourceBundle.getBundle("database");
-    private static final String DRIVER = RB.getString("db.driver");
-    private static final String URL = RB.getString("db.url");
-    private static final String LOGIN = RB.getString("db.user");
-    private static final String PASSWORD = RB.getString("db.password");
-    private static final int POOL_SIZE = Integer.parseInt(RB.getString("db.pool_size"));
-    private static final ConnectionPool INSTANCE = new ConnectionPool();
-    BlockingQueue<Connection> connections = new ArrayBlockingQueue<>(POOL_SIZE);
+    BlockingQueue<Connection> connections = new ArrayBlockingQueue<>(Entity.POOL_SIZE);
 
     public ConnectionPool() {
         initializeConnectionPool();
     }
 
     public static ConnectionPool getInstance() throws ConnectionPoolException {
-        return INSTANCE;
+        return Entity.INSTANCE;
     }
 
     public void initializeConnectionPool() throws ConnectionPoolException {
-        while ((connections.size() < POOL_SIZE)) {
+        while ((connections.size() < Entity.POOL_SIZE)) {
             try {
-                Class.forName(DRIVER);
+                Class.forName(Entity.DRIVER);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
             Connection connection = null;
             try {
-                connection = DriverManager.getConnection(URL, LOGIN, PASSWORD);
+                connection = DriverManager.getConnection(Entity.URL, Entity.LOGIN, Entity.PASSWORD);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
