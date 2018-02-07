@@ -16,8 +16,8 @@ public class ChangeUserCommand implements Command {
     @Override
     public CommandResult execute(HttpServletRequest request) throws CommandException {
 
-        String firstName = request.getParameter(Entity.PARAM_FIRSTNAME);
-        String lastName = request.getParameter(Entity.PARAM_LASTNAME);
+        String firstName = request.getParameter(Entity.PARAM_FIRST_NAME);
+        String lastName = request.getParameter(Entity.PARAM_LAST_NAME);
         String loginEmail = request.getParameter(Entity.PARAM_LOGIN_EMAIL);
         String currentPassword = request.getParameter(Entity.PARAM_CURRENT_PASSWORD);
         Integer id = Integer.parseInt(request.getParameter(Entity.PARAM_ID));

@@ -2,6 +2,7 @@ package kz.epam.waterdelivery.entity;
 
 import kz.epam.waterdelivery.command.CommandException;
 import kz.epam.waterdelivery.dao.DaoException;
+import kz.epam.waterdelivery.dao.sql.CustomerAddressDao;
 import kz.epam.waterdelivery.dao.sql.OrderContentDao;
 import kz.epam.waterdelivery.dao.sql.UserDao;
 import org.apache.log4j.Logger;
@@ -13,10 +14,10 @@ public class CustomerOrder extends Entity {
     private static final Logger LOGGER = Logger.getLogger(CustomerOrder.class);
     private int customerId;
     private double amount;
-    private Date orderDate;
-    private String address;
+    private Date orderDate = new Date();
     private Status status;
     private User customer;
+    private CustomerAddress address;
     private List<OrderContent> contentList;
 
     public int getCustomerId() {
@@ -43,19 +44,6 @@ public class CustomerOrder extends Entity {
         this.orderDate = orderDate;
     }
 
-    public java.sql.Date getCurrentDate() {
-        java.util.Date orderDate = new java.util.Date();
-        return new java.sql.Date(orderDate.getTime());
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public Status getStatus() {
         return status;
     }
@@ -69,7 +57,7 @@ public class CustomerOrder extends Entity {
         try {
             customer = userDao.getById(customerId);
         } catch (DaoException e) {
-            LOGGER.error("DaoException in CustomerOrder", e);
+            LOGGER.error(CUSTOMER_ORDER_DAO_EXCEPTION, e);
             throw new CommandException(e);
         }
         return customer;
@@ -79,12 +67,27 @@ public class CustomerOrder extends Entity {
         this.customer = customer;
     }
 
+    public CustomerAddress getAddress() throws CommandException {
+        CustomerAddressDao addressDao = new CustomerAddressDao();
+        try {
+            address = addressDao.getByCustomerId(customerId);
+        } catch (DaoException e) {
+            LOGGER.error(CUSTOMER_ORDER_DAO_EXCEPTION, e);
+            throw new CommandException(e);
+        }
+        return address;
+    }
+
+    public void setAddress(CustomerAddress address) {
+        this.address = address;
+    }
+
     public List<OrderContent> getContentList() throws CommandException {
         OrderContentDao contentDao = new OrderContentDao();
         try {
             contentList = contentDao.getAllByCustomerOrderId(getId());
         } catch (DaoException e) {
-            LOGGER.error("DaoException in CustomerOrder", e);
+            LOGGER.error(CUSTOMER_ORDER_DAO_EXCEPTION, e);
             throw new CommandException(e);
         }
         return contentList;

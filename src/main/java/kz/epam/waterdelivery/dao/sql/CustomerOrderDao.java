@@ -89,7 +89,6 @@ public class CustomerOrderDao implements GenericDao<CustomerOrder> {
     @Override
     public CustomerOrder getById(int id) throws DaoException {
         String sql = "SELECT ID, CUSTOMER_ID, AMOUNT, ORDER_DATE, STATUS FROM CUSTOMER_ORDER WHERE ID=?";
-        ;
         return getByParameter(id, sql);
     }
 
@@ -102,7 +101,6 @@ public class CustomerOrderDao implements GenericDao<CustomerOrder> {
         Connection connection = pool.getConnection();
         Integer order = null;
         String sql = "SELECT MAX(ID) FROM CUSTOMER_ORDER WHERE CUSTOMER_ID =?";
-        ;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, userId);
@@ -134,9 +132,8 @@ public class CustomerOrderDao implements GenericDao<CustomerOrder> {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlParameter);
             preparedStatement.setInt(1, order.getCustomerId());
             preparedStatement.setDouble(2, order.getAmount());
-            preparedStatement.setDate(3, order.getCurrentDate());
+            preparedStatement.setDate(3, new java.sql.Date(order.getOrderDate().getTime()));
             preparedStatement.setString(4, String.valueOf(order.getStatus()));
-            System.out.println(order.getId());
             if (order.getId() != null) preparedStatement.setInt(5, order.getId());
             preparedStatement.executeUpdate();
             preparedStatement.close();

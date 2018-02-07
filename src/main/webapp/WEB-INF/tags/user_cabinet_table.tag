@@ -20,7 +20,12 @@
                 <tr>
                     <td>${i.count}</td>
                     <td>${order.orderDate}</td>
-                    <td>${order.address}</td>
+                    <td><fmt:message key="default.address_city"/> ${order.address.city},</br>
+                        <fmt:message key="default.address_street"/> ${order.address.street},</br>
+                        <fmt:message key="default.address_house"/> ${order.address.houseNumber},
+                        <fmt:message key="default.address_apartment"/> ${order.address.apartmentNumber},</br>
+                        <fmt:message key="default.address_phone"/> ${order.address.phoneNumber}
+                    </td>
                     <td>
                         <c:forEach items="${order.contentList}" var="content" varStatus="i">
                             <fmt:message key="default.type_${content.water.type}"/>, <fmt:message

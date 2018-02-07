@@ -24,15 +24,15 @@ public class EditUserCommand implements Command {
         ResourceBundle RB = ResourceBundle.getBundle(Entity.RB_NAME, locale);
         String pass_err_msg = RB.getString(Entity.ERROR_PASS);
         String pass_mis_err_msg = RB.getString(Entity.ERROR_PASS_MISMATCH);
-        String invalid_firstname_err_msg = RB.getString(Entity.ERROR_INVALID_FIRSTNAME);
-        String invalid_lastname_err_msg = RB.getString(Entity.ERROR_INVALID_LASTNAME);
+        String invalid_first_name_err_msg = RB.getString(Entity.ERROR_INVALID_FIRST_NAME);
+        String invalid_last_name_err_msg = RB.getString(Entity.ERROR_INVALID_LAST_NAME);
 
         String loginEmail = request.getParameter(Entity.PARAM_LOGIN_EMAIL);
         String currentPassword = request.getParameter(Entity.PARAM_CURRENT_PASSWORD);
         String newPassword = request.getParameter(Entity.PARAM_NEW_PASSWORD);
         String newRePassword = request.getParameter(Entity.PARAM_RE_NEW_PASSWORD);
-        String firstName = request.getParameter(Entity.PARAM_FIRSTNAME);
-        String lastName = request.getParameter(Entity.PARAM_LASTNAME);
+        String firstName = request.getParameter(Entity.PARAM_FIRST_NAME);
+        String lastName = request.getParameter(Entity.PARAM_LAST_NAME);
 
         UserDao userDao = new UserDao();
         User user;
@@ -44,17 +44,17 @@ public class EditUserCommand implements Command {
         try {
             user = userDao.getByLogin(loginEmail);
             if (!firstNameValidResult) {
-                LOGGER.info("Invalid first name");
-                session.setAttribute(Entity.ERROR, invalid_firstname_err_msg);
+                LOGGER.info(Entity.FIRST_NAME_MSG);
+                session.setAttribute(Entity.ERROR, invalid_first_name_err_msg);
             } else if (!lastNameValidResult) {
-                LOGGER.info("Invalid last name");
-                session.setAttribute(Entity.ERROR, invalid_lastname_err_msg);
+                LOGGER.info(Entity.LAST_NAME_MSG);
+                session.setAttribute(Entity.ERROR, invalid_last_name_err_msg);
             } else if (!currentPassword.equals(user.getPassword())) {
                 session.setAttribute(Entity.ERROR, pass_err_msg);
                 LOGGER.info("Wrong password");
             } else if (!newPassword.equals(newRePassword)) {
                 session.setAttribute(Entity.ERROR, pass_mis_err_msg);
-                LOGGER.info("Entered password mismatching");
+                LOGGER.info(Entity.PASS_MSG);
             } else {
                 updateUser(user, firstName, lastName, newPassword, userDao, request);
             }

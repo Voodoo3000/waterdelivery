@@ -20,5 +20,4 @@ public class Water extends Entity {
         this.pricePerLiter = pricePerLiter;
     }
 
-
 }

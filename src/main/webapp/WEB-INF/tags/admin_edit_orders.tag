@@ -30,7 +30,12 @@
                         </c:forEach>
                     </td>
                     <td>${order.orderDate}</td>
-                    <td>${order.address}</td>
+                    <td><fmt:message key="default.address_city"/> ${order.address.city},</br>
+                        <fmt:message key="default.address_street"/> ${order.address.street},</br>
+                        <fmt:message key="default.address_house"/> ${order.address.houseNumber},
+                        <fmt:message key="default.address_apartment"/> ${order.address.apartmentNumber},</br>
+                        <fmt:message key="default.address_phone"/> ${order.address.phoneNumber}
+                    </td>
                     <td>${order.amount}</td>
                     <td>
                         <select class="selectpicker show-menu-arrow" data-width="auto" name="status">
@@ -47,5 +52,19 @@
                 </tr>
             </form>
         </c:forEach>
+        <tr class="info">
+            <td></td>
+            <td>
+                <c:if test="${orderList.isEmpty()}">
+                    <h4><fmt:message key="default.empty_admin_order"/></h4>
+                </c:if>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
     </table>
 </div>

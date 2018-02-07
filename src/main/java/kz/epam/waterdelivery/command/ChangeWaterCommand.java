@@ -17,7 +17,7 @@ public class ChangeWaterCommand implements Command {
     public CommandResult execute(HttpServletRequest request) throws CommandException {
 
         String type = request.getParameter(Entity.PARAM_TYPE);
-        Integer pricePerLiter = Integer.valueOf(request.getParameter(Entity.PARAM_PRICEPERLITER));
+        Integer pricePerLiter = Integer.valueOf(request.getParameter(Entity.PARAM_PRICE_PER_LITER));
         Integer id = Integer.parseInt(request.getParameter(Entity.PARAM_ID));
         WaterDao waterDao = new WaterDao();
         Water water;

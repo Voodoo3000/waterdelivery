@@ -9,7 +9,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.util.List;
-import java.util.Locale;
 
 public class ContextListener implements ServletContextListener {
 
