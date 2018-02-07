@@ -27,7 +27,6 @@ public class CancelOrderCommand implements Command {
             user.setWallet(user.getWallet() + order.getAmount());
             userDao.update(user);
             LOGGER.info("Money was refunded to the customer because of order cancellation");
-            order.setAmount(order.getAmount() - order.getAmount());
             order.setStatus(CustomerOrder.Status.CANCELLED);
             orderDao.update(order);
             LOGGER.info("Order was cancelled by customer");

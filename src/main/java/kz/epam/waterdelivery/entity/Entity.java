@@ -2,7 +2,6 @@ package kz.epam.waterdelivery.entity;
 
 import kz.epam.waterdelivery.command.CommandResult;
 import kz.epam.waterdelivery.pool.ConnectionPool;
-
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -12,12 +11,12 @@ public abstract class Entity {
     public static final String PARAM_TYPE = "type";
     public static final String PARAM_SIZE = "size";
     public static final String PARAM_COUNT = "count";
-    public static final String PARAM_PRICEPERLITER = "pricePerLiter";
+    public static final String PARAM_PRICE_PER_LITER = "pricePerLiter";
     public static final String PARAM_STATUS = "status";
     public static final String PARAM_STATES = "states";
     public static final String PARAM_STATUSES = "statuses";
-    public static final String PARAM_FIRSTNAME = "firstName";
-    public static final String PARAM_LASTNAME = "lastName";
+    public static final String PARAM_FIRST_NAME = "firstName";
+    public static final String PARAM_LAST_NAME = "lastName";
     public static final String PARAM_ROLE = "role";
     public static final String PARAM_ROLES = "roles";
     public static final String PARAM_WALLET = "wallet";
@@ -53,16 +52,25 @@ public abstract class Entity {
     public static final CommandResult CUSTOMER_CABINET = new CommandResult("customer_cabinet");
     public static final CommandResult CUSTOMER_CART = new CommandResult("customer_cart");
 
+    public static final String PASS_MSG = "Entered password mismatching";
+    public static final String FIRST_NAME_MSG = "Invalid first name";
+    public static final String LAST_NAME_MSG = "Invalid last name";
+    public static final String CUSTOMER_ORDER_DAO_EXCEPTION = "DaoException in CustomerOrder";
+
     public static final String ERROR = "errormsg";
     public static final String ERROR_PASS = "error.wrong_pass";
     public static final String ERROR_PASS_MISMATCH = "error.password_mismatching";
     public static final String ERROR_LOGIN_PASS = "error.wrong_user_or_pass";
     public static final String ERROR_USER_BAN = "error.banned_user";
     public static final String ERROR_BUSY_LOGIN = "error.busy_login";
-    public static final String ERROR_INVALID_LOGINEMAIL = "error.invalid_loginEmail";
+    public static final String ERROR_INVALID_LOGIN_EMAIL = "error.invalid_loginEmail";
     public static final String ERROR_UNDESIRABLE_PASSWORD = "error.undesirable_password";
-    public static final String ERROR_INVALID_FIRSTNAME = "error.invalid_firstname";
-    public static final String ERROR_INVALID_LASTNAME = "error.invalid_lastname";
+    public static final String ERROR_INVALID_FIRST_NAME = "error.invalid_first_name";
+    public static final String ERROR_INVALID_LAST_NAME = "error.invalid_last_name";
+    public static final String MESSAGE_ERROR404 = "error.404";
+    public static final String MESSAGE_ERROR500 = "error.500";
+    public static final String ERROR404 = "error404";
+    public static final String ERROR500 = "error500";
 
     public static final String MAIN_PAGE = "main";
     public static final String ADMIN_ORDERS_PAGE = "admin_orders";
@@ -90,6 +98,8 @@ public abstract class Entity {
     public static final String PASSWORD = RB.getString("db.password");
     public static final int POOL_SIZE = Integer.parseInt(RB.getString("db.pool_size"));
     public static final ConnectionPool INSTANCE = new ConnectionPool();
+
+    public static final double ZERO = 0;
 
     private Integer id;
     public Integer getId() {

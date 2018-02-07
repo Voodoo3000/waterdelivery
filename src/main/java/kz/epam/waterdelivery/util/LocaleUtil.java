@@ -8,6 +8,9 @@ import java.util.Locale;
 
 public class LocaleUtil {
 
+    private LocaleUtil() {
+    }
+
     public static Locale getSessionLocale(HttpServletRequest request) {
         HttpSession session = request.getSession();
         Locale locale = (Locale) session.getAttribute(Entity.LOCALE);

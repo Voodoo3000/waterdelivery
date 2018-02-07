@@ -1,15 +1,16 @@
 package kz.epam.waterdelivery.pool;
 
 import kz.epam.waterdelivery.entity.Entity;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 public class ConnectionPool {
+    private static final Logger LOGGER = Logger.getLogger(ConnectionPool.class);
     BlockingQueue<Connection> connections = new ArrayBlockingQueue<>(Entity.POOL_SIZE);
 
     public ConnectionPool() {
@@ -25,13 +26,13 @@ public class ConnectionPool {
             try {
                 Class.forName(Entity.DRIVER);
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                LOGGER.error("ClassNotFoundException in initializeConnectionPool", e);
             }
             Connection connection = null;
             try {
                 connection = DriverManager.getConnection(Entity.URL, Entity.LOGIN, Entity.PASSWORD);
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOGGER.error("SQLException in initializeConnectionPool", e);
             }
             connections.add(connection);
         }
@@ -42,7 +43,7 @@ public class ConnectionPool {
         try {
             connection = connections.take();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.error("InterruptedException in getConnection", e);
         }
         return connection;
     }
@@ -56,7 +57,7 @@ public class ConnectionPool {
             try {
                 connection.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                LOGGER.error("SQLException in closeConnections", e);
             }
         }
     }

@@ -1,10 +1,12 @@
 package kz.epam.waterdelivery.util;
 
 import kz.epam.waterdelivery.entity.Entity;
-
 import java.util.regex.Pattern;
 
 public class Validator {
+
+    private Validator() {
+    }
 
     public static boolean validateLoginEmail(String loginEmail) {
         return Pattern.compile(Entity.EMAIL_REGEX).matcher(loginEmail).matches();

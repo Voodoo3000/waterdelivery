@@ -70,7 +70,6 @@ public class BottleSizeDao implements GenericDao<BottleSize> {
 
     private void addUpdateSize(BottleSize bottle, String sqlParameter) throws DaoException {
         Connection connection = pool.getConnection();
-        String sql = "UPDATE BOTTLE_SIZE SET SIZE=? WHERE ID=?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlParameter);
             preparedStatement.setDouble(1, bottle.getSize());

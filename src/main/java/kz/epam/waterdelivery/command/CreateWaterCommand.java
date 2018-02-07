@@ -16,7 +16,7 @@ public class CreateWaterCommand implements Command {
     @Override
     public CommandResult execute(HttpServletRequest request) throws CommandException {
         String type = request.getParameter(Entity.PARAM_TYPE);
-        Integer pricePerLiter = Integer.valueOf(request.getParameter(Entity.PARAM_PRICEPERLITER));
+        Integer pricePerLiter = Integer.valueOf(request.getParameter(Entity.PARAM_PRICE_PER_LITER));
         Water water = new Water();
         WaterDao waterDao = new WaterDao();
         List<Water> waterList;
