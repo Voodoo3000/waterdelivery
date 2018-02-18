@@ -28,22 +28,24 @@ public class ConnectionPool {
             } catch (ClassNotFoundException e) {
                 LOGGER.error("ClassNotFoundException in initializeConnectionPool", e);
             }
-            Connection connection = null;
+            Connection connection;
             try {
                 connection = DriverManager.getConnection(Entity.URL, Entity.LOGIN, Entity.PASSWORD);
             } catch (SQLException e) {
                 LOGGER.error("SQLException in initializeConnectionPool", e);
+                throw new ConnectionPoolException(e);
             }
             connections.add(connection);
         }
     }
 
     public Connection getConnection() throws ConnectionPoolException {
-        Connection connection = null;
+        Connection connection;
         try {
             connection = connections.take();
         } catch (InterruptedException e) {
-            LOGGER.error("InterruptedException in getConnection", e);
+            LOGGER.warn("InterruptedException in getConnection", e);
+            throw new ConnectionPoolException(e);
         }
         return connection;
     }

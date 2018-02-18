@@ -22,12 +22,12 @@ public class SignUpCommand implements Command {
         HttpSession session = request.getSession();
         Locale locale = LocaleUtil.getSessionLocale(request);
         ResourceBundle RB = ResourceBundle.getBundle(Entity.RB_NAME, locale);
-        String busy_login_err_msg = RB.getString(Entity.ERROR_BUSY_LOGIN);
-        String pass_mis_err_msg = RB.getString(Entity.ERROR_PASS_MISMATCH);
-        String invalid_loginEmail_err_msg = RB.getString(Entity.ERROR_INVALID_LOGIN_EMAIL);
-        String undesirable_pass_err_msg = RB.getString(Entity.ERROR_UNDESIRABLE_PASSWORD);
-        String invalid_first_name_err_msg = RB.getString(Entity.ERROR_INVALID_FIRST_NAME);
-        String invalid_last_name_err_msg = RB.getString(Entity.ERROR_INVALID_LAST_NAME);
+        String busyLoginErrMsg = RB.getString(Entity.ERROR_BUSY_LOGIN);
+        String passMisErrMsg = RB.getString(Entity.ERROR_PASS_MISMATCH);
+        String invalidLoginEmailErrMsg = RB.getString(Entity.ERROR_INVALID_LOGIN_EMAIL);
+        String undesirablePassErrMsg = RB.getString(Entity.ERROR_UNDESIRABLE_PASSWORD);
+        String invalidFirstNameErrMsg = RB.getString(Entity.ERROR_INVALID_FIRST_NAME);
+        String invalidLastNameErrMsg = RB.getString(Entity.ERROR_INVALID_LAST_NAME);
 
         String loginEmail = request.getParameter(Entity.PARAM_LOGIN_EMAIL);
         String newPassword = request.getParameter(Entity.PARAM_NEW_PASSWORD);
@@ -48,22 +48,22 @@ public class SignUpCommand implements Command {
         try {
             if (!loginEmailValidResult) {
                 LOGGER.info("Invalid login(email address)");
-                session.setAttribute(Entity.ERROR, invalid_loginEmail_err_msg);
+                session.setAttribute(Entity.ERROR, invalidLoginEmailErrMsg);
             } else if (!passwordValidResult) {
                 LOGGER.info("Invalid password");
-                session.setAttribute(Entity.ERROR, undesirable_pass_err_msg);
+                session.setAttribute(Entity.ERROR, undesirablePassErrMsg);
             } else if (!firstNameValidResult) {
                 LOGGER.info(Entity.FIRST_NAME_MSG);
-                session.setAttribute(Entity.ERROR, invalid_first_name_err_msg);
+                session.setAttribute(Entity.ERROR, invalidFirstNameErrMsg);
             } else if (!lastNameValidResult) {
                 LOGGER.info(Entity.LAST_NAME_MSG);
-                session.setAttribute(Entity.ERROR, invalid_last_name_err_msg);
+                session.setAttribute(Entity.ERROR, invalidLastNameErrMsg);
             } else if (userDao.getByLogin(loginEmail) != null) {
                 LOGGER.info("Entered login is busy");
-                session.setAttribute(Entity.ERROR, busy_login_err_msg);
+                session.setAttribute(Entity.ERROR, busyLoginErrMsg);
             } else if (!newPassword.equals(newRePassword)) {
                 LOGGER.info(Entity.PASS_MSG);
-                session.setAttribute(Entity.ERROR, pass_mis_err_msg);
+                session.setAttribute(Entity.ERROR, passMisErrMsg);
             } else {
                 user = createUser(loginEmail, newPassword, firstName, lastName, userDao);
                 LOGGER.info("Newly registered user is: " + user.toString());

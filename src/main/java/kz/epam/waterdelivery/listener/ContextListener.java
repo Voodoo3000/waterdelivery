@@ -4,6 +4,7 @@ import kz.epam.waterdelivery.dao.DaoException;
 import kz.epam.waterdelivery.dao.sql.BottleSizeDao;
 import kz.epam.waterdelivery.dao.sql.WaterDao;
 import kz.epam.waterdelivery.entity.*;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -11,6 +12,7 @@ import javax.servlet.ServletContextListener;
 import java.util.List;
 
 public class ContextListener implements ServletContextListener {
+    private static final Logger LOGGER = Logger.getLogger(ContextListener.class);
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -22,13 +24,10 @@ public class ContextListener implements ServletContextListener {
             waterList = new WaterDao().getAll();
             bottleSizes = new BottleSizeDao().getAll();
         } catch (DaoException e) {
-            e.printStackTrace();
+            LOGGER.error("DaoException in ContextListener", e);
         }
         context.setAttribute(Entity.ATTR_WATER_LIST, waterList);
         context.setAttribute(Entity.ATTR_BOTTLE_SIZES, bottleSizes);
-        context.setAttribute(Entity.PARAM_ROLES, User.Role.values());
-        context.setAttribute(Entity.PARAM_STATES, User.State.values());
-        context.setAttribute(Entity.PARAM_STATUSES, CustomerOrder.Status.values());
     }
 
     @Override
