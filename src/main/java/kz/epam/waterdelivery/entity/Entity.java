@@ -102,9 +102,11 @@ public abstract class Entity {
     public static final double ZERO = 0;
 
     private Integer id;
+
     public Integer getId() {
         return id;
     }
+
     public void setId(Integer id) {
         this.id = id;
     }

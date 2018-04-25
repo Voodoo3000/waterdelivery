@@ -43,6 +43,10 @@ public class OpenAdminPageCommand implements Command {
         request.getSession().setAttribute(Entity.ATTR_USER_LIST, userList);
         request.getSession().setAttribute(Entity.ATTR_ORDER_LIST, orderList);
         request.getSession().setAttribute(Entity.ATTR_CONTENT_LIST, contentList);
+        request.getSession().setAttribute(Entity.PARAM_ROLES, User.Role.values());
+        request.getSession().setAttribute(Entity.PARAM_STATES, User.State.values());
+        request.getSession().setAttribute(Entity.PARAM_STATUSES, CustomerOrder.Status.values());
+
         return result;
     }
 }
